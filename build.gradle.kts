@@ -19,11 +19,13 @@ version = if (project.hasProperty("elide.stamp") && project.properties["elide.st
 }
 
 val props = java.util.Properties()
-props.load(file(if (project.hasProperty("elide.ci") && project.properties["elide.ci"] == "true") {
+val overlay = file(if (project.hasProperty("elide.ci") && project.properties["elide.ci"] == "true") {
     "gradle-ci.properties"
 } else {
     "local.properties"
-}).inputStream())
+})
+
+if (overlay.exists()) props.load(overlay.inputStream())
 
 sonarqube {
     properties {
