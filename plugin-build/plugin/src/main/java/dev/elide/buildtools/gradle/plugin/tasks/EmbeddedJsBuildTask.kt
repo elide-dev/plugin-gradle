@@ -32,6 +32,9 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
 
         private const val defaultEcmaVersion: String = "2020"
         private const val defaultLibraryName: String = "embedded"
+        private const val defaultEntrypointName: String = "main.js"
+        private const val defaultOutputConfig: String = "embedded-js/compile.js"
+        private const val defaultProcessShim: String = "embedded-js/shim.process.js"
         const val defaultOutputBundleFolder = "bundle"
         const val defaultOutputBundleName = "bundle.js"
         const val esbuildConfigTemplatePath = "/dev/elide/buildtools/js/esbuild-wrapper.js.hbs"
@@ -50,7 +53,7 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
     }
 
     init {
-        description = "Configures an application target for use with ESBuild"
+        description = "Configures an application target for use with ESBuild or Webpack"
         group = BasePlugin.BUILD_GROUP
 
         // set defaults
@@ -64,6 +67,22 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
             outputBundleName.set(
                 defaultOutputBundleName
             )
+
+            // set the default output config file/wrapper
+            outputConfig.set(file(
+                "$buildDir/$defaultOutputConfig"
+            ))
+
+            // set the default process shim file
+            processShim.set(file(
+                "$buildDir/$defaultProcessShim"
+            ))
+
+            // set the default entrypoint
+            val defaultEntrypoint = "$projectDir/src/main/embedded/$defaultEntrypointName"
+            entryFile.set(file(
+                entryFileName?.ifBlank { defaultEntrypoint } ?: defaultEntrypoint
+            ))
 
             // set the default set of module paths
             modulesFolders.set(listOf(
@@ -219,6 +238,14 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
     /** Entrypoint file to begin the compilation from. */
     @get:InputFile
     @get:Option(
+        option = "entryFileName",
+        description = "Name of the source file which should serve as the entrypoint for this build.",
+    )
+    var entryFileName: String? = "src/main/embedded/$defaultEntrypointName"
+
+    /** Entrypoint file to begin the compilation from. */
+    @get:InputFile
+    @get:Option(
         option = "entryFile",
         description = "Source file which should serve as the entrypoint for this build.",
     )
@@ -280,12 +307,12 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
     }
 
     @TaskAction fun sampleAction() {
-//        processShim.get().writeText(
-//            renderTemplateVals(processShimTemplate)
-//        )
-//        outputConfig.get().writeText(
-//            renderTemplateVals(configTemplate)
-//        )
+        processShim.get().writeText(
+            renderTemplateVals(processShimTemplate)
+        )
+        outputConfig.get().writeText(
+            renderTemplateVals(configTemplate)
+        )
 
         val prettyTag = tag.orNull?.let { "[$it]" } ?: ""
 
