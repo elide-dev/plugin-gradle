@@ -9,6 +9,22 @@ plugins {
     alias(libs.plugins.versionCheck)
 }
 
+// Set version from `.version` if stamping is enabled.
+version = if (project.hasProperty("elide.stamp") && project.properties["elide.stamp"] == "true") {
+    file(".version").readText().trim().replace("\n", "").ifBlank {
+        throw IllegalStateException("Failed to load `.version`")
+    }
+} else {
+    "1.0-SNAPSHOT"
+}
+
+val props = java.util.Properties()
+props.load(file(if (project.hasProperty("elide.ci") && project.properties["elide.ci"] == "true") {
+    "gradle-ci.properties"
+} else {
+    "local.properties"
+}).inputStream())
+
 sonarqube {
     properties {
         property("sonar.projectKey", "elide-dev_buildtools")
