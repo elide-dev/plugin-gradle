@@ -4,7 +4,6 @@ import dev.elide.buildtools.gradle.plugin.tasks.EmbeddedJsBuildTask
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Assert.assertNotNull
 import org.junit.Test
-import java.io.File
 
 class ElidePluginTest {
     @Test fun `plugin is applied correctly to the project`() {
@@ -25,7 +24,6 @@ class ElidePluginTest {
     @Test fun `parameters are passed correctly from extension to task`() {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply("dev.elide.buildtools.plugin")
-        val aFile = File(project.projectDir, ".tmp")
         (project.extensions.getByName("elide") as ElideExtension).apply {
 //            tag.set("a-sample-tag")
 //            message.set("just-a-message")

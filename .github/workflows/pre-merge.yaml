@@ -75,14 +75,17 @@ jobs:
       ## Job: Run plugin
       - name: Run the plugin
         uses: gradle/gradle-build-action@v2
+        continue-on-error: true
         if: success()
         with:
           arguments: |
             bundleEmbeddedJs
             -Pelide.ci=true
+            --scan
             --continue
 
       ## Job: Verify plugin output
       - name: Verify the plugin output
         if: success()
+        continue-on-error: true
         run: grep -Fxq "[CI] Test Run" ./example/build/template-example.txt
