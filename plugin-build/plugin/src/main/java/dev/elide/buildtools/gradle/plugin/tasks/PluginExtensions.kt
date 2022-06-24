@@ -4,7 +4,6 @@ package dev.elide.buildtools.gradle.plugin.tasks
 
 import java.io.File
 
-
 internal fun String.fixSlashes() =
     replace("\\", "\\\\")
 

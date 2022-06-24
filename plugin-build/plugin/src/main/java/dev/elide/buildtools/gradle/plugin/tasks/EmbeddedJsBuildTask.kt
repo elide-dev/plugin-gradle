@@ -20,7 +20,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
 
-
 /** Task which builds JavaScript targets for embedded use with Elide. */
 @Suppress("unused")
 abstract class EmbeddedJsBuildTask : DefaultTask() {
@@ -68,18 +67,18 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
 
             // set the default set of module paths
             modulesFolders.set(listOf(
-                file("$projectDir/build/js/node_modules"),  // single-module Kotlin/JS projects
-                file("$projectDir/node_modules"),           // project-level regular node modules
-                file("$rootDir/build/js/node_modules"),     // multi-module Kotlin/JS projects
-                file("$rootDir/node_modules"),              // root-project regular node modules
+                file("$projectDir/build/js/node_modules"), // single-module Kotlin/JS projects
+                file("$projectDir/node_modules"), // project-level regular node modules
+                file("$rootDir/build/js/node_modules"), // multi-module Kotlin/JS projects
+                file("$rootDir/node_modules"), // root-project regular node modules
             ).plus(if (enableReact) {
                 listOf(
-                    file("$rootDir/build/js/elide/runtime/base"),   // base runtime
-                    file("$rootDir/build/js/elide/runtime/react"),  // react support
+                    file("$rootDir/build/js/elide/runtime/base"), // base runtime
+                    file("$rootDir/build/js/elide/runtime/react"), // react support
                 )
             } else {
                 listOf(
-                    file("$rootDir/build/js/elide/runtime/base"),  // just the runtime, no react
+                    file("$rootDir/build/js/elide/runtime/base"), // just the runtime, no react
                 )
             }))
         }
