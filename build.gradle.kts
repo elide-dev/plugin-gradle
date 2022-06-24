@@ -5,13 +5,44 @@ plugins {
     alias(libs.plugins.kotlin) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.sonar)
     alias(libs.plugins.versionCheck)
+}
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "elide-gradle-plugin")
+        property("sonar.organization", "elide-dev")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.dynamicAnalysis", "reuseReports")
+        property("sonar.junit.reportsPath", "build/reports/")
+        property("sonar.java.coveragePlugin", "jacoco")
+        property("sonar.jacoco.reportPath", "build/jacoco/test.exec")
+        property("sonar.sourceEncoding", "UTF-8")
+    }
 }
 
 subprojects {
     apply {
         plugin("io.gitlab.arturbosch.detekt")
         plugin("org.jlleitschuh.gradle.ktlint")
+        plugin("org.sonarqube")
+    }
+
+    sonarqube {
+        properties {
+            property("sonar.sources", "src/main/kotlin")
+            property("sonar.tests", "src/test/kotlin")
+            property(
+                "sonar.coverage.jacoco.xmlReportPaths",
+                listOf(
+                    "build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml",
+                    "build/reports/jacoco/testCodeCoverageReport/jacocoTestReport.xml",
+                    "build/reports/jacoco/test/jacocoTestReport.xml",
+                    "build/reports/kover/xml/coverage.xml",
+                )
+            )
+        }
     }
 
     ktlint {

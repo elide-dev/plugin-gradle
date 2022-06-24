@@ -1,12 +1,12 @@
-plugins {
-    id("com.gradle.enterprise") version("3.10.2")
-}
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
     }
+}
+
+plugins {
+    id("com.gradle.enterprise") version("3.10.2")
 }
 
 dependencyResolutionManagement {

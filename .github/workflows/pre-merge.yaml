@@ -32,15 +32,30 @@ jobs:
           java-version: '11'
 
       ## Setup: GraalVM
-      - uses: elide-dev/setup-graalvm@5.0
+      - uses: elide-tools/setup-graalvm@5.0
         with:
           graalvm: '21.0.0.2'
           java: 'java11'
           arch: 'amd64'
 
+      ## Setup: Gradle Caches
       - name: Cache Gradle Caches
         uses: gradle/gradle-build-action@v2
 
+      ## Prep: Download Caches
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./build
+            ./*/build
+            ./*/*/build
+          key: elide-${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            elide-gradle-${{ runner.os }}
+            elide-gradle-
+
+      ## Job: Run build
       - name: Run Gradle build
         uses: gradle/gradle-build-action@v2
         with:
@@ -50,7 +65,7 @@ jobs:
             --scan
             --continue
 
-      # Sample run of the plugin
+      ## Job: Run plugin
       - name: Run the plugin
         uses: gradle/gradle-build-action@v2
         if: success()
@@ -62,7 +77,66 @@ jobs:
             --tag=CI
             --continue
 
-      # Verify plugin output
+      ## Job: Verify plugin output
       - name: Verify the plugin output
         if: success()
         run: grep -Fxq "[CI] Test Run" ./example/build/template-example.txt
+
+  ##
+  ## Job: Sonar
+  ##
+  tools-sonar:
+    runs-on: ubuntu-latest
+    needs: [gradle]
+    steps:
+      ## Setup: Checkout Code
+      - uses: actions/checkout@v3
+
+      ## Setup: Java
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      ## Setup: GraalVM
+      - uses: elide-tools/setup-graalvm@5.0
+        with:
+          graalvm: '21.0.0.2'
+          java: 'java11'
+          arch: 'amd64'
+
+      ## Setup: Checkout Code
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      ## Prep: Download Caches
+      - name: Cache build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./build
+            ./*/build
+            ./*/*/build
+          key: elide-${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            elide-gradle-${{ runner.os }}
+            elide-gradle-
+
+      ## Run Sonar
+      - name: "Run Sonar"
+        uses: gradle/gradle-build-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          arguments: |
+            sonarqube
+            --scan
+            -Pelide.ci=true
+            -PbuildSamples=false
+            -x nativeCompile
+            -x test
