@@ -280,12 +280,12 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
     }
 
     @TaskAction fun sampleAction() {
-        processShim.get().writeText(
-            renderTemplateVals(processShimTemplate)
-        )
-        outputConfig.get().writeText(
-            renderTemplateVals(configTemplate)
-        )
+//        processShim.get().writeText(
+//            renderTemplateVals(processShimTemplate)
+//        )
+//        outputConfig.get().writeText(
+//            renderTemplateVals(configTemplate)
+//        )
 
         val prettyTag = tag.orNull?.let { "[$it]" } ?: ""
 
