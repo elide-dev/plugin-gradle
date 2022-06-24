@@ -1,6 +1,6 @@
 package dev.elide.buildtools.gradle.plugin
 
-import dev.elide.buildtools.gradle.plugin.tasks.TemplateExampleTask
+import dev.elide.buildtools.gradle.plugin.tasks.EmbeddedJsBuildTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -16,7 +16,7 @@ import org.gradle.api.Project
         val extension = project.extensions.create(EXTENSION_NAME, ElideExtension::class.java, project)
 
         // Add a task that uses configuration from the extension object
-        project.tasks.register(TASK_NAME, TemplateExampleTask::class.java) {
+        project.tasks.register(TASK_NAME, EmbeddedJsBuildTask::class.java) {
             it.tag.set(extension.tag)
             it.message.set(extension.message)
             it.outputFile.set(extension.outputFile)

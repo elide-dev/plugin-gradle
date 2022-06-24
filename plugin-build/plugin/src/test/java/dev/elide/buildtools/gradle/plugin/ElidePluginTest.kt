@@ -1,6 +1,6 @@
 package dev.elide.buildtools.gradle.plugin
 
-import dev.elide.buildtools.gradle.plugin.tasks.TemplateExampleTask
+import dev.elide.buildtools.gradle.plugin.tasks.EmbeddedJsBuildTask
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -15,7 +15,7 @@ class ElidePluginTest {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply("dev.elide.buildtools.gradle.plugin")
 
-        assert(project.tasks.getByName("templateExample") is TemplateExampleTask)
+        assert(project.tasks.getByName("templateExample") is EmbeddedJsBuildTask)
     }
 
     @Test
@@ -37,7 +37,7 @@ class ElidePluginTest {
             outputFile.set(aFile)
         }
 
-        val task = project.tasks.getByName("templateExample") as TemplateExampleTask
+        val task = project.tasks.getByName("templateExample") as EmbeddedJsBuildTask
 
         assertEquals("a-sample-tag", task.tag.get())
         assertEquals("just-a-message", task.message.get())
