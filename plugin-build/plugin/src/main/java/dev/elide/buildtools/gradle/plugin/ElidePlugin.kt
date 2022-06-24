@@ -4,8 +4,8 @@ import dev.elide.buildtools.gradle.plugin.tasks.EmbeddedJsBuildTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-
-@Suppress("unused") abstract class ElidePlugin : Plugin<Project> {
+@Suppress("unused")
+abstract class ElidePlugin : Plugin<Project> {
     companion object {
         const val EXTENSION_NAME = "elide"
         const val TASK_NAME = "bundleEmbeddedJs"

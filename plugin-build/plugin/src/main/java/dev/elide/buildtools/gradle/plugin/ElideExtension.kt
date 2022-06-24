@@ -5,7 +5,6 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import javax.inject.Inject
 
-
 @Suppress("UnnecessaryAbstractClass")
 abstract class ElideExtension @Inject constructor(project: Project) {
     companion object {

@@ -2,7 +2,8 @@ package dev.elide.buildtools.gradle.plugin.js
 
 
 /** Enumerates tools which may be used to perform JS bundling. */
-@Suppress("unused") enum class BundleTool {
+@Suppress("unused")
+enum class BundleTool {
     /** `esbuild`: https://esbuild.github.io/ */
     ESBUILD,
 

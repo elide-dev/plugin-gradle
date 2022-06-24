@@ -8,7 +8,8 @@ package dev.elide.buildtools.gradle.plugin.js
  * @param bundleType Default bundle type to use for this target type.
  * @param bundleTool Default tool to use for this bundle target type.
  */
-@Suppress("unused") enum class BundleTarget (
+@Suppress("unused")
+enum class BundleTarget(
     internal val platform: String,
     internal val bundleType: BundleType,
     internal val bundleTool: BundleTool,

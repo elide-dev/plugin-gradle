@@ -7,7 +7,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Test
 import java.io.File
 
-
 class ElidePluginTest {
     @Test fun `plugin is applied correctly to the project`() {
         val project = ProjectBuilder.builder().build()
@@ -40,5 +39,4 @@ class ElidePluginTest {
         assertEquals("just-a-message", task.message.get())
         assertEquals(aFile, task.outputFile.get().asFile)
     }
-
 }

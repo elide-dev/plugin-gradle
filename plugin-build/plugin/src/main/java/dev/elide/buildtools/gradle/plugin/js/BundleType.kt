@@ -2,7 +2,6 @@
 
 package dev.elide.buildtools.gradle.plugin.js
 
-
 /**
  * Enumerates types of bundles supported by the plugin, via the superset of supported formats between Webpack and
  * ESBuild.
@@ -11,7 +10,8 @@ package dev.elide.buildtools.gradle.plugin.js
  * @param supportedByEsbuild Whether ESBuild supports this bundle format.
  * @param supportedByWebpack Whether Webpack supports this bundle format.
  */
-@Suppress("unused") enum class BundleType constructor (
+@Suppress("unused")
+enum class BundleType constructor(
     internal val symbol: String,
     internal val supportedByEsbuild: Boolean = true,
     internal val supportedByWebpack: Boolean = true

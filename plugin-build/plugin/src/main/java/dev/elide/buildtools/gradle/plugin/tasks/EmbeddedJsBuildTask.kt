@@ -22,7 +22,8 @@ import java.nio.charset.StandardCharsets
 
 
 /** Task which builds JavaScript targets for embedded use with Elide. */
-@Suppress("unused") abstract class EmbeddedJsBuildTask : DefaultTask() {
+@Suppress("unused")
+abstract class EmbeddedJsBuildTask : DefaultTask() {
     companion object {
         private val defaultTargetMode: BuildMode = BuildMode.DEVELOPMENT
         private const val defaultTargetModeName: String = BuildMode.DEVELOPMENT_NAME
