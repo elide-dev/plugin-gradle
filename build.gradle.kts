@@ -11,7 +11,7 @@ plugins {
 
 sonarqube {
     properties {
-        property("sonar.projectKey", "elide-gradle-plugin")
+        property("sonar.projectKey", "elide-dev_buildtools")
         property("sonar.organization", "elide-dev")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.dynamicAnalysis", "reuseReports")
@@ -31,8 +31,8 @@ subprojects {
 
     sonarqube {
         properties {
-            property("sonar.sources", "src/main/kotlin")
-            property("sonar.tests", "src/test/kotlin")
+            property("sonar.sources", "src/main/java")
+            property("sonar.tests", "src/test/java")
             property(
                 "sonar.coverage.jacoco.xmlReportPaths",
                 listOf(
