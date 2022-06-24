@@ -66,6 +66,3 @@ jobs:
             sonarqube
             --scan
             -Pelide.ci=true
-            -PbuildSamples=false
-            -x nativeCompile
-            -x test
