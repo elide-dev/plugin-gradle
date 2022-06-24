@@ -1,10 +1,13 @@
 
-## Elide Plugin for Gradle
+# Elide Plugin for Gradle
 
-[![CI](https://github.com/elide-dev/buildtools/actions/workflows/pre-merge.yaml/badge.svg)](https://github.com/elide-dev/buildtools/actions/workflows/pre-merge.yaml)
 ![alpha](https://img.shields.io/badge/status-alpha-yellow.svg)
+[![CI](https://github.com/elide-dev/buildtools/actions/workflows/pre-merge.yaml/badge.svg)](https://github.com/elide-dev/buildtools/actions/workflows/pre-merge.yaml)
 [![Kotlin](https://img.shields.io/badge/kotlin-1.7.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![Gradle](https://img.shields.io/badge/gradle-7.x-blue.svg?logo=gradle)](http://gradle.org)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=elide-dev_buildtools&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=elide-dev_buildtools)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=elide-dev_buildtools&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=elide-dev_buildtools)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=elide-dev_buildtools&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=elide-dev_buildtools)
 
 _**Elide is under construction.**_
 
