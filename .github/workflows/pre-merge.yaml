@@ -78,7 +78,7 @@ jobs:
         if: success()
         with:
           arguments: |
-            templateExample
+            bundleEmbeddedJs
             -Pelide.ci=true
             --message="Test Run"
             --tag=CI
