@@ -1,6 +1,7 @@
 
 ## Elide Plugin for Gradle
 
+[![CI](https://github.com/elide-dev/buildtools/actions/workflows/pre-merge.yaml/badge.svg)](https://github.com/elide-dev/buildtools/actions/workflows/pre-merge.yaml)
 ![alpha](https://img.shields.io/badge/status-alpha-yellow.svg)
 [![Kotlin](https://img.shields.io/badge/kotlin-1.7.0-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![Gradle](https://img.shields.io/badge/gradle-7.x-blue.svg?logo=gradle)](http://gradle.org)
