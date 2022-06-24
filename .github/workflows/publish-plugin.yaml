@@ -1,4 +1,4 @@
-name: Publish Plugin to Portal
+name: Publish
 
 on:
   push:
