@@ -8,7 +8,7 @@ import org.gradle.api.Project
 @Suppress("unused") abstract class ElidePlugin : Plugin<Project> {
     companion object {
         const val EXTENSION_NAME = "elide"
-        const val TASK_NAME = "templateExample"
+        const val TASK_NAME = "bundleEmbeddedJs"
     }
 
     override fun apply(project: Project) {

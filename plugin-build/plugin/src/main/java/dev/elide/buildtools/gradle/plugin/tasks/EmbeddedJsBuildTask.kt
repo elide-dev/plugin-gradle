@@ -17,6 +17,7 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import java.io.File
+import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
 
 
@@ -33,8 +34,19 @@ import java.nio.charset.StandardCharsets
         private const val defaultLibraryName: String = "embedded"
         const val defaultOutputBundleFolder = "bundle"
         const val defaultOutputBundleName = "bundle.js"
-        const val esbuildConfigTemplatePath = "/dev/elide/buildtools/gradle/plugin/esbuild-wrapper.js.hbs"
-        const val processShimTemplatePath = "/dev/elide/buildtools/gradle/plugin/process-wrapper.js.hbs"
+        const val esbuildConfigTemplatePath = "/dev/elide/buildtools/js/esbuild-wrapper.js.hbs"
+        const val processShimTemplatePath = "/dev/elide/buildtools/js/process-wrapper.js.hbs"
+
+        // Load an embedded resource from the plugin JAR.
+        @JvmStatic private fun loadEmbedded(filename: String): String {
+            return (EmbeddedJsBuildTask::class.java.getResourceAsStream(
+                filename
+            ) ?: throw FileNotFoundException(
+                "Failed to locate embedded plugin resource: '$filename'"
+            )).bufferedReader(
+                StandardCharsets.UTF_8
+            ).readText()
+        }
     }
 
     init {
@@ -214,19 +226,15 @@ import java.nio.charset.StandardCharsets
 
     /** Template content to use for the ESBuild wrapper. Please use with caution, this is not documented yet. */
     @get:Input
-    val configTemplate = EmbeddedJsBuildTask::class.java.getResourceAsStream(
+    val configTemplate = loadEmbedded(
         esbuildConfigTemplatePath
-    )!!.bufferedReader(
-        StandardCharsets.UTF_8
-    ).readText()
+    )
 
     /** Template content to use for the `process` shim. Please use with caution, this is not documented yet. */
     @get:Input
-    val processShimTemplate = EmbeddedJsBuildTask::class.java.getResourceAsStream(
+    val processShimTemplate = loadEmbedded(
         processShimTemplatePath
-    )!!.bufferedReader(
-        StandardCharsets.UTF_8
-    ).readText()
+    )
 
     @get:Input
     @get:Option(

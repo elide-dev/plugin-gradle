@@ -9,38 +9,36 @@ import java.io.File
 
 
 class ElidePluginTest {
-
-    @Test
-    fun `plugin is applied correctly to the project`() {
+    @Test fun `plugin is applied correctly to the project`() {
         val project = ProjectBuilder.builder().build()
-        project.pluginManager.apply("dev.elide.buildtools.gradle.plugin")
+        project.pluginManager.apply("dev.elide.buildtools.plugin")
 
-        assert(project.tasks.getByName("templateExample") is EmbeddedJsBuildTask)
+        assertNotNull(project.tasks.getByName("bundleEmbeddedJs"))
+        assert(project.tasks.getByName("bundleEmbeddedJs") is EmbeddedJsBuildTask)
     }
 
-    @Test
-    fun `extension templateExampleConfig is created correctly`() {
+    @Test fun `extension is created correctly`() {
         val project = ProjectBuilder.builder().build()
-        project.pluginManager.apply("dev.elide.buildtools.gradle.plugin")
+        project.pluginManager.apply("dev.elide.buildtools.plugin")
 
-        assertNotNull(project.extensions.getByName("templateExampleConfig"))
+        assertNotNull(project.extensions.getByName("elide"))
     }
 
-    @Test
-    fun `parameters are passed correctly from extension to task`() {
+    @Test fun `parameters are passed correctly from extension to task`() {
         val project = ProjectBuilder.builder().build()
-        project.pluginManager.apply("dev.elide.buildtools.gradle.plugin")
+        project.pluginManager.apply("dev.elide.buildtools.plugin")
         val aFile = File(project.projectDir, ".tmp")
-        (project.extensions.getByName("templateExampleConfig") as ElideExtension).apply {
+        (project.extensions.getByName("elide") as ElideExtension).apply {
             tag.set("a-sample-tag")
             message.set("just-a-message")
             outputFile.set(aFile)
         }
 
-        val task = project.tasks.getByName("templateExample") as EmbeddedJsBuildTask
+        val task = project.tasks.getByName("bundleEmbeddedJs") as EmbeddedJsBuildTask
 
         assertEquals("a-sample-tag", task.tag.get())
         assertEquals("just-a-message", task.message.get())
         assertEquals(aFile, task.outputFile.get().asFile)
     }
+
 }
