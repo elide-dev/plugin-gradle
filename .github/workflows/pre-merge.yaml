@@ -75,7 +75,6 @@ jobs:
       ## Job: Run plugin
       - name: Run the plugin
         uses: gradle/gradle-build-action@v2
-        continue-on-error: true
         if: success()
         with:
           arguments: |
@@ -87,5 +86,6 @@ jobs:
       ## Job: Verify plugin output
       - name: Verify the plugin output
         if: success()
-        continue-on-error: true
-        run: grep -Fxq "[CI] Test Run" ./example/build/template-example.txt
+        run: |
+          file ./example/build/embedded-js/compile.js
+          grep -Fq "esbuild" ./example/build/embedded-js/compile.js
