@@ -28,15 +28,16 @@ class ElidePluginTest {
         project.pluginManager.apply("dev.elide.buildtools.plugin")
         val aFile = File(project.projectDir, ".tmp")
         (project.extensions.getByName("elide") as ElideExtension).apply {
-            tag.set("a-sample-tag")
-            message.set("just-a-message")
-            outputFile.set(aFile)
+//            tag.set("a-sample-tag")
+//            message.set("just-a-message")
+//            outputFile.set(aFile)
         }
 
         val task = project.tasks.getByName("bundleEmbeddedJs") as EmbeddedJsBuildTask
 
-        assertEquals("a-sample-tag", task.tag.get())
-        assertEquals("just-a-message", task.message.get())
-        assertEquals(aFile, task.outputFile.get().asFile)
+        assertNotNull("should be able to find mounted task in project", task)
+//        assertEquals("a-sample-tag", task.tag.get())
+//        assertEquals("just-a-message", task.message.get())
+//        assertEquals(aFile, task.outputFile.get().asFile)
     }
 }

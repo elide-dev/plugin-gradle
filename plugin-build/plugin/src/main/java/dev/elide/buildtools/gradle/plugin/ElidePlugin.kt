@@ -17,9 +17,9 @@ abstract class ElidePlugin : Plugin<Project> {
 
         // Add a task that uses configuration from the extension object
         project.tasks.register(TASK_NAME, EmbeddedJsBuildTask::class.java) {
-            it.tag.set(extension.tag)
-            it.message.set(extension.message)
-            it.outputFile.set(extension.outputFile)
+//            it.tag.set(extension.tag)
+//            it.message.set(extension.message)
+//            it.outputFile.set(extension.outputFile)
         }
     }
 }

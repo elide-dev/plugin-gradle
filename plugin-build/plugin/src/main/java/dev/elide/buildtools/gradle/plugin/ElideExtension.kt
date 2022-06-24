@@ -15,13 +15,13 @@ abstract class ElideExtension @Inject constructor(project: Project) {
 
     // Example of a property that is mandatory. The task will
     // fail if this property is not set as is annotated with @Optional.
-    val message: Property<String> = objects.property(String::class.java)
+//    val message: Property<String> = objects.property(String::class.java)
 
     // Example of a property that is optional.
-    val tag: Property<String> = objects.property(String::class.java)
+//    val tag: Property<String> = objects.property(String::class.java)
 
     // Example of a property with a default set with .convention
-    val outputFile: RegularFileProperty = objects.fileProperty().convention(
-        project.layout.buildDirectory.file(DEFAULT_OUTPUT_FILE)
-    )
+//    val outputFile: RegularFileProperty = objects.fileProperty().convention(
+//        project.layout.buildDirectory.file(DEFAULT_OUTPUT_FILE)
+//    )
 }

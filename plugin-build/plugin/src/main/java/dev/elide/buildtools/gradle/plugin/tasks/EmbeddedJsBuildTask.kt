@@ -249,7 +249,7 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
         option = "entryFile",
         description = "Source file which should serve as the entrypoint for this build.",
     )
-    abstract val entryFile: Property<File>
+    abstract val entryFile: RegularFileProperty
 
     /** Template content to use for the ESBuild wrapper. Please use with caution, this is not documented yet. */
     @get:Input
@@ -263,24 +263,6 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
         processShimTemplatePath
     )
 
-    @get:Input
-    @get:Option(
-        option = "message",
-        description = "A message to be printed in the output file"
-    )
-    abstract val message: Property<String>
-
-    @get:Input
-    @get:Option(
-        option = "tag",
-        description = "A Tag to be used for debug and in the output file"
-    )
-    @get:Optional
-    abstract val tag: Property<String>
-
-    @get:OutputFile
-    abstract val outputFile: RegularFileProperty
-
     private fun templateVar(varname: String): String = "{{${varname.uppercase()}}}"
     private fun replaceVar(subj: String, varname: String, value: String): String =
         subj.replace(templateVar(varname), value)
@@ -288,7 +270,7 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
     private fun renderTemplateVals(tpl: String): String {
         var subj = tpl
         listOf(
-            "entry" to entryFile.get().absolutePath.fixSlashes(),
+            "entry" to entryFile.asFile.get().absolutePath.fixSlashes(),
             "mode" to mode.name.lowercase().trim(),
             "format" to format.symbol,
             "bundle" to bundle.toString(),
@@ -314,12 +296,9 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
             renderTemplateVals(configTemplate)
         )
 
-        val prettyTag = tag.orNull?.let { "[$it]" } ?: ""
-
-        logger.lifecycle("$prettyTag message is: ${message.orNull}")
-        logger.lifecycle("$prettyTag tag is: ${tag.orNull}")
-        logger.lifecycle("$prettyTag outputFile is: ${outputFile.orNull}")
-
-        outputFile.get().asFile.writeText("$prettyTag ${message.get()}")
+        logger.lifecycle(
+            "Config generated for `${tool.name.lowercase()}` (mode: ${mode.name}): " +
+            outputConfig.get().path
+        )
     }
 }

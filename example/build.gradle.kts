@@ -4,5 +4,5 @@ plugins {
 }
 
 elide {
-    message.set("Just trying this gradle plugin...")
+//    message.set("Just trying this gradle plugin...")
 }

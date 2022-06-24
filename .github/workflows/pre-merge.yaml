@@ -80,8 +80,6 @@ jobs:
           arguments: |
             bundleEmbeddedJs
             -Pelide.ci=true
-            --message="Test Run"
-            --tag=CI
             --continue
 
       ## Job: Verify plugin output
