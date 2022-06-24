@@ -12,8 +12,15 @@ jobs:
   gradle:
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-        experimental: [ false, true, true ]
+        os: [ubuntu-latest]
+        experimental: [false]
+        include:
+          - os: ubuntu-latest
+            experimental: false
+          - os: macos-latest
+            experimental: true
+          - os: windows-latest
+            experimental: true
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     env:
