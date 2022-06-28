@@ -10,6 +10,7 @@ dependencies {
     api(kotlin("gradle-plugin"))
     implementation(kotlin("stdlib-jdk7"))
     implementation(gradleApi())
+    implementation(project(":model"))
     implementation("com.github.node-gradle:gradle-node-plugin:3.4.0")
     implementation("org.gradle.kotlin:gradle-kotlin-dsl-plugins:2.4.0")
 
