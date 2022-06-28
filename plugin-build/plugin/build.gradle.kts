@@ -1,7 +1,28 @@
+import com.google.protobuf.gradle.*
+
 plugins {
     kotlin("jvm")
     id("java-gradle-plugin")
     id("com.gradle.plugin-publish")
+    alias(libs.plugins.protobuf)
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.20.1"
+    }
+    generateProtoTasks {
+        ofSourceSet("main").forEach {
+            it.builtins {
+                id("kotlin")
+            }
+        }
+        ofSourceSet("test").forEach {
+            it.builtins {
+                id("kotlin")
+            }
+        }
+    }
 }
 
 dependencies {
