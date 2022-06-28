@@ -1,35 +1,16 @@
-import com.google.protobuf.gradle.*
+//import com.google.protobuf.gradle.*
 
 plugins {
     kotlin("jvm")
     id("java-gradle-plugin")
     id("com.gradle.plugin-publish")
-    alias(libs.plugins.protobuf)
-}
-
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.20.1"
-    }
-    generateProtoTasks {
-        ofSourceSet("main").forEach {
-            it.builtins {
-                id("kotlin")
-            }
-        }
-        ofSourceSet("test").forEach {
-            it.builtins {
-                id("kotlin")
-            }
-        }
-    }
 }
 
 dependencies {
     api(kotlin("gradle-plugin"))
     implementation(kotlin("stdlib-jdk7"))
     implementation(gradleApi())
-    implementation("com.github.node-gradle:gradle-node-plugin:3.3.0")
+    implementation("com.github.node-gradle:gradle-node-plugin:3.4.0")
     implementation("org.gradle.kotlin:gradle-kotlin-dsl-plugins:2.4.0")
 
     testImplementation(libs.junit)
