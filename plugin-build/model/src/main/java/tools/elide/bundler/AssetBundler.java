@@ -625,7 +625,16 @@ public class AssetBundler implements Callable<Integer> {
     System.exit(cl.execute(args));
   }
 
-  private AssetBundler() { /* Disallow empty instantiation, except by DI. */ }
+  private AssetBundler() { /* Disallow empty instantiation, except by DI or static factory. */ }
+
+  /**
+   * Create a new {@link AssetBundler} from scratch.
+   *
+   * @return Asset bundler.
+   */
+  public static AssetBundler create() {
+    return new AssetBundler();
+  }
 
   /** Private constructor (from scratch). Accessed through static factory methods. */
   @SuppressWarnings("unused")
