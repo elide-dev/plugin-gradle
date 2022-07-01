@@ -11,9 +11,12 @@ object PluginBundle {
     const val DESCRIPTION = "Plugin for building Elide apps in Kotlin"
     const val DISPLAY_NAME = "Elide Plugin for Gradle"
     val TAGS = listOf(
-        "plugin",
-        "gradle",
         "multiplatform",
         "apps",
+        "elide",
+        "micronaut",
+        "react",
+        "graalvm",
+        "ssr",
     )
 }
