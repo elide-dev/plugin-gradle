@@ -79,7 +79,7 @@ public class AssetBundler implements Callable<Integer> {
   /** Current version for the tool. */
   static final int version = 1;
 
-  /** URL prefix for dynamic asset serving. */
+  /** URL prefix value for dynamic asset serving. */
   static final String dynamicAssetPrefix = "/_/asset";
 
   /** Local indicator of availability for Brotli. */
@@ -335,7 +335,7 @@ public class AssetBundler implements Callable<Integer> {
       return module;
     }
 
-    /** @return Source file paths for this module.. */
+    /** @return Source file paths for this module. */
     public @Nonnull SortedSet<String> getPaths() {
       return paths;
     }
@@ -452,6 +452,7 @@ public class AssetBundler implements Callable<Integer> {
   }
 
   /** Holds onto current state, throughout each builder action. */
+  @SuppressWarnings("rawtypes")
   @Immutable @ThreadSafe
   static class BundlerState {
     /** Bundle builder. */
@@ -502,7 +503,7 @@ public class AssetBundler implements Callable<Integer> {
       // setup a digester for this file
       MessageDigest mainDigester = MessageDigest.getInstance(digest.algorithm());
 
-      var iterations = 0;
+      int iterations = 0;
       while (iterations < rounds) {
         iterations++;
         if (iterations > 1) {
@@ -618,7 +619,7 @@ public class AssetBundler implements Callable<Integer> {
    * @param args Arguments to run the tool with.
    */
   public static void main(String... args) {
-    var cl = new CommandLine(new AssetBundler());
+    CommandLine cl = new CommandLine(new AssetBundler());
     cl.registerConverter(JsModule.class, AssetBundler::interpretJsModule);
     cl.registerConverter(CssModule.class, AssetBundler::interpretCssModule);
     System.exit(cl.execute(args));
@@ -741,7 +742,7 @@ public class AssetBundler implements Callable<Integer> {
       this.verbose("Resolved output stream for file at path '%s'.", this.output);
       File target = new File(this.output);
       if (target.createNewFile() && target.canWrite()) {
-        return new FileOutputStream(target);
+        return Files.newOutputStream(target.toPath());
       }
     }
     throw new IllegalArgumentException(format("Failed to load output target at path '%s'.", this.output));
@@ -802,12 +803,12 @@ public class AssetBundler implements Callable<Integer> {
    * @param sources Sources associated with this bundle routine.
    */
   private void processSources(@Nonnull BundlerState state, @Nonnull BundleSources sources) throws Exception {
-    // setup the main digester
+    // set up the main digester
     verbose("Loading sources...");
     MessageDigest mainDigester = MessageDigest.getInstance(this.digest.algorithm());
 
     for (Map.Entry<String, BundleSources.BundleSourceGroup> module : sources.sourceGroupMap.entrySet()) {
-      var sourceGroup = module.getValue();
+      BundleSources.BundleSourceGroup sourceGroup = module.getValue();
       verbose("Processing %s sources for module '%s'", sourceGroup.files.size(), sourceGroup.module.module);
       ArrayList<ListenableFuture<byte[]>> futures = new ArrayList<>();
 
@@ -896,11 +897,12 @@ public class AssetBundler implements Callable<Integer> {
               if (VariantCompression.IDENTITY.equals(compressionMode))
                 continue;
               verbose("Kicking off %s compression job for '%s'.", compressionMode.name(), file.getPath());
-              var job = this.compress(
-                      compressionMode,
-                      fileData,
-                      file.getPath()
+              ListenableFuture<Pair<VariantCompression, ByteString>> job = this.compress(
+                compressionMode,
+                fileData,
+                file.getPath()
               );
+              compressionJobs.add(job);
             }
 
             ListenableFuture<List<Pair<VariantCompression, ByteString>>> jobs = Futures.allAsList(compressionJobs);
@@ -980,7 +982,7 @@ public class AssetBundler implements Callable<Integer> {
    * @param compressionMode Compression mode to employ for this operation.
    * @return Async operation that evaluates to the resulting compressed data.
    */
-  private @Nullable ListenableFuture<Pair<VariantCompression, ByteString>> compress(
+  private @Nonnull ListenableFuture<Pair<VariantCompression, ByteString>> compress(
           @Nonnull VariantCompression compressionMode,
           @Nonnull ByteString fileContents,
           @Nonnull String file) {
@@ -1049,7 +1051,7 @@ public class AssetBundler implements Callable<Integer> {
     verbose("Processing asset metadata for module '%s'.", module.module);
     if (module instanceof JsModule) {
       // prep a JS module and attach it
-      var bundle = ScriptBundle.newBuilder().setModule(module.module);
+      ScriptBundle.Builder bundle = ScriptBundle.newBuilder().setModule(module.module);
 
       // build an asset for each script target
       bundle.addAllAsset(module.paths.parallelStream().map((path) -> {
@@ -1069,7 +1071,7 @@ public class AssetBundler implements Callable<Integer> {
 
     } else if (module instanceof CssModule) {
       // prep a CSS module and attach it
-      var bundle = StyleBundle.newBuilder().setModule(module.module);
+      StyleBundle.Builder bundle = StyleBundle.newBuilder().setModule(module.module);
 
       // build an asset for each script target
       bundle.addAllAsset(module.paths.parallelStream().map((path) -> {
@@ -1168,22 +1170,22 @@ public class AssetBundler implements Callable<Integer> {
         final AssetBundle bundle = builder.build();
 
         switch (this.format) {
-          case BINARY -> {
+            case BINARY:
               verbose("Writing BINARY data to manifest target...");
               bundle.writeDelimitedTo(outputBuffer);
-          }
-          case TEXT -> {
+                break;
+            case TEXT:
               verbose("Writing TEXT data to manifest target...");
               outputBuffer.write(bundle.toString().getBytes(StandardCharsets.UTF_8));
-          }
-          case JSON -> {
+                break;
+            case JSON:
               verbose("Writing JSON data to manifest target...");
               outputBuffer.write(JsonFormat.printer()
                   .omittingInsignificantWhitespace()
                   .sortingMapKeys()
                   .print(bundle)
                   .getBytes(StandardCharsets.UTF_8));
-          }
+              break;
         }
         if (this.debug) {
           logger.trace(format("Final structure of manifest:\n%s\n", bundle));
