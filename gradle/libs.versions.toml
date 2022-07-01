@@ -13,6 +13,8 @@ soy = "2022-03-07"
 picocli = "4.6.3"
 slf4j = "1.7.36"
 jvmbrotli = "0.2.0"
+gson = "2.9.0"
+checker_compat_qual = "2.5.3"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt"}
@@ -38,3 +40,6 @@ picocli = { group = "info.picocli", name = "picocli", version.ref = "picocli" }
 picocli_codegen = { group = "info.picocli", name = "picocli-codegen", version.ref = "picocli" }
 slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 brotli = { group = "com.nixxcode.jvmbrotli", name = "jvmbrotli", version.ref="jvmbrotli" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+gson_parent = { group = "com.google.code.gson", name = "gson-parent", version.ref = "gson" }
+checker = { group = "org.checkerframework", name = "checker-compat-qual", version.ref = "checker_compat_qual" }
