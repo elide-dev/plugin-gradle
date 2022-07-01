@@ -20,9 +20,10 @@ allprojects {
     version = PluginCoordinates.VERSION
 
     repositories {
-        google()
-        mavenCentral()
         gradlePluginPortal()
+        maven("https://maven-central.storage-download.googleapis.com/maven2/")
+        mavenCentral()
+        google()
     }
 
     apply {

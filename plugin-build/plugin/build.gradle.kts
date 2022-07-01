@@ -6,6 +6,11 @@ plugins {
     id("com.gradle.plugin-publish")
 }
 
+repositories {
+    google()
+    mavenCentral()
+}
+
 dependencies {
     api(kotlin("gradle-plugin"))
     implementation(kotlin("stdlib-jdk7"))
