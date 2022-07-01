@@ -9,6 +9,10 @@ sonar = "3.4.0.2513"
 protobuf = "3.20.1"
 kotlinx_serialization = "1.3.3"
 truth = "1.1.3"
+soy = "2022-03-07"
+picocli = "4.6.3"
+slf4j = "1.7.36"
+jvmbrotli = "0.2.0"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt"}
@@ -29,3 +33,8 @@ kotlinx_serialization_json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx_serialization_protobuf = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-protobuf", version.ref = "kotlinx_serialization" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 truth_proto = { group = "com.google.truth.extensions", name = "truth-proto-extension", version.ref = "truth" }
+soy = { group = "com.google.template", name = "soy", version.ref = "soy" }
+picocli = { group = "info.picocli", name = "picocli", version.ref = "picocli" }
+picocli_codegen = { group = "info.picocli", name = "picocli-codegen", version.ref = "picocli" }
+slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
+brotli = { group = "com.nixxcode.jvmbrotli", name = "jvmbrotli", version.ref="jvmbrotli" }
