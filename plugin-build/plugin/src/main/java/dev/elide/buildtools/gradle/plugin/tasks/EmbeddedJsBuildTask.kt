@@ -287,7 +287,7 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
         return subj
     }
 
-    @TaskAction fun sampleAction() {
+    @TaskAction fun writeFiles() {
         processShim.get().writeText(
             renderTemplateVals(processShimTemplate)
         )
