@@ -1,7 +1,16 @@
+@file:Suppress(
+    "UnstableApiUsage",
+    "unused",
+    "UNUSED_VARIABLE",
+    "DSL_SCOPE_VIOLATION",
+)
+
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
+import java.util.Properties
 
 plugins {
+    java
     alias(libs.plugins.kotlin) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
@@ -18,7 +27,13 @@ version = if (project.hasProperty("elide.stamp") && project.properties["elide.st
     "1.0-SNAPSHOT"
 }
 
-val props = java.util.Properties()
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+val props = Properties()
 val overlay = file(if (project.hasProperty("elide.ci") && project.properties["elide.ci"] == "true") {
     "gradle-ci.properties"
 } else {
@@ -95,10 +110,6 @@ tasks.withType<DependencyUpdatesTask> {
 }
 
 fun String.isNonStable() = "^[0-9,.v-]+(-r)?$".toRegex().matches(this).not()
-
-tasks.register("clean", Delete::class.java) {
-    delete(rootProject.buildDir)
-}
 
 tasks.register("reformatAll") {
     description = "Reformat all the Kotlin Code"
