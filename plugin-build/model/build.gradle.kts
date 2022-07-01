@@ -19,6 +19,9 @@ dependencies {
     implementation(libs.protobuf.util)
     implementation(libs.protobuf.kotlin)
 
+    implementation(libs.gson)
+    implementation(libs.checker)
+
     testImplementation(libs.junit)
     testImplementation(libs.truth)
     testImplementation(libs.truth.proto)
