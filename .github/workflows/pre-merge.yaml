@@ -78,7 +78,7 @@ jobs:
         if: success()
         with:
           arguments: |
-            bundleEmbeddedJs
+            example:build
             -Pelide.ci=true
             --scan
             --continue
@@ -87,5 +87,5 @@ jobs:
       - name: Verify the plugin output
         if: success()
         run: |
-          file ./example/build/embedded-js/compile.js
-          grep -Fq "esbuild" ./example/build/embedded-js/compile.js
+          file ./example/build/distributions/bundle.opt.js
+          grep -Fq "esbuild" ./example/build/esbuild/esbuild.production.js
