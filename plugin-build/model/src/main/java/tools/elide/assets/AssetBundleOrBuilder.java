@@ -259,4 +259,60 @@ tools.elide.assets.AssetBundle.ScriptBundle defaultValue);
    * @return The rewrite.
    */
   boolean getRewrite();
+
+  /**
+   * <pre>
+   * Generic assets which are mapped within this bundle.
+   * </pre>
+   *
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+   */
+  int getGenericCount();
+  /**
+   * <pre>
+   * Generic assets which are mapped within this bundle.
+   * </pre>
+   *
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+   */
+  boolean containsGeneric(
+      java.lang.String key);
+  /**
+   * Use {@link #getGenericMap()} instead.
+   */
+  @java.lang.Deprecated
+  java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle>
+  getGeneric();
+  /**
+   * <pre>
+   * Generic assets which are mapped within this bundle.
+   * </pre>
+   *
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+   */
+  java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle>
+  getGenericMap();
+  /**
+   * <pre>
+   * Generic assets which are mapped within this bundle.
+   * </pre>
+   *
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+   */
+
+  /* nullable */
+tools.elide.assets.AssetBundle.GenericBundle getGenericOrDefault(
+      java.lang.String key,
+      /* nullable */
+tools.elide.assets.AssetBundle.GenericBundle defaultValue);
+  /**
+   * <pre>
+   * Generic assets which are mapped within this bundle.
+   * </pre>
+   *
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+   */
+
+  tools.elide.assets.AssetBundle.GenericBundle getGenericOrThrow(
+      java.lang.String key);
 }

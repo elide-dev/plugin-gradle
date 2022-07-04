@@ -5,6 +5,7 @@ ktlintGradle = "10.3.0"
 pluginPublish = "0.21.0"
 pluginProtobuf = "0.8.18"
 versionCheck = "0.42.0"
+nodePlugin = "3.3.0"
 sonar = "3.4.0.2513"
 protobuf = "3.20.1"
 kotlinx_serialization = "1.3.3"
@@ -15,12 +16,15 @@ slf4j = "1.7.36"
 jvmbrotli = "0.2.0"
 gson = "2.9.0"
 checker_compat_qual = "2.5.3"
+npm_esbuild = "0.14.47"
+npm_prepack = "0.2.54"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt"}
 kotlin = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin"}
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle"}
 sonar = { id = "org.sonarqube", version.ref = "sonar" }
+node = { id = "com.github.node-gradle.node", version.ref = "nodePlugin" }
 protobuf = { id = "com.google.protobuf", version.ref = "pluginProtobuf" }
 pluginPublish = { id = "com.gradle.plugin-publish", version.ref = "pluginPublish"}
 versionCheck = { id = "com.github.ben-manes.versions", version.ref = "versionCheck"}

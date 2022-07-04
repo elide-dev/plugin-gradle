@@ -1,20 +1,28 @@
 package dev.elide.buildtools.gradle.plugin.tasks
 
+import com.github.gradle.node.task.NodeTask
 import dev.elide.buildtools.gradle.plugin.BuildMode
+import dev.elide.buildtools.gradle.plugin.ElideEmbeddedJsExtension
+import dev.elide.buildtools.gradle.plugin.ElideExtension
 import dev.elide.buildtools.gradle.plugin.js.BundleTarget
 import dev.elide.buildtools.gradle.plugin.js.BundleTool
 import dev.elide.buildtools.gradle.plugin.js.BundleType
 import org.gradle.api.DefaultTask
+import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
+import org.gradle.configurationcache.extensions.capitalized
+import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.RootPackageJsonTask
 import java.io.File
 import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
@@ -23,6 +31,7 @@ import java.nio.charset.StandardCharsets
 @Suppress("unused")
 abstract class EmbeddedJsBuildTask : DefaultTask() {
     companion object {
+        private const val TASK_NAME = "bundleEmbeddedJs"
         private val defaultTargetMode: BuildMode = BuildMode.DEVELOPMENT
         private const val defaultTargetModeName: String = BuildMode.DEVELOPMENT_NAME
 
@@ -36,6 +45,7 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
         private const val defaultProcessShim: String = "embedded-js/shim.process.js"
         const val defaultOutputBundleFolder = "bundle"
         const val defaultOutputBundleName = "bundle.js"
+        const val defaultOutputOptimizedName = "bundle.opt.js"
         const val esbuildConfigTemplatePath = "/dev/elide/buildtools/js/esbuild-wrapper.js.hbs"
         const val processShimTemplatePath = "/dev/elide/buildtools/js/process-wrapper.js.hbs"
 
@@ -48,6 +58,179 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
             )).bufferedReader(
                 StandardCharsets.UTF_8
             ).readText()
+        }
+
+        // Setup build tasks for the provided project.
+        @JvmStatic fun setup(
+            project: Project,
+            fetchSources: Copy,
+            kotlinJsLink: Task,
+            tool: BundleTool,
+            target: BundleTarget,
+            extension: ElideExtension,
+            jsExtension: ElideEmbeddedJsExtension,
+        ) {
+            if (tool == BundleTool.ESBUILD && target == BundleTarget.EMBEDDED) {
+                BuildMode.values().forEach { mode ->
+                    setupEmbeddedEsbuildTask(
+                        mode,
+                        project,
+                        fetchSources,
+                        kotlinJsLink,
+                        jsExtension,
+                    )
+                }
+                setupEsbuildEntrypointTask(
+                    project,
+                    extension
+                )
+            } else if (tool == BundleTool.WEBPACK && target != BundleTarget.EMBEDDED) {
+                BuildMode.values().forEach { mode ->
+                    setupBrowserWebpackBuildTask(
+                        mode,
+                        project,
+                        fetchSources,
+                        kotlinJsLink,
+                        extension,
+                        jsExtension,
+                    )
+                }
+            } else throw IllegalArgumentException(
+                "Unsupported bundle tool/target combination: $tool/$target"
+            )
+        }
+
+        @JvmStatic fun setupEsbuildEntrypointTask(
+            project: Project,
+            extension: ElideExtension,
+        ) {
+            val activeMode = extension.mode.getOrElse(BuildMode.PRODUCTION)
+            val targetBundleTask = "generate${activeMode.name.lowercase().capitalized()}EsBuildConfig"
+            val targetEmbeddedTask = "${activeMode.name.lowercase()}EmbeddedExecutable"
+
+            project.tasks.create(TASK_NAME) {
+                it.dependsOn(targetBundleTask)
+                it.dependsOn(targetEmbeddedTask)
+            }
+            project.tasks.named("build") {
+                it.dependsOn(TASK_NAME)
+            }
+        }
+
+        @JvmStatic fun setupEmbeddedEsbuildTask(
+            mode: BuildMode,
+            project: Project,
+            fetchSources: Copy,
+            kotlinJsLink: Task,
+            jsExtension: ElideEmbeddedJsExtension,
+        ) {
+            // resolve root-package-json task
+            val rootPackageJson = project.rootProject.tasks.withType(
+                RootPackageJsonTask::class.java
+            ).first()
+
+            val modeName = mode.name.lowercase().capitalized()
+            val targetBundleTask = "generate${modeName}EsBuildConfig"
+            val buildTask = project.tasks.create(targetBundleTask, EmbeddedJsBuildTask::class.java) {
+                // setup deps
+                it.dependsOn(kotlinJsLink)
+                it.dependsOn(fetchSources)
+
+                // setup attrs
+                it.group = "other"
+                it.mode = mode
+                it.tool = jsExtension.tool.getOrElse(BundleTool.ESBUILD)
+                it.target = jsExtension.target.getOrElse(BundleTarget.EMBEDDED)
+                it.entryFile.set(fetchSources.destinationDir / "ssr.js")
+                it.libraryName = jsExtension.libraryName.getOrElse("embedded")
+
+                // setup properties
+                it.outputBundleName.set(buildString {
+                    append(project.name)
+                    when (mode) {
+                        BuildMode.PRODUCTION -> append("-prod")
+                        BuildMode.DEVELOPMENT -> append("-dev")
+                    }
+                    append(".js")
+                })
+                it.outputBundleName.set(buildString {
+                    append(project.name)
+                    when (mode) {
+                        BuildMode.PRODUCTION -> append("-prod")
+                        BuildMode.DEVELOPMENT -> append("-dev")
+                    }
+                    append(".opt")
+                    append(".js")
+                })
+                it.outputBundleFolder.set(
+                    File("${project.buildDir}/distributions").absolutePath
+                )
+                it.processShim.set(
+                    File("${project.buildDir}/esbuild/process-shim.${modeName.lowercase()}.js")
+                )
+                it.outputConfig.set(
+                    File("${project.buildDir}/esbuild/esbuild.${modeName.lowercase()}.js")
+                )
+                if (mode == BuildMode.PRODUCTION) {
+                    it.minify = true
+                    it.prepack = true
+                }
+            }
+
+            val targetEmbeddedTask = "${modeName.lowercase()}EmbeddedExecutable"
+            project.tasks.create(
+                targetEmbeddedTask,
+                NodeTask::class.java
+            ) {
+                it.group = "distribution"
+                it.dependsOn(buildTask)
+                it.dependsOn(buildTask.processShim)
+                it.dependsOn(buildTask.outputConfig)
+                it.script.set(buildTask.outputConfig.get())
+
+                it.setNodeModulesPath(
+                    listOf(
+                        "${project.rootDir}/node_modules",
+                        "${rootPackageJson.rootPackageJson.parentFile / "node_modules"}"
+                    ).joinToString(":")
+                )
+                it.inputs.files(
+                    buildTask.processShim,
+                    buildTask.outputConfig,
+                    fetchSources.destinationDir / "ssr.js",
+                )
+                if (mode == BuildMode.PRODUCTION) {
+                    it.outputs.file(buildTask.outputOptimizedFile.absolutePath)
+                } else {
+                    it.outputs.file(buildTask.outputBundleFile.absolutePath)
+                }
+            }
+
+            // create a distribution for the bundle
+            val nodeDist = project.configurations.create("nodeSsrDist${mode.name.capitalized()}") {
+                it.isCanBeConsumed = true
+                it.isCanBeResolved = false
+            }
+
+            // add to project artifacts
+            project.artifacts.add(
+                nodeDist.name,
+                project.tasks.named(targetEmbeddedTask, NodeTask::class.java).map {
+                    it.outputs.files.files.single()
+                },
+            )
+        }
+
+        @Suppress("UNUSED_PARAMETER")
+        @JvmStatic fun setupBrowserWebpackBuildTask(
+            mode: BuildMode,
+            project: Project,
+            fetchSources: Copy,
+            kotlinJsLink: Task,
+            extension: ElideExtension,
+            jsExtension: ElideEmbeddedJsExtension,
+        ) {
+            project.logger.lifecycle("Configuring embedded 'webpack' task for CSR...")
         }
     }
 
@@ -62,9 +245,12 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
                 file("$buildDir\\$defaultOutputBundleFolder").absolutePath
             )
 
-            // set the default output bundle name
+            // set the default output bundle name and optimized bundle name
             outputBundleName.set(
                 defaultOutputBundleName
+            )
+            outputOptimizedName.set(
+                defaultOutputOptimizedName
             )
 
             // set the default output config file/wrapper
@@ -194,6 +380,14 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
     )
     abstract val outputBundleName: Property<String>
 
+    /** Name to give the pre-compiled and optimized version of the output bundle. */
+    @get:Input
+    @get:Option(
+        option = "outputOptimizedName",
+        description = "Name to give the optimized bundle built by this task. Typically managed by the plugin.",
+    )
+    abstract val outputOptimizedName: Property<String>
+
     /** Input Node Modules directory for installed dependencies. */
     @get:InputFiles
     @get:Option(
@@ -225,6 +419,14 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
         description = "Whether to minify the target bundle. Defaults to the value stipulate by `mode`.",
     )
     var minify: Boolean = mode.minify
+
+    /** Whether to perform pre-packing on the target bundle. */
+    @get:Input
+    @get:Option(
+        option = "prepack",
+        description = "Whether to run the bundle through `prepack`. Only applies to server-side SSR bundles.",
+    )
+    var prepack: Boolean = mode.prepack
 
     /** Whether to generate a single output bundle. */
     @get:Input
@@ -274,10 +476,12 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
             "format" to format.symbol,
             "bundle" to bundle.toString(),
             "minify" to minify.toString(),
+            "prepack" to prepack.toString(),
             "libname" to libraryName,
             "platform" to platform.trim().lowercase(),
             "process" to processShim.get().absolutePath.fixSlashes(),
             "outfile" to outputBundleFile.absolutePath.fixSlashes(),
+            "prepack_outfile" to outputOptimizedFile.absolutePath.fixSlashes(),
             "nodepath" to modulesFolders.get().joinToString(",") {
                 "'${it.absolutePath.fixSlashes()}'"
             },

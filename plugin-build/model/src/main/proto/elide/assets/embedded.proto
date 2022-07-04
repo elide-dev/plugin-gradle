@@ -1,0 +1,102 @@
+/*
+ * Specifies structures used to define the notion of an "embedded" script asset in some foreign language, which can be
+ * executed at runtime by Elide to fulfill user requests.
+ */
+syntax = "proto3";
+package assets;
+
+option optimize_for = SPEED;
+option cc_enable_arenas = true;
+option java_multiple_files = true;
+option java_string_check_utf8 = true;
+option php_namespace = "Elide\\Assets";
+option php_class_prefix = "ELD";
+option swift_prefix = "Elide";
+option objc_class_prefix = "ELD";
+option ruby_package = "Elide::Assets";
+option java_package = "tools.elide.assets";
+option csharp_namespace = "Elide.Assets";
+option go_package = "github.com/elide-tools/elide/assets/embedded;embedded";
+
+import "google/protobuf/timestamp.proto";
+
+import "elide/crypto/crypto.proto";
+import "elide/data/data.proto";
+
+
+//
+enum EmbeddedScriptLanguage {
+  //
+  LANGUAGE_UNSPECIFIED = 0;
+
+  //
+  JS = 1;
+}
+
+
+//
+message EmbeddedScriptMetadata {
+  //
+  message JsScriptMetadata {
+    //
+    enum JsLanguageLevel {
+      //
+      JS_LANGUAGE_LEVEL_DEFAULT = 0;
+
+      //
+      ES5 = 1;
+
+      //
+      ES6 = 2;
+
+      //
+      ES2017 = 3;
+
+      //
+      ES2018 = 4;
+
+      //
+      ES2019 = 5;
+
+      //
+      ES2020 = 6;
+    }
+
+    //
+    JsLanguageLevel level = 1;
+  }
+
+  //
+  oneof metadata {
+    //
+    JsScriptMetadata javascript = 1;
+  }
+}
+
+
+//
+message EmbeddedScript {
+  //
+  string module = 1;
+
+  //
+  string filename = 2;
+
+  //
+  EmbeddedScriptLanguage language = 3;
+
+  //
+  crypto.HashAlgorithm hash_algorithm = 4;
+
+  //
+  bytes fingerprint = 5;
+
+  //
+  EmbeddedScriptMetadata metadata = 6;
+
+  //
+  google.protobuf.Timestamp last_modified = 7;
+
+  //
+  string sourcemap = 8;
+}

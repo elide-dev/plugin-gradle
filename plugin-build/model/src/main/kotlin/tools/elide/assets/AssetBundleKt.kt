@@ -442,6 +442,91 @@ public object AssetBundleKt {
     public fun clearRewrite() {
       _builder.clearRewrite()
     }
+
+    /**
+     * An uninstantiable, behaviorless type to represent the field in
+     * generics.
+     */
+    @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
+    public class GenericProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     */
+     public val generic: com.google.protobuf.kotlin.DslMap<kotlin.String, tools.elide.assets.AssetBundle.GenericBundle, GenericProxy>
+      @kotlin.jvm.JvmSynthetic
+      @JvmName("getGenericMap")
+      get() = com.google.protobuf.kotlin.DslMap(
+        _builder.getGenericMap()
+      )
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     */
+    @JvmName("putGeneric")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, tools.elide.assets.AssetBundle.GenericBundle, GenericProxy>
+      .put(key: kotlin.String, value: tools.elide.assets.AssetBundle.GenericBundle) {
+         _builder.putGeneric(key, value)
+       }
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("setGeneric")
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun com.google.protobuf.kotlin.DslMap<kotlin.String, tools.elide.assets.AssetBundle.GenericBundle, GenericProxy>
+      .set(key: kotlin.String, value: tools.elide.assets.AssetBundle.GenericBundle) {
+         put(key, value)
+       }
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("removeGeneric")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, tools.elide.assets.AssetBundle.GenericBundle, GenericProxy>
+      .remove(key: kotlin.String) {
+         _builder.removeGeneric(key)
+       }
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("putAllGeneric")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, tools.elide.assets.AssetBundle.GenericBundle, GenericProxy>
+      .putAll(map: kotlin.collections.Map<kotlin.String, tools.elide.assets.AssetBundle.GenericBundle>) {
+         _builder.putAllGeneric(map)
+       }
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     */
+    @kotlin.jvm.JvmSynthetic
+    @JvmName("clearGeneric")
+    public fun com.google.protobuf.kotlin.DslMap<kotlin.String, tools.elide.assets.AssetBundle.GenericBundle, GenericProxy>
+      .clear() {
+         _builder.clearGeneric()
+       }
   }
   @kotlin.jvm.JvmName("-initializedigestSettings")
   public inline fun digestSettings(block: tools.elide.assets.AssetBundleKt.DigestSettingsKt.Dsl.() -> kotlin.Unit): tools.elide.assets.AssetBundle.DigestSettings =
@@ -1555,6 +1640,251 @@ public object AssetBundleKt {
       }
     }
   }
+  @kotlin.jvm.JvmName("-initializegenericBundle")
+  public inline fun genericBundle(block: tools.elide.assets.AssetBundleKt.GenericBundleKt.Dsl.() -> kotlin.Unit): tools.elide.assets.AssetBundle.GenericBundle =
+    tools.elide.assets.AssetBundleKt.GenericBundleKt.Dsl._create(tools.elide.assets.AssetBundle.GenericBundle.newBuilder()).apply { block() }._build()
+  public object GenericBundleKt {
+    @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
+    @com.google.protobuf.kotlin.ProtoDslMarker
+    public class Dsl private constructor(
+      private val _builder: tools.elide.assets.AssetBundle.GenericBundle.Builder
+    ) {
+      public companion object {
+        @kotlin.jvm.JvmSynthetic
+        @kotlin.PublishedApi
+        internal fun _create(builder: tools.elide.assets.AssetBundle.GenericBundle.Builder): Dsl = Dsl(builder)
+      }
+
+      @kotlin.jvm.JvmSynthetic
+      @kotlin.PublishedApi
+      internal fun _build(): tools.elide.assets.AssetBundle.GenericBundle = _builder.build()
+
+      /**
+       * <pre>
+       * Generic asset name/path.
+       * </pre>
+       *
+       * <code>string module = 1;</code>
+       */
+      public var module: kotlin.String
+        @JvmName("getModule")
+        get() = _builder.getModule()
+        @JvmName("setModule")
+        set(value) {
+          _builder.setModule(value)
+        }
+      /**
+       * <pre>
+       * Generic asset name/path.
+       * </pre>
+       *
+       * <code>string module = 1;</code>
+       */
+      public fun clearModule() {
+        _builder.clearModule()
+      }
+
+      /**
+       * <pre>
+       * Original name of the source file, as applicable.
+       * </pre>
+       *
+       * <code>string filename = 2;</code>
+       */
+      public var filename: kotlin.String
+        @JvmName("getFilename")
+        get() = _builder.getFilename()
+        @JvmName("setFilename")
+        set(value) {
+          _builder.setFilename(value)
+        }
+      /**
+       * <pre>
+       * Original name of the source file, as applicable.
+       * </pre>
+       *
+       * <code>string filename = 2;</code>
+       */
+      public fun clearFilename() {
+        _builder.clearFilename()
+      }
+
+      /**
+       * <pre>
+       * Hash token uniquely identifying the content in this module.
+       * </pre>
+       *
+       * <code>string token = 3;</code>
+       */
+      public var token: kotlin.String
+        @JvmName("getToken")
+        get() = _builder.getToken()
+        @JvmName("setToken")
+        set(value) {
+          _builder.setToken(value)
+        }
+      /**
+       * <pre>
+       * Hash token uniquely identifying the content in this module.
+       * </pre>
+       *
+       * <code>string token = 3;</code>
+       */
+      public fun clearToken() {
+        _builder.clearToken()
+      }
+
+      /**
+       * An uninstantiable, behaviorless type to represent the field in
+       * generics.
+       */
+      @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
+      public class VariantProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+       public val variant: com.google.protobuf.kotlin.DslList<tools.elide.data.CompressedData, VariantProxy>
+        @kotlin.jvm.JvmSynthetic
+        get() = com.google.protobuf.kotlin.DslList(
+          _builder.getVariantList()
+        )
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       * @param value The variant to add.
+       */
+      @kotlin.jvm.JvmSynthetic
+      @kotlin.jvm.JvmName("addVariant")
+      public fun com.google.protobuf.kotlin.DslList<tools.elide.data.CompressedData, VariantProxy>.add(value: tools.elide.data.CompressedData) {
+        _builder.addVariant(value)
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       * @param value The variant to add.
+       */
+      @kotlin.jvm.JvmSynthetic
+      @kotlin.jvm.JvmName("plusAssignVariant")
+      @Suppress("NOTHING_TO_INLINE")
+      public inline operator fun com.google.protobuf.kotlin.DslList<tools.elide.data.CompressedData, VariantProxy>.plusAssign(value: tools.elide.data.CompressedData) {
+        add(value)
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       * @param values The variant to add.
+       */
+      @kotlin.jvm.JvmSynthetic
+      @kotlin.jvm.JvmName("addAllVariant")
+      public fun com.google.protobuf.kotlin.DslList<tools.elide.data.CompressedData, VariantProxy>.addAll(values: kotlin.collections.Iterable<tools.elide.data.CompressedData>) {
+        _builder.addAllVariant(values)
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       * @param values The variant to add.
+       */
+      @kotlin.jvm.JvmSynthetic
+      @kotlin.jvm.JvmName("plusAssignAllVariant")
+      @Suppress("NOTHING_TO_INLINE")
+      public inline operator fun com.google.protobuf.kotlin.DslList<tools.elide.data.CompressedData, VariantProxy>.plusAssign(values: kotlin.collections.Iterable<tools.elide.data.CompressedData>) {
+        addAll(values)
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       * @param index The index to set the value at.
+       * @param value The variant to set.
+       */
+      @kotlin.jvm.JvmSynthetic
+      @kotlin.jvm.JvmName("setVariant")
+      public operator fun com.google.protobuf.kotlin.DslList<tools.elide.data.CompressedData, VariantProxy>.set(index: kotlin.Int, value: tools.elide.data.CompressedData) {
+        _builder.setVariant(index, value)
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      @kotlin.jvm.JvmSynthetic
+      @kotlin.jvm.JvmName("clearVariant")
+      public fun com.google.protobuf.kotlin.DslList<tools.elide.data.CompressedData, VariantProxy>.clear() {
+        _builder.clearVariant()
+      }
+
+
+      /**
+       * <pre>
+       * Whether this asset should be compressed when serving to end-users.
+       * </pre>
+       *
+       * <code>bool compressable = 5;</code>
+       */
+      public var compressable: kotlin.Boolean
+        @JvmName("getCompressable")
+        get() = _builder.getCompressable()
+        @JvmName("setCompressable")
+        set(value) {
+          _builder.setCompressable(value)
+        }
+      /**
+       * <pre>
+       * Whether this asset should be compressed when serving to end-users.
+       * </pre>
+       *
+       * <code>bool compressable = 5;</code>
+       */
+      public fun clearCompressable() {
+        _builder.clearCompressable()
+      }
+
+      /**
+       * <pre>
+       * Whether this asset should be considered cacheable.
+       * </pre>
+       *
+       * <code>bool cacheable = 6;</code>
+       */
+      public var cacheable: kotlin.Boolean
+        @JvmName("getCacheable")
+        get() = _builder.getCacheable()
+        @JvmName("setCacheable")
+        set(value) {
+          _builder.setCacheable(value)
+        }
+      /**
+       * <pre>
+       * Whether this asset should be considered cacheable.
+       * </pre>
+       *
+       * <code>bool cacheable = 6;</code>
+       */
+      public fun clearCacheable() {
+        _builder.clearCacheable()
+      }
+    }
+  }
   @kotlin.jvm.JvmName("-initializeassetContent")
   public inline fun assetContent(block: tools.elide.assets.AssetBundleKt.AssetContentKt.Dsl.() -> kotlin.Unit): tools.elide.assets.AssetBundle.AssetContent =
     tools.elide.assets.AssetBundleKt.AssetContentKt.Dsl._create(tools.elide.assets.AssetBundle.AssetContent.newBuilder()).apply { block() }._build()
@@ -1800,6 +2130,10 @@ val tools.elide.assets.AssetBundle.ScriptBundle.ScriptAssetOrBuilder.scriptOrNul
 
 val tools.elide.assets.AssetBundle.ScriptBundleOrBuilder.dependenciesOrNull: tools.elide.assets.AssetBundle.AssetDependencies?
   get() = if (hasDependencies()) getDependencies() else null
+
+@kotlin.jvm.JvmSynthetic
+public inline fun tools.elide.assets.AssetBundle.GenericBundle.copy(block: tools.elide.assets.AssetBundleKt.GenericBundleKt.Dsl.() -> kotlin.Unit): tools.elide.assets.AssetBundle.GenericBundle =
+  tools.elide.assets.AssetBundleKt.GenericBundleKt.Dsl._create(this.toBuilder()).apply { block() }._build()
 
 @kotlin.jvm.JvmSynthetic
 public inline fun tools.elide.assets.AssetBundle.AssetContent.copy(block: tools.elide.assets.AssetBundleKt.AssetContentKt.Dsl.() -> kotlin.Unit): tools.elide.assets.AssetBundle.AssetContent =
