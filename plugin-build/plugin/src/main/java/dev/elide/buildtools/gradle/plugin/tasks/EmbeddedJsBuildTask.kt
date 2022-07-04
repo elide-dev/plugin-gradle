@@ -274,6 +274,13 @@ abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBund
                 it.outputConfig.set(
                     File("${project.buildDir}/esbuild/esbuild.${modeName.lowercase()}.js")
                 )
+                it.modulesFolders.set(listOf(
+                    File(inflateRuntime.modulesPath.get().absolutePath),
+                    File("${project.buildDir}/js/node_modules"),
+                    File("${project.projectDir}/node_modules"),
+                    File("${project.rootProject.buildDir}/js/node_modules"),
+                    File("${project.rootProject.projectDir}/node_modules"),
+                ))
                 if (mode == BuildMode.PRODUCTION) {
                     it.minify = true
                     it.prepack = true
