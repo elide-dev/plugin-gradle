@@ -29,6 +29,10 @@ import java.util.concurrent.atomic.AtomicReference
  */
 abstract class BundleSpecTask<M : Message, Spec> : DefaultTask() {
     companion object {
+        const val defaultOutputBundleFolder = "bundle"
+        const val defaultOutputBundleName = "bundle.js"
+        const val defaultOutputOptimizedName = "bundle.opt.js"
+
         /** Asset bundler tool. */
         @Suppress("unused")
         internal val bundler: AssetBundler = AssetBundler.create()
@@ -53,6 +57,13 @@ abstract class BundleSpecTask<M : Message, Spec> : DefaultTask() {
             ManifestFormat.BINARY -> "$name.assets.pb"
             ManifestFormat.TEXT -> "$name.assets.pb.txt"
             ManifestFormat.JSON -> "$name.assets.pb.json"
+        }
+
+        /** Apply the plugin at the provided [id] to the provided [project] within the scope of the [cbk]. */
+        @JvmStatic fun applyPlugin(project: Project, id: String, cbk: () -> Unit) {
+            project.plugins.withId(id) {
+                cbk.invoke()
+            }
         }
 
         @JvmStatic

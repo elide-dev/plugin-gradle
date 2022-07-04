@@ -42,6 +42,11 @@ abstract class BundleAssetsBuildTask : BundleSpecTask<AssetBundle, AssetBundleSp
 
         // set defaults
         with(project) {
+            // set the default output bundle folder
+            outputBundleFolder.set(
+                file("$buildDir\\${defaultOutputBundleFolder}").absolutePath
+            )
+
             // setup asset spec
             outputSpecName.set(
                 StaticValues.defaultEncoding.fileNamed("app")

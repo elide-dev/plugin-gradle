@@ -5,6 +5,8 @@
       <module name="com.ncorti.kotlin.gradle.template.plugin" target="1.8" />
       <module name="com.ncorti.kotlin.gradle.template.plugin.main" target="1.8" />
       <module name="com.ncorti.kotlin.gradle.template.plugin.test" target="1.8" />
+      <module name="elide-gradle-plugin.example.main" target="17" />
+      <module name="elide-gradle-plugin.example.test" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -88,7 +88,7 @@ abstract class BundleWriteTask : DefaultTask() {
             throw IllegalStateException("Failed to resolve built asset spec: could not write.")
         } else {
             project.logger.lifecycle(
-                "Writing asset bundle '${outputSpecName.get()}'..."
+                "Writing asset bundle '${outputSpecName.get()}'"
             )
             writeBundle(assetSpec)
         }
