@@ -94,5 +94,5 @@ jobs:
       - name: Verify the plugin output
         if: success()
         run: |
-          file ./example/build/distributions/bundle.opt.js
-          grep -Fq "esbuild" ./example/build/esbuild/esbuild.production.js
+          file ./example/fullstack/node/build/distributions/*.js
+          grep -Fq "esbuild" ./example/fullstack/node/build/esbuild/esbuild.*.js
