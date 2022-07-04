@@ -25,6 +25,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private AssetBundle() {
+    digest_ = com.google.protobuf.ByteString.EMPTY;
     asset_ = java.util.Collections.emptyList();
   }
 
@@ -66,18 +67,23 @@ private static final long serialVersionUID = 0L;
           }
           case 18: {
             tools.elide.assets.AssetBundle.DigestSettings.Builder subBuilder = null;
-            if (digest_ != null) {
-              subBuilder = digest_.toBuilder();
+            if (digestSettings_ != null) {
+              subBuilder = digestSettings_.toBuilder();
             }
-            digest_ = input.readMessage(tools.elide.assets.AssetBundle.DigestSettings.parser(), extensionRegistry);
+            digestSettings_ = input.readMessage(tools.elide.assets.AssetBundle.DigestSettings.parser(), extensionRegistry);
             if (subBuilder != null) {
-              subBuilder.mergeFrom(digest_);
-              digest_ = subBuilder.buildPartial();
+              subBuilder.mergeFrom(digestSettings_);
+              digestSettings_ = subBuilder.buildPartial();
             }
 
             break;
           }
           case 26: {
+
+            digest_ = input.readBytes();
+            break;
+          }
+          case 34: {
             if (!((mutable_bitField0_ & 0x00000001) != 0)) {
               styles_ = com.google.protobuf.MapField.newMapField(
                   StylesDefaultEntryHolder.defaultEntry);
@@ -90,7 +96,7 @@ private static final long serialVersionUID = 0L;
                 styles__.getKey(), styles__.getValue());
             break;
           }
-          case 34: {
+          case 42: {
             if (!((mutable_bitField0_ & 0x00000002) != 0)) {
               scripts_ = com.google.protobuf.MapField.newMapField(
                   ScriptsDefaultEntryHolder.defaultEntry);
@@ -103,16 +109,29 @@ private static final long serialVersionUID = 0L;
                 scripts__.getKey(), scripts__.getValue());
             break;
           }
-          case 42: {
+          case 50: {
             if (!((mutable_bitField0_ & 0x00000004) != 0)) {
-              asset_ = new java.util.ArrayList<tools.elide.assets.AssetBundle.AssetContent>();
+              generic_ = com.google.protobuf.MapField.newMapField(
+                  GenericDefaultEntryHolder.defaultEntry);
               mutable_bitField0_ |= 0x00000004;
+            }
+            com.google.protobuf.MapEntry<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle>
+            generic__ = input.readMessage(
+                GenericDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+            generic_.getMutableMap().put(
+                generic__.getKey(), generic__.getValue());
+            break;
+          }
+          case 58: {
+            if (!((mutable_bitField0_ & 0x00000008) != 0)) {
+              asset_ = new java.util.ArrayList<tools.elide.assets.AssetBundle.AssetContent>();
+              mutable_bitField0_ |= 0x00000008;
             }
             asset_.add(
                 input.readMessage(tools.elide.assets.AssetBundle.AssetContent.parser(), extensionRegistry));
             break;
           }
-          case 50: {
+          case 66: {
             com.google.protobuf.Timestamp.Builder subBuilder = null;
             if (generated_ != null) {
               subBuilder = generated_.toBuilder();
@@ -125,9 +144,9 @@ private static final long serialVersionUID = 0L;
 
             break;
           }
-          case 56: {
+          case 72: {
 
-            rewrite_ = input.readBool();
+            styleRewrite_ = input.readBool();
             break;
           }
           default: {
@@ -147,7 +166,7 @@ private static final long serialVersionUID = 0L;
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000004) != 0)) {
+      if (((mutable_bitField0_ & 0x00000008) != 0)) {
         asset_ = java.util.Collections.unmodifiableList(asset_);
       }
       this.unknownFields = unknownFields.build();
@@ -164,10 +183,12 @@ private static final long serialVersionUID = 0L;
   protected com.google.protobuf.MapField internalGetMapField(
       int number) {
     switch (number) {
-      case 3:
-        return internalGetStyles();
       case 4:
+        return internalGetStyles();
+      case 5:
         return internalGetScripts();
+      case 6:
+        return internalGetGeneric();
       default:
         throw new RuntimeException(
             "Invalid map field number: " + number);
@@ -8417,6 +8438,1663 @@ java.lang.String defaultValue);
 
   }
 
+  public interface GenericBundleOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:assets.AssetBundle.GenericBundle)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * Generic asset name/path.
+     * </pre>
+     *
+     * <code>string module = 1;</code>
+     * @return The module.
+     */
+    java.lang.String getModule();
+    /**
+     * <pre>
+     * Generic asset name/path.
+     * </pre>
+     *
+     * <code>string module = 1;</code>
+     * @return The bytes for module.
+     */
+    com.google.protobuf.ByteString
+        getModuleBytes();
+
+    /**
+     * <pre>
+     * Original name of the source file, as applicable.
+     * </pre>
+     *
+     * <code>string filename = 2;</code>
+     * @return The filename.
+     */
+    java.lang.String getFilename();
+    /**
+     * <pre>
+     * Original name of the source file, as applicable.
+     * </pre>
+     *
+     * <code>string filename = 2;</code>
+     * @return The bytes for filename.
+     */
+    com.google.protobuf.ByteString
+        getFilenameBytes();
+
+    /**
+     * <pre>
+     * Hash token uniquely identifying the content in this module.
+     * </pre>
+     *
+     * <code>string token = 3;</code>
+     * @return The token.
+     */
+    java.lang.String getToken();
+    /**
+     * <pre>
+     * Hash token uniquely identifying the content in this module.
+     * </pre>
+     *
+     * <code>string token = 3;</code>
+     * @return The bytes for token.
+     */
+    com.google.protobuf.ByteString
+        getTokenBytes();
+
+    /**
+     * <pre>
+     * Specifies each variant of an asset's main content.
+     * </pre>
+     *
+     * <code>repeated .data.CompressedData variant = 4;</code>
+     */
+    java.util.List<tools.elide.data.CompressedData> 
+        getVariantList();
+    /**
+     * <pre>
+     * Specifies each variant of an asset's main content.
+     * </pre>
+     *
+     * <code>repeated .data.CompressedData variant = 4;</code>
+     */
+    tools.elide.data.CompressedData getVariant(int index);
+    /**
+     * <pre>
+     * Specifies each variant of an asset's main content.
+     * </pre>
+     *
+     * <code>repeated .data.CompressedData variant = 4;</code>
+     */
+    int getVariantCount();
+    /**
+     * <pre>
+     * Specifies each variant of an asset's main content.
+     * </pre>
+     *
+     * <code>repeated .data.CompressedData variant = 4;</code>
+     */
+    java.util.List<? extends tools.elide.data.CompressedDataOrBuilder> 
+        getVariantOrBuilderList();
+    /**
+     * <pre>
+     * Specifies each variant of an asset's main content.
+     * </pre>
+     *
+     * <code>repeated .data.CompressedData variant = 4;</code>
+     */
+    tools.elide.data.CompressedDataOrBuilder getVariantOrBuilder(
+        int index);
+
+    /**
+     * <pre>
+     * Whether this asset should be compressed when serving to end-users.
+     * </pre>
+     *
+     * <code>bool compressable = 5;</code>
+     * @return The compressable.
+     */
+    boolean getCompressable();
+
+    /**
+     * <pre>
+     * Whether this asset should be considered cacheable.
+     * </pre>
+     *
+     * <code>bool cacheable = 6;</code>
+     * @return The cacheable.
+     */
+    boolean getCacheable();
+  }
+  /**
+   * <pre>
+   * Describes a generic asset bundle relating to a text asset, or some other generic asset which is otherwise not
+   * modeled by other available descriptors.
+   * </pre>
+   *
+   * Protobuf type {@code assets.AssetBundle.GenericBundle}
+   */
+  public static final class GenericBundle extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:assets.AssetBundle.GenericBundle)
+      GenericBundleOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use GenericBundle.newBuilder() to construct.
+    private GenericBundle(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private GenericBundle() {
+      module_ = "";
+      filename_ = "";
+      token_ = "";
+      variant_ = java.util.Collections.emptyList();
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new GenericBundle();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GenericBundle(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              module_ = s;
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              filename_ = s;
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              token_ = s;
+              break;
+            }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                variant_ = new java.util.ArrayList<tools.elide.data.CompressedData>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              variant_.add(
+                  input.readMessage(tools.elide.data.CompressedData.parser(), extensionRegistry));
+              break;
+            }
+            case 40: {
+
+              compressable_ = input.readBool();
+              break;
+            }
+            case 48: {
+
+              cacheable_ = input.readBool();
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+          variant_ = java.util.Collections.unmodifiableList(variant_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return tools.elide.assets.Bundle.internal_static_assets_AssetBundle_GenericBundle_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return tools.elide.assets.Bundle.internal_static_assets_AssetBundle_GenericBundle_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              tools.elide.assets.AssetBundle.GenericBundle.class, tools.elide.assets.AssetBundle.GenericBundle.Builder.class);
+    }
+
+    public static final int MODULE_FIELD_NUMBER = 1;
+    private volatile java.lang.Object module_;
+    /**
+     * <pre>
+     * Generic asset name/path.
+     * </pre>
+     *
+     * <code>string module = 1;</code>
+     * @return The module.
+     */
+    @java.lang.Override
+    public java.lang.String getModule() {
+      java.lang.Object ref = module_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        module_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * Generic asset name/path.
+     * </pre>
+     *
+     * <code>string module = 1;</code>
+     * @return The bytes for module.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getModuleBytes() {
+      java.lang.Object ref = module_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        module_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int FILENAME_FIELD_NUMBER = 2;
+    private volatile java.lang.Object filename_;
+    /**
+     * <pre>
+     * Original name of the source file, as applicable.
+     * </pre>
+     *
+     * <code>string filename = 2;</code>
+     * @return The filename.
+     */
+    @java.lang.Override
+    public java.lang.String getFilename() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        filename_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * Original name of the source file, as applicable.
+     * </pre>
+     *
+     * <code>string filename = 2;</code>
+     * @return The bytes for filename.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getFilenameBytes() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        filename_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int TOKEN_FIELD_NUMBER = 3;
+    private volatile java.lang.Object token_;
+    /**
+     * <pre>
+     * Hash token uniquely identifying the content in this module.
+     * </pre>
+     *
+     * <code>string token = 3;</code>
+     * @return The token.
+     */
+    @java.lang.Override
+    public java.lang.String getToken() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        token_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     * Hash token uniquely identifying the content in this module.
+     * </pre>
+     *
+     * <code>string token = 3;</code>
+     * @return The bytes for token.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getTokenBytes() {
+      java.lang.Object ref = token_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        token_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int VARIANT_FIELD_NUMBER = 4;
+    private java.util.List<tools.elide.data.CompressedData> variant_;
+    /**
+     * <pre>
+     * Specifies each variant of an asset's main content.
+     * </pre>
+     *
+     * <code>repeated .data.CompressedData variant = 4;</code>
+     */
+    @java.lang.Override
+    public java.util.List<tools.elide.data.CompressedData> getVariantList() {
+      return variant_;
+    }
+    /**
+     * <pre>
+     * Specifies each variant of an asset's main content.
+     * </pre>
+     *
+     * <code>repeated .data.CompressedData variant = 4;</code>
+     */
+    @java.lang.Override
+    public java.util.List<? extends tools.elide.data.CompressedDataOrBuilder> 
+        getVariantOrBuilderList() {
+      return variant_;
+    }
+    /**
+     * <pre>
+     * Specifies each variant of an asset's main content.
+     * </pre>
+     *
+     * <code>repeated .data.CompressedData variant = 4;</code>
+     */
+    @java.lang.Override
+    public int getVariantCount() {
+      return variant_.size();
+    }
+    /**
+     * <pre>
+     * Specifies each variant of an asset's main content.
+     * </pre>
+     *
+     * <code>repeated .data.CompressedData variant = 4;</code>
+     */
+    @java.lang.Override
+    public tools.elide.data.CompressedData getVariant(int index) {
+      return variant_.get(index);
+    }
+    /**
+     * <pre>
+     * Specifies each variant of an asset's main content.
+     * </pre>
+     *
+     * <code>repeated .data.CompressedData variant = 4;</code>
+     */
+    @java.lang.Override
+    public tools.elide.data.CompressedDataOrBuilder getVariantOrBuilder(
+        int index) {
+      return variant_.get(index);
+    }
+
+    public static final int COMPRESSABLE_FIELD_NUMBER = 5;
+    private boolean compressable_;
+    /**
+     * <pre>
+     * Whether this asset should be compressed when serving to end-users.
+     * </pre>
+     *
+     * <code>bool compressable = 5;</code>
+     * @return The compressable.
+     */
+    @java.lang.Override
+    public boolean getCompressable() {
+      return compressable_;
+    }
+
+    public static final int CACHEABLE_FIELD_NUMBER = 6;
+    private boolean cacheable_;
+    /**
+     * <pre>
+     * Whether this asset should be considered cacheable.
+     * </pre>
+     *
+     * <code>bool cacheable = 6;</code>
+     * @return The cacheable.
+     */
+    @java.lang.Override
+    public boolean getCacheable() {
+      return cacheable_;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(module_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, module_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(filename_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, filename_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, token_);
+      }
+      for (int i = 0; i < variant_.size(); i++) {
+        output.writeMessage(4, variant_.get(i));
+      }
+      if (compressable_ != false) {
+        output.writeBool(5, compressable_);
+      }
+      if (cacheable_ != false) {
+        output.writeBool(6, cacheable_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(module_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, module_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(filename_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, filename_);
+      }
+      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(token_)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, token_);
+      }
+      for (int i = 0; i < variant_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, variant_.get(i));
+      }
+      if (compressable_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(5, compressable_);
+      }
+      if (cacheable_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(6, cacheable_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof tools.elide.assets.AssetBundle.GenericBundle)) {
+        return super.equals(obj);
+      }
+      tools.elide.assets.AssetBundle.GenericBundle other = (tools.elide.assets.AssetBundle.GenericBundle) obj;
+
+      if (!getModule()
+          .equals(other.getModule())) return false;
+      if (!getFilename()
+          .equals(other.getFilename())) return false;
+      if (!getToken()
+          .equals(other.getToken())) return false;
+      if (!getVariantList()
+          .equals(other.getVariantList())) return false;
+      if (getCompressable()
+          != other.getCompressable()) return false;
+      if (getCacheable()
+          != other.getCacheable()) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + MODULE_FIELD_NUMBER;
+      hash = (53 * hash) + getModule().hashCode();
+      hash = (37 * hash) + FILENAME_FIELD_NUMBER;
+      hash = (53 * hash) + getFilename().hashCode();
+      hash = (37 * hash) + TOKEN_FIELD_NUMBER;
+      hash = (53 * hash) + getToken().hashCode();
+      if (getVariantCount() > 0) {
+        hash = (37 * hash) + VARIANT_FIELD_NUMBER;
+        hash = (53 * hash) + getVariantList().hashCode();
+      }
+      hash = (37 * hash) + COMPRESSABLE_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getCompressable());
+      hash = (37 * hash) + CACHEABLE_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getCacheable());
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static tools.elide.assets.AssetBundle.GenericBundle parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static tools.elide.assets.AssetBundle.GenericBundle parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static tools.elide.assets.AssetBundle.GenericBundle parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static tools.elide.assets.AssetBundle.GenericBundle parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static tools.elide.assets.AssetBundle.GenericBundle parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static tools.elide.assets.AssetBundle.GenericBundle parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static tools.elide.assets.AssetBundle.GenericBundle parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static tools.elide.assets.AssetBundle.GenericBundle parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static tools.elide.assets.AssetBundle.GenericBundle parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static tools.elide.assets.AssetBundle.GenericBundle parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static tools.elide.assets.AssetBundle.GenericBundle parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static tools.elide.assets.AssetBundle.GenericBundle parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(tools.elide.assets.AssetBundle.GenericBundle prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * <pre>
+     * Describes a generic asset bundle relating to a text asset, or some other generic asset which is otherwise not
+     * modeled by other available descriptors.
+     * </pre>
+     *
+     * Protobuf type {@code assets.AssetBundle.GenericBundle}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:assets.AssetBundle.GenericBundle)
+        tools.elide.assets.AssetBundle.GenericBundleOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return tools.elide.assets.Bundle.internal_static_assets_AssetBundle_GenericBundle_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return tools.elide.assets.Bundle.internal_static_assets_AssetBundle_GenericBundle_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                tools.elide.assets.AssetBundle.GenericBundle.class, tools.elide.assets.AssetBundle.GenericBundle.Builder.class);
+      }
+
+      // Construct using tools.elide.assets.AssetBundle.GenericBundle.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getVariantFieldBuilder();
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        module_ = "";
+
+        filename_ = "";
+
+        token_ = "";
+
+        if (variantBuilder_ == null) {
+          variant_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          variantBuilder_.clear();
+        }
+        compressable_ = false;
+
+        cacheable_ = false;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return tools.elide.assets.Bundle.internal_static_assets_AssetBundle_GenericBundle_descriptor;
+      }
+
+      @java.lang.Override
+      public tools.elide.assets.AssetBundle.GenericBundle getDefaultInstanceForType() {
+        return tools.elide.assets.AssetBundle.GenericBundle.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public tools.elide.assets.AssetBundle.GenericBundle build() {
+        tools.elide.assets.AssetBundle.GenericBundle result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public tools.elide.assets.AssetBundle.GenericBundle buildPartial() {
+        tools.elide.assets.AssetBundle.GenericBundle result = new tools.elide.assets.AssetBundle.GenericBundle(this);
+        int from_bitField0_ = bitField0_;
+        result.module_ = module_;
+        result.filename_ = filename_;
+        result.token_ = token_;
+        if (variantBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) != 0)) {
+            variant_ = java.util.Collections.unmodifiableList(variant_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.variant_ = variant_;
+        } else {
+          result.variant_ = variantBuilder_.build();
+        }
+        result.compressable_ = compressable_;
+        result.cacheable_ = cacheable_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof tools.elide.assets.AssetBundle.GenericBundle) {
+          return mergeFrom((tools.elide.assets.AssetBundle.GenericBundle)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(tools.elide.assets.AssetBundle.GenericBundle other) {
+        if (other == tools.elide.assets.AssetBundle.GenericBundle.getDefaultInstance()) return this;
+        if (!other.getModule().isEmpty()) {
+          module_ = other.module_;
+          onChanged();
+        }
+        if (!other.getFilename().isEmpty()) {
+          filename_ = other.filename_;
+          onChanged();
+        }
+        if (!other.getToken().isEmpty()) {
+          token_ = other.token_;
+          onChanged();
+        }
+        if (variantBuilder_ == null) {
+          if (!other.variant_.isEmpty()) {
+            if (variant_.isEmpty()) {
+              variant_ = other.variant_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureVariantIsMutable();
+              variant_.addAll(other.variant_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.variant_.isEmpty()) {
+            if (variantBuilder_.isEmpty()) {
+              variantBuilder_.dispose();
+              variantBuilder_ = null;
+              variant_ = other.variant_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              variantBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getVariantFieldBuilder() : null;
+            } else {
+              variantBuilder_.addAllMessages(other.variant_);
+            }
+          }
+        }
+        if (other.getCompressable() != false) {
+          setCompressable(other.getCompressable());
+        }
+        if (other.getCacheable() != false) {
+          setCacheable(other.getCacheable());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        tools.elide.assets.AssetBundle.GenericBundle parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (tools.elide.assets.AssetBundle.GenericBundle) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.lang.Object module_ = "";
+      /**
+       * <pre>
+       * Generic asset name/path.
+       * </pre>
+       *
+       * <code>string module = 1;</code>
+       * @return The module.
+       */
+      public java.lang.String getModule() {
+        java.lang.Object ref = module_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          module_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Generic asset name/path.
+       * </pre>
+       *
+       * <code>string module = 1;</code>
+       * @return The bytes for module.
+       */
+      public com.google.protobuf.ByteString
+          getModuleBytes() {
+        java.lang.Object ref = module_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          module_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Generic asset name/path.
+       * </pre>
+       *
+       * <code>string module = 1;</code>
+       * @param value The module to set.
+       * @return This builder for chaining.
+       */
+      public Builder setModule(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        module_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Generic asset name/path.
+       * </pre>
+       *
+       * <code>string module = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearModule() {
+        
+        module_ = getDefaultInstance().getModule();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Generic asset name/path.
+       * </pre>
+       *
+       * <code>string module = 1;</code>
+       * @param value The bytes for module to set.
+       * @return This builder for chaining.
+       */
+      public Builder setModuleBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        module_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object filename_ = "";
+      /**
+       * <pre>
+       * Original name of the source file, as applicable.
+       * </pre>
+       *
+       * <code>string filename = 2;</code>
+       * @return The filename.
+       */
+      public java.lang.String getFilename() {
+        java.lang.Object ref = filename_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          filename_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Original name of the source file, as applicable.
+       * </pre>
+       *
+       * <code>string filename = 2;</code>
+       * @return The bytes for filename.
+       */
+      public com.google.protobuf.ByteString
+          getFilenameBytes() {
+        java.lang.Object ref = filename_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          filename_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Original name of the source file, as applicable.
+       * </pre>
+       *
+       * <code>string filename = 2;</code>
+       * @param value The filename to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFilename(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        filename_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Original name of the source file, as applicable.
+       * </pre>
+       *
+       * <code>string filename = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFilename() {
+        
+        filename_ = getDefaultInstance().getFilename();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Original name of the source file, as applicable.
+       * </pre>
+       *
+       * <code>string filename = 2;</code>
+       * @param value The bytes for filename to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFilenameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        filename_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object token_ = "";
+      /**
+       * <pre>
+       * Hash token uniquely identifying the content in this module.
+       * </pre>
+       *
+       * <code>string token = 3;</code>
+       * @return The token.
+       */
+      public java.lang.String getToken() {
+        java.lang.Object ref = token_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          token_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Hash token uniquely identifying the content in this module.
+       * </pre>
+       *
+       * <code>string token = 3;</code>
+       * @return The bytes for token.
+       */
+      public com.google.protobuf.ByteString
+          getTokenBytes() {
+        java.lang.Object ref = token_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          token_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       * Hash token uniquely identifying the content in this module.
+       * </pre>
+       *
+       * <code>string token = 3;</code>
+       * @param value The token to set.
+       * @return This builder for chaining.
+       */
+      public Builder setToken(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        token_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Hash token uniquely identifying the content in this module.
+       * </pre>
+       *
+       * <code>string token = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearToken() {
+        
+        token_ = getDefaultInstance().getToken();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Hash token uniquely identifying the content in this module.
+       * </pre>
+       *
+       * <code>string token = 3;</code>
+       * @param value The bytes for token to set.
+       * @return This builder for chaining.
+       */
+      public Builder setTokenBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        token_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.util.List<tools.elide.data.CompressedData> variant_ =
+        java.util.Collections.emptyList();
+      private void ensureVariantIsMutable() {
+        if (!((bitField0_ & 0x00000001) != 0)) {
+          variant_ = new java.util.ArrayList<tools.elide.data.CompressedData>(variant_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          tools.elide.data.CompressedData, tools.elide.data.CompressedData.Builder, tools.elide.data.CompressedDataOrBuilder> variantBuilder_;
+
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public java.util.List<tools.elide.data.CompressedData> getVariantList() {
+        if (variantBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(variant_);
+        } else {
+          return variantBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public int getVariantCount() {
+        if (variantBuilder_ == null) {
+          return variant_.size();
+        } else {
+          return variantBuilder_.getCount();
+        }
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public tools.elide.data.CompressedData getVariant(int index) {
+        if (variantBuilder_ == null) {
+          return variant_.get(index);
+        } else {
+          return variantBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public Builder setVariant(
+          int index, tools.elide.data.CompressedData value) {
+        if (variantBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariantIsMutable();
+          variant_.set(index, value);
+          onChanged();
+        } else {
+          variantBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public Builder setVariant(
+          int index, tools.elide.data.CompressedData.Builder builderForValue) {
+        if (variantBuilder_ == null) {
+          ensureVariantIsMutable();
+          variant_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          variantBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public Builder addVariant(tools.elide.data.CompressedData value) {
+        if (variantBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariantIsMutable();
+          variant_.add(value);
+          onChanged();
+        } else {
+          variantBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public Builder addVariant(
+          int index, tools.elide.data.CompressedData value) {
+        if (variantBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariantIsMutable();
+          variant_.add(index, value);
+          onChanged();
+        } else {
+          variantBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public Builder addVariant(
+          tools.elide.data.CompressedData.Builder builderForValue) {
+        if (variantBuilder_ == null) {
+          ensureVariantIsMutable();
+          variant_.add(builderForValue.build());
+          onChanged();
+        } else {
+          variantBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public Builder addVariant(
+          int index, tools.elide.data.CompressedData.Builder builderForValue) {
+        if (variantBuilder_ == null) {
+          ensureVariantIsMutable();
+          variant_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          variantBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public Builder addAllVariant(
+          java.lang.Iterable<? extends tools.elide.data.CompressedData> values) {
+        if (variantBuilder_ == null) {
+          ensureVariantIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, variant_);
+          onChanged();
+        } else {
+          variantBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public Builder clearVariant() {
+        if (variantBuilder_ == null) {
+          variant_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          variantBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public Builder removeVariant(int index) {
+        if (variantBuilder_ == null) {
+          ensureVariantIsMutable();
+          variant_.remove(index);
+          onChanged();
+        } else {
+          variantBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public tools.elide.data.CompressedData.Builder getVariantBuilder(
+          int index) {
+        return getVariantFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public tools.elide.data.CompressedDataOrBuilder getVariantOrBuilder(
+          int index) {
+        if (variantBuilder_ == null) {
+          return variant_.get(index);  } else {
+          return variantBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public java.util.List<? extends tools.elide.data.CompressedDataOrBuilder> 
+           getVariantOrBuilderList() {
+        if (variantBuilder_ != null) {
+          return variantBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(variant_);
+        }
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public tools.elide.data.CompressedData.Builder addVariantBuilder() {
+        return getVariantFieldBuilder().addBuilder(
+            tools.elide.data.CompressedData.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public tools.elide.data.CompressedData.Builder addVariantBuilder(
+          int index) {
+        return getVariantFieldBuilder().addBuilder(
+            index, tools.elide.data.CompressedData.getDefaultInstance());
+      }
+      /**
+       * <pre>
+       * Specifies each variant of an asset's main content.
+       * </pre>
+       *
+       * <code>repeated .data.CompressedData variant = 4;</code>
+       */
+      public java.util.List<tools.elide.data.CompressedData.Builder> 
+           getVariantBuilderList() {
+        return getVariantFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          tools.elide.data.CompressedData, tools.elide.data.CompressedData.Builder, tools.elide.data.CompressedDataOrBuilder> 
+          getVariantFieldBuilder() {
+        if (variantBuilder_ == null) {
+          variantBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              tools.elide.data.CompressedData, tools.elide.data.CompressedData.Builder, tools.elide.data.CompressedDataOrBuilder>(
+                  variant_,
+                  ((bitField0_ & 0x00000001) != 0),
+                  getParentForChildren(),
+                  isClean());
+          variant_ = null;
+        }
+        return variantBuilder_;
+      }
+
+      private boolean compressable_ ;
+      /**
+       * <pre>
+       * Whether this asset should be compressed when serving to end-users.
+       * </pre>
+       *
+       * <code>bool compressable = 5;</code>
+       * @return The compressable.
+       */
+      @java.lang.Override
+      public boolean getCompressable() {
+        return compressable_;
+      }
+      /**
+       * <pre>
+       * Whether this asset should be compressed when serving to end-users.
+       * </pre>
+       *
+       * <code>bool compressable = 5;</code>
+       * @param value The compressable to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCompressable(boolean value) {
+        
+        compressable_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Whether this asset should be compressed when serving to end-users.
+       * </pre>
+       *
+       * <code>bool compressable = 5;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCompressable() {
+        
+        compressable_ = false;
+        onChanged();
+        return this;
+      }
+
+      private boolean cacheable_ ;
+      /**
+       * <pre>
+       * Whether this asset should be considered cacheable.
+       * </pre>
+       *
+       * <code>bool cacheable = 6;</code>
+       * @return The cacheable.
+       */
+      @java.lang.Override
+      public boolean getCacheable() {
+        return cacheable_;
+      }
+      /**
+       * <pre>
+       * Whether this asset should be considered cacheable.
+       * </pre>
+       *
+       * <code>bool cacheable = 6;</code>
+       * @param value The cacheable to set.
+       * @return This builder for chaining.
+       */
+      public Builder setCacheable(boolean value) {
+        
+        cacheable_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       * Whether this asset should be considered cacheable.
+       * </pre>
+       *
+       * <code>bool cacheable = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearCacheable() {
+        
+        cacheable_ = false;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:assets.AssetBundle.GenericBundle)
+    }
+
+    // @@protoc_insertion_point(class_scope:assets.AssetBundle.GenericBundle)
+    private static final tools.elide.assets.AssetBundle.GenericBundle DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new tools.elide.assets.AssetBundle.GenericBundle();
+    }
+
+    public static tools.elide.assets.AssetBundle.GenericBundle getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<GenericBundle>
+        PARSER = new com.google.protobuf.AbstractParser<GenericBundle>() {
+      @java.lang.Override
+      public GenericBundle parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new GenericBundle(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<GenericBundle> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<GenericBundle> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public tools.elide.assets.AssetBundle.GenericBundle getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface AssetContentOrBuilder extends
       // @@protoc_insertion_point(interface_extends:assets.AssetBundle.AssetContent)
       com.google.protobuf.MessageOrBuilder {
@@ -9910,20 +11588,20 @@ java.lang.String defaultValue);
     return version_;
   }
 
-  public static final int DIGEST_FIELD_NUMBER = 2;
-  private tools.elide.assets.AssetBundle.DigestSettings digest_;
+  public static final int DIGEST_SETTINGS_FIELD_NUMBER = 2;
+  private tools.elide.assets.AssetBundle.DigestSettings digestSettings_;
   /**
    * <pre>
    * Digest algorithm settings in use to calculate chunk tokens. These tokens are used to address pre-compressed asset
    * content, and are used to address assets dynamically from the server and frontend.
    * </pre>
    *
-   * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
-   * @return Whether the digest field is set.
+   * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
+   * @return Whether the digestSettings field is set.
    */
   @java.lang.Override
-  public boolean hasDigest() {
-    return digest_ != null;
+  public boolean hasDigestSettings() {
+    return digestSettings_ != null;
   }
   /**
    * <pre>
@@ -9931,27 +11609,43 @@ java.lang.String defaultValue);
    * content, and are used to address assets dynamically from the server and frontend.
    * </pre>
    *
-   * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+   * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
+   * @return The digestSettings.
+   */
+  @java.lang.Override
+  public tools.elide.assets.AssetBundle.DigestSettings getDigestSettings() {
+    return digestSettings_ == null ? tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digestSettings_;
+  }
+  /**
+   * <pre>
+   * Digest algorithm settings in use to calculate chunk tokens. These tokens are used to address pre-compressed asset
+   * content, and are used to address assets dynamically from the server and frontend.
+   * </pre>
+   *
+   * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
+   */
+  @java.lang.Override
+  public tools.elide.assets.AssetBundle.DigestSettingsOrBuilder getDigestSettingsOrBuilder() {
+    return getDigestSettings();
+  }
+
+  public static final int DIGEST_FIELD_NUMBER = 3;
+  private com.google.protobuf.ByteString digest_;
+  /**
+   * <pre>
+   * Raw bytes of a digest matching the algorithm for digests in file names, which represents a unique fingerprint of
+   * the full asset bundle.
+   * </pre>
+   *
+   * <code>bytes digest = 3;</code>
    * @return The digest.
    */
   @java.lang.Override
-  public tools.elide.assets.AssetBundle.DigestSettings getDigest() {
-    return digest_ == null ? tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digest_;
-  }
-  /**
-   * <pre>
-   * Digest algorithm settings in use to calculate chunk tokens. These tokens are used to address pre-compressed asset
-   * content, and are used to address assets dynamically from the server and frontend.
-   * </pre>
-   *
-   * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
-   */
-  @java.lang.Override
-  public tools.elide.assets.AssetBundle.DigestSettingsOrBuilder getDigestOrBuilder() {
-    return getDigest();
+  public com.google.protobuf.ByteString getDigest() {
+    return digest_;
   }
 
-  public static final int STYLES_FIELD_NUMBER = 3;
+  public static final int STYLES_FIELD_NUMBER = 4;
   private static final class StylesDefaultEntryHolder {
     static final com.google.protobuf.MapEntry<
         java.lang.String, tools.elide.assets.AssetBundle.StyleBundle> defaultEntry =
@@ -9983,7 +11677,7 @@ java.lang.String defaultValue);
    * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
    */
 
   @java.lang.Override
@@ -10006,7 +11700,7 @@ java.lang.String defaultValue);
    * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
    */
   @java.lang.Override
 
@@ -10019,7 +11713,7 @@ java.lang.String defaultValue);
    * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
    */
   @java.lang.Override
 
@@ -10037,7 +11731,7 @@ java.lang.String defaultValue);
    * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
    */
   @java.lang.Override
 
@@ -10052,7 +11746,7 @@ java.lang.String defaultValue);
     return map.get(key);
   }
 
-  public static final int SCRIPTS_FIELD_NUMBER = 4;
+  public static final int SCRIPTS_FIELD_NUMBER = 5;
   private static final class ScriptsDefaultEntryHolder {
     static final com.google.protobuf.MapEntry<
         java.lang.String, tools.elide.assets.AssetBundle.ScriptBundle> defaultEntry =
@@ -10084,7 +11778,7 @@ java.lang.String defaultValue);
    * their script sources and settings. Generally, a Closure module name is used for scripts.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
    */
 
   @java.lang.Override
@@ -10107,7 +11801,7 @@ java.lang.String defaultValue);
    * their script sources and settings. Generally, a Closure module name is used for scripts.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
    */
   @java.lang.Override
 
@@ -10120,7 +11814,7 @@ java.lang.String defaultValue);
    * their script sources and settings. Generally, a Closure module name is used for scripts.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
    */
   @java.lang.Override
 
@@ -10138,7 +11832,7 @@ java.lang.String defaultValue);
    * their script sources and settings. Generally, a Closure module name is used for scripts.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
    */
   @java.lang.Override
 
@@ -10153,7 +11847,104 @@ java.lang.String defaultValue);
     return map.get(key);
   }
 
-  public static final int ASSET_FIELD_NUMBER = 5;
+  public static final int GENERIC_FIELD_NUMBER = 6;
+  private static final class GenericDefaultEntryHolder {
+    static final com.google.protobuf.MapEntry<
+        java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> defaultEntry =
+            com.google.protobuf.MapEntry
+            .<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle>newDefaultInstance(
+                tools.elide.assets.Bundle.internal_static_assets_AssetBundle_GenericEntry_descriptor, 
+                com.google.protobuf.WireFormat.FieldType.STRING,
+                "",
+                com.google.protobuf.WireFormat.FieldType.MESSAGE,
+                tools.elide.assets.AssetBundle.GenericBundle.getDefaultInstance());
+  }
+  private com.google.protobuf.MapField<
+      java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> generic_;
+  private com.google.protobuf.MapField<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle>
+  internalGetGeneric() {
+    if (generic_ == null) {
+      return com.google.protobuf.MapField.emptyMapField(
+          GenericDefaultEntryHolder.defaultEntry);
+    }
+    return generic_;
+  }
+
+  public int getGenericCount() {
+    return internalGetGeneric().getMap().size();
+  }
+  /**
+   * <pre>
+   * Generic assets which are mapped within this bundle.
+   * </pre>
+   *
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
+   */
+
+  @java.lang.Override
+  public boolean containsGeneric(
+      java.lang.String key) {
+    if (key == null) { throw new NullPointerException("map key"); }
+    return internalGetGeneric().getMap().containsKey(key);
+  }
+  /**
+   * Use {@link #getGenericMap()} instead.
+   */
+  @java.lang.Override
+  @java.lang.Deprecated
+  public java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> getGeneric() {
+    return getGenericMap();
+  }
+  /**
+   * <pre>
+   * Generic assets which are mapped within this bundle.
+   * </pre>
+   *
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
+   */
+  @java.lang.Override
+
+  public java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> getGenericMap() {
+    return internalGetGeneric().getMap();
+  }
+  /**
+   * <pre>
+   * Generic assets which are mapped within this bundle.
+   * </pre>
+   *
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
+   */
+  @java.lang.Override
+
+  public tools.elide.assets.AssetBundle.GenericBundle getGenericOrDefault(
+      java.lang.String key,
+      tools.elide.assets.AssetBundle.GenericBundle defaultValue) {
+    if (key == null) { throw new NullPointerException("map key"); }
+    java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> map =
+        internalGetGeneric().getMap();
+    return map.containsKey(key) ? map.get(key) : defaultValue;
+  }
+  /**
+   * <pre>
+   * Generic assets which are mapped within this bundle.
+   * </pre>
+   *
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
+   */
+  @java.lang.Override
+
+  public tools.elide.assets.AssetBundle.GenericBundle getGenericOrThrow(
+      java.lang.String key) {
+    if (key == null) { throw new NullPointerException("map key"); }
+    java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> map =
+        internalGetGeneric().getMap();
+    if (!map.containsKey(key)) {
+      throw new java.lang.IllegalArgumentException();
+    }
+    return map.get(key);
+  }
+
+  public static final int ASSET_FIELD_NUMBER = 7;
   private java.util.List<tools.elide.assets.AssetBundle.AssetContent> asset_;
   /**
    * <pre>
@@ -10161,7 +11952,7 @@ java.lang.String defaultValue);
    * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
    * </pre>
    *
-   * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+   * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
    */
   @java.lang.Override
   public java.util.List<tools.elide.assets.AssetBundle.AssetContent> getAssetList() {
@@ -10173,7 +11964,7 @@ java.lang.String defaultValue);
    * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
    * </pre>
    *
-   * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+   * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
    */
   @java.lang.Override
   public java.util.List<? extends tools.elide.assets.AssetBundle.AssetContentOrBuilder> 
@@ -10186,7 +11977,7 @@ java.lang.String defaultValue);
    * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
    * </pre>
    *
-   * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+   * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
    */
   @java.lang.Override
   public int getAssetCount() {
@@ -10198,7 +11989,7 @@ java.lang.String defaultValue);
    * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
    * </pre>
    *
-   * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+   * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
    */
   @java.lang.Override
   public tools.elide.assets.AssetBundle.AssetContent getAsset(int index) {
@@ -10210,7 +12001,7 @@ java.lang.String defaultValue);
    * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
    * </pre>
    *
-   * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+   * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
    */
   @java.lang.Override
   public tools.elide.assets.AssetBundle.AssetContentOrBuilder getAssetOrBuilder(
@@ -10218,7 +12009,7 @@ java.lang.String defaultValue);
     return asset_.get(index);
   }
 
-  public static final int GENERATED_FIELD_NUMBER = 6;
+  public static final int GENERATED_FIELD_NUMBER = 8;
   private com.google.protobuf.Timestamp generated_;
   /**
    * <pre>
@@ -10226,7 +12017,7 @@ java.lang.String defaultValue);
    * checking for updates to the asset bundle itself.
    * </pre>
    *
-   * <code>.google.protobuf.Timestamp generated = 6;</code>
+   * <code>.google.protobuf.Timestamp generated = 8;</code>
    * @return Whether the generated field is set.
    */
   @java.lang.Override
@@ -10239,7 +12030,7 @@ java.lang.String defaultValue);
    * checking for updates to the asset bundle itself.
    * </pre>
    *
-   * <code>.google.protobuf.Timestamp generated = 6;</code>
+   * <code>.google.protobuf.Timestamp generated = 8;</code>
    * @return The generated.
    */
   @java.lang.Override
@@ -10252,27 +12043,27 @@ java.lang.String defaultValue);
    * checking for updates to the asset bundle itself.
    * </pre>
    *
-   * <code>.google.protobuf.Timestamp generated = 6;</code>
+   * <code>.google.protobuf.Timestamp generated = 8;</code>
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getGeneratedOrBuilder() {
     return getGenerated();
   }
 
-  public static final int REWRITE_FIELD_NUMBER = 7;
-  private boolean rewrite_;
+  public static final int STYLE_REWRITE_FIELD_NUMBER = 9;
+  private boolean styleRewrite_;
   /**
    * <pre>
    * Whether style-rewriting is enabled or not, which should indicate the presence of generated style symbol maps, that
    * must be loaded by the server for SSR.
    * </pre>
    *
-   * <code>bool rewrite = 7;</code>
-   * @return The rewrite.
+   * <code>bool style_rewrite = 9;</code>
+   * @return The styleRewrite.
    */
   @java.lang.Override
-  public boolean getRewrite() {
-    return rewrite_;
+  public boolean getStyleRewrite() {
+    return styleRewrite_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -10292,29 +12083,38 @@ java.lang.String defaultValue);
     if (version_ != 0) {
       output.writeUInt32(1, version_);
     }
-    if (digest_ != null) {
-      output.writeMessage(2, getDigest());
+    if (digestSettings_ != null) {
+      output.writeMessage(2, getDigestSettings());
+    }
+    if (!digest_.isEmpty()) {
+      output.writeBytes(3, digest_);
     }
     com.google.protobuf.GeneratedMessageV3
       .serializeStringMapTo(
         output,
         internalGetStyles(),
         StylesDefaultEntryHolder.defaultEntry,
-        3);
+        4);
     com.google.protobuf.GeneratedMessageV3
       .serializeStringMapTo(
         output,
         internalGetScripts(),
         ScriptsDefaultEntryHolder.defaultEntry,
-        4);
+        5);
+    com.google.protobuf.GeneratedMessageV3
+      .serializeStringMapTo(
+        output,
+        internalGetGeneric(),
+        GenericDefaultEntryHolder.defaultEntry,
+        6);
     for (int i = 0; i < asset_.size(); i++) {
-      output.writeMessage(5, asset_.get(i));
+      output.writeMessage(7, asset_.get(i));
     }
     if (generated_ != null) {
-      output.writeMessage(6, getGenerated());
+      output.writeMessage(8, getGenerated());
     }
-    if (rewrite_ != false) {
-      output.writeBool(7, rewrite_);
+    if (styleRewrite_ != false) {
+      output.writeBool(9, styleRewrite_);
     }
     unknownFields.writeTo(output);
   }
@@ -10329,9 +12129,13 @@ java.lang.String defaultValue);
       size += com.google.protobuf.CodedOutputStream
         .computeUInt32Size(1, version_);
     }
-    if (digest_ != null) {
+    if (digestSettings_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, getDigest());
+        .computeMessageSize(2, getDigestSettings());
+    }
+    if (!digest_.isEmpty()) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBytesSize(3, digest_);
     }
     for (java.util.Map.Entry<java.lang.String, tools.elide.assets.AssetBundle.StyleBundle> entry
          : internalGetStyles().getMap().entrySet()) {
@@ -10341,7 +12145,7 @@ java.lang.String defaultValue);
           .setValue(entry.getValue())
           .build();
       size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, styles__);
+          .computeMessageSize(4, styles__);
     }
     for (java.util.Map.Entry<java.lang.String, tools.elide.assets.AssetBundle.ScriptBundle> entry
          : internalGetScripts().getMap().entrySet()) {
@@ -10351,19 +12155,29 @@ java.lang.String defaultValue);
           .setValue(entry.getValue())
           .build();
       size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, scripts__);
+          .computeMessageSize(5, scripts__);
+    }
+    for (java.util.Map.Entry<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> entry
+         : internalGetGeneric().getMap().entrySet()) {
+      com.google.protobuf.MapEntry<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle>
+      generic__ = GenericDefaultEntryHolder.defaultEntry.newBuilderForType()
+          .setKey(entry.getKey())
+          .setValue(entry.getValue())
+          .build();
+      size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, generic__);
     }
     for (int i = 0; i < asset_.size(); i++) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(5, asset_.get(i));
+        .computeMessageSize(7, asset_.get(i));
     }
     if (generated_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(6, getGenerated());
+        .computeMessageSize(8, getGenerated());
     }
-    if (rewrite_ != false) {
+    if (styleRewrite_ != false) {
       size += com.google.protobuf.CodedOutputStream
-        .computeBoolSize(7, rewrite_);
+        .computeBoolSize(9, styleRewrite_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -10382,15 +12196,19 @@ java.lang.String defaultValue);
 
     if (getVersion()
         != other.getVersion()) return false;
-    if (hasDigest() != other.hasDigest()) return false;
-    if (hasDigest()) {
-      if (!getDigest()
-          .equals(other.getDigest())) return false;
+    if (hasDigestSettings() != other.hasDigestSettings()) return false;
+    if (hasDigestSettings()) {
+      if (!getDigestSettings()
+          .equals(other.getDigestSettings())) return false;
     }
+    if (!getDigest()
+        .equals(other.getDigest())) return false;
     if (!internalGetStyles().equals(
         other.internalGetStyles())) return false;
     if (!internalGetScripts().equals(
         other.internalGetScripts())) return false;
+    if (!internalGetGeneric().equals(
+        other.internalGetGeneric())) return false;
     if (!getAssetList()
         .equals(other.getAssetList())) return false;
     if (hasGenerated() != other.hasGenerated()) return false;
@@ -10398,8 +12216,8 @@ java.lang.String defaultValue);
       if (!getGenerated()
           .equals(other.getGenerated())) return false;
     }
-    if (getRewrite()
-        != other.getRewrite()) return false;
+    if (getStyleRewrite()
+        != other.getStyleRewrite()) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -10413,10 +12231,12 @@ java.lang.String defaultValue);
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + VERSION_FIELD_NUMBER;
     hash = (53 * hash) + getVersion();
-    if (hasDigest()) {
-      hash = (37 * hash) + DIGEST_FIELD_NUMBER;
-      hash = (53 * hash) + getDigest().hashCode();
+    if (hasDigestSettings()) {
+      hash = (37 * hash) + DIGEST_SETTINGS_FIELD_NUMBER;
+      hash = (53 * hash) + getDigestSettings().hashCode();
     }
+    hash = (37 * hash) + DIGEST_FIELD_NUMBER;
+    hash = (53 * hash) + getDigest().hashCode();
     if (!internalGetStyles().getMap().isEmpty()) {
       hash = (37 * hash) + STYLES_FIELD_NUMBER;
       hash = (53 * hash) + internalGetStyles().hashCode();
@@ -10424,6 +12244,10 @@ java.lang.String defaultValue);
     if (!internalGetScripts().getMap().isEmpty()) {
       hash = (37 * hash) + SCRIPTS_FIELD_NUMBER;
       hash = (53 * hash) + internalGetScripts().hashCode();
+    }
+    if (!internalGetGeneric().getMap().isEmpty()) {
+      hash = (37 * hash) + GENERIC_FIELD_NUMBER;
+      hash = (53 * hash) + internalGetGeneric().hashCode();
     }
     if (getAssetCount() > 0) {
       hash = (37 * hash) + ASSET_FIELD_NUMBER;
@@ -10433,9 +12257,9 @@ java.lang.String defaultValue);
       hash = (37 * hash) + GENERATED_FIELD_NUMBER;
       hash = (53 * hash) + getGenerated().hashCode();
     }
-    hash = (37 * hash) + REWRITE_FIELD_NUMBER;
+    hash = (37 * hash) + STYLE_REWRITE_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-        getRewrite());
+        getStyleRewrite());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -10556,10 +12380,12 @@ java.lang.String defaultValue);
     protected com.google.protobuf.MapField internalGetMapField(
         int number) {
       switch (number) {
-        case 3:
-          return internalGetStyles();
         case 4:
+          return internalGetStyles();
+        case 5:
           return internalGetScripts();
+        case 6:
+          return internalGetGeneric();
         default:
           throw new RuntimeException(
               "Invalid map field number: " + number);
@@ -10569,10 +12395,12 @@ java.lang.String defaultValue);
     protected com.google.protobuf.MapField internalGetMutableMapField(
         int number) {
       switch (number) {
-        case 3:
-          return internalGetMutableStyles();
         case 4:
+          return internalGetMutableStyles();
+        case 5:
           return internalGetMutableScripts();
+        case 6:
+          return internalGetMutableGeneric();
         default:
           throw new RuntimeException(
               "Invalid map field number: " + number);
@@ -10607,17 +12435,20 @@ java.lang.String defaultValue);
       super.clear();
       version_ = 0;
 
-      if (digestBuilder_ == null) {
-        digest_ = null;
+      if (digestSettingsBuilder_ == null) {
+        digestSettings_ = null;
       } else {
-        digest_ = null;
-        digestBuilder_ = null;
+        digestSettings_ = null;
+        digestSettingsBuilder_ = null;
       }
+      digest_ = com.google.protobuf.ByteString.EMPTY;
+
       internalGetMutableStyles().clear();
       internalGetMutableScripts().clear();
+      internalGetMutableGeneric().clear();
       if (assetBuilder_ == null) {
         asset_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
       } else {
         assetBuilder_.clear();
       }
@@ -10627,7 +12458,7 @@ java.lang.String defaultValue);
         generated_ = null;
         generatedBuilder_ = null;
       }
-      rewrite_ = false;
+      styleRewrite_ = false;
 
       return this;
     }
@@ -10657,19 +12488,22 @@ java.lang.String defaultValue);
       tools.elide.assets.AssetBundle result = new tools.elide.assets.AssetBundle(this);
       int from_bitField0_ = bitField0_;
       result.version_ = version_;
-      if (digestBuilder_ == null) {
-        result.digest_ = digest_;
+      if (digestSettingsBuilder_ == null) {
+        result.digestSettings_ = digestSettings_;
       } else {
-        result.digest_ = digestBuilder_.build();
+        result.digestSettings_ = digestSettingsBuilder_.build();
       }
+      result.digest_ = digest_;
       result.styles_ = internalGetStyles();
       result.styles_.makeImmutable();
       result.scripts_ = internalGetScripts();
       result.scripts_.makeImmutable();
+      result.generic_ = internalGetGeneric();
+      result.generic_.makeImmutable();
       if (assetBuilder_ == null) {
-        if (((bitField0_ & 0x00000004) != 0)) {
+        if (((bitField0_ & 0x00000008) != 0)) {
           asset_ = java.util.Collections.unmodifiableList(asset_);
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
         }
         result.asset_ = asset_;
       } else {
@@ -10680,7 +12514,7 @@ java.lang.String defaultValue);
       } else {
         result.generated_ = generatedBuilder_.build();
       }
-      result.rewrite_ = rewrite_;
+      result.styleRewrite_ = styleRewrite_;
       onBuilt();
       return result;
     }
@@ -10732,18 +12566,23 @@ java.lang.String defaultValue);
       if (other.getVersion() != 0) {
         setVersion(other.getVersion());
       }
-      if (other.hasDigest()) {
-        mergeDigest(other.getDigest());
+      if (other.hasDigestSettings()) {
+        mergeDigestSettings(other.getDigestSettings());
+      }
+      if (other.getDigest() != com.google.protobuf.ByteString.EMPTY) {
+        setDigest(other.getDigest());
       }
       internalGetMutableStyles().mergeFrom(
           other.internalGetStyles());
       internalGetMutableScripts().mergeFrom(
           other.internalGetScripts());
+      internalGetMutableGeneric().mergeFrom(
+          other.internalGetGeneric());
       if (assetBuilder_ == null) {
         if (!other.asset_.isEmpty()) {
           if (asset_.isEmpty()) {
             asset_ = other.asset_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
           } else {
             ensureAssetIsMutable();
             asset_.addAll(other.asset_);
@@ -10756,7 +12595,7 @@ java.lang.String defaultValue);
             assetBuilder_.dispose();
             assetBuilder_ = null;
             asset_ = other.asset_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
             assetBuilder_ = 
               com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                  getAssetFieldBuilder() : null;
@@ -10768,8 +12607,8 @@ java.lang.String defaultValue);
       if (other.hasGenerated()) {
         mergeGenerated(other.getGenerated());
       }
-      if (other.getRewrite() != false) {
-        setRewrite(other.getRewrite());
+      if (other.getStyleRewrite() != false) {
+        setStyleRewrite(other.getStyleRewrite());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -10847,20 +12686,20 @@ java.lang.String defaultValue);
       return this;
     }
 
-    private tools.elide.assets.AssetBundle.DigestSettings digest_;
+    private tools.elide.assets.AssetBundle.DigestSettings digestSettings_;
     private com.google.protobuf.SingleFieldBuilderV3<
-        tools.elide.assets.AssetBundle.DigestSettings, tools.elide.assets.AssetBundle.DigestSettings.Builder, tools.elide.assets.AssetBundle.DigestSettingsOrBuilder> digestBuilder_;
+        tools.elide.assets.AssetBundle.DigestSettings, tools.elide.assets.AssetBundle.DigestSettings.Builder, tools.elide.assets.AssetBundle.DigestSettingsOrBuilder> digestSettingsBuilder_;
     /**
      * <pre>
      * Digest algorithm settings in use to calculate chunk tokens. These tokens are used to address pre-compressed asset
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
-     * @return Whether the digest field is set.
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
+     * @return Whether the digestSettings field is set.
      */
-    public boolean hasDigest() {
-      return digestBuilder_ != null || digest_ != null;
+    public boolean hasDigestSettings() {
+      return digestSettingsBuilder_ != null || digestSettings_ != null;
     }
     /**
      * <pre>
@@ -10868,14 +12707,14 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
-     * @return The digest.
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
+     * @return The digestSettings.
      */
-    public tools.elide.assets.AssetBundle.DigestSettings getDigest() {
-      if (digestBuilder_ == null) {
-        return digest_ == null ? tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digest_;
+    public tools.elide.assets.AssetBundle.DigestSettings getDigestSettings() {
+      if (digestSettingsBuilder_ == null) {
+        return digestSettings_ == null ? tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digestSettings_;
       } else {
-        return digestBuilder_.getMessage();
+        return digestSettingsBuilder_.getMessage();
       }
     }
     /**
@@ -10884,17 +12723,17 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public Builder setDigest(tools.elide.assets.AssetBundle.DigestSettings value) {
-      if (digestBuilder_ == null) {
+    public Builder setDigestSettings(tools.elide.assets.AssetBundle.DigestSettings value) {
+      if (digestSettingsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
-        digest_ = value;
+        digestSettings_ = value;
         onChanged();
       } else {
-        digestBuilder_.setMessage(value);
+        digestSettingsBuilder_.setMessage(value);
       }
 
       return this;
@@ -10905,15 +12744,15 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public Builder setDigest(
+    public Builder setDigestSettings(
         tools.elide.assets.AssetBundle.DigestSettings.Builder builderForValue) {
-      if (digestBuilder_ == null) {
-        digest_ = builderForValue.build();
+      if (digestSettingsBuilder_ == null) {
+        digestSettings_ = builderForValue.build();
         onChanged();
       } else {
-        digestBuilder_.setMessage(builderForValue.build());
+        digestSettingsBuilder_.setMessage(builderForValue.build());
       }
 
       return this;
@@ -10924,19 +12763,19 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public Builder mergeDigest(tools.elide.assets.AssetBundle.DigestSettings value) {
-      if (digestBuilder_ == null) {
-        if (digest_ != null) {
-          digest_ =
-            tools.elide.assets.AssetBundle.DigestSettings.newBuilder(digest_).mergeFrom(value).buildPartial();
+    public Builder mergeDigestSettings(tools.elide.assets.AssetBundle.DigestSettings value) {
+      if (digestSettingsBuilder_ == null) {
+        if (digestSettings_ != null) {
+          digestSettings_ =
+            tools.elide.assets.AssetBundle.DigestSettings.newBuilder(digestSettings_).mergeFrom(value).buildPartial();
         } else {
-          digest_ = value;
+          digestSettings_ = value;
         }
         onChanged();
       } else {
-        digestBuilder_.mergeFrom(value);
+        digestSettingsBuilder_.mergeFrom(value);
       }
 
       return this;
@@ -10947,15 +12786,15 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public Builder clearDigest() {
-      if (digestBuilder_ == null) {
-        digest_ = null;
+    public Builder clearDigestSettings() {
+      if (digestSettingsBuilder_ == null) {
+        digestSettings_ = null;
         onChanged();
       } else {
-        digest_ = null;
-        digestBuilder_ = null;
+        digestSettings_ = null;
+        digestSettingsBuilder_ = null;
       }
 
       return this;
@@ -10966,12 +12805,12 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public tools.elide.assets.AssetBundle.DigestSettings.Builder getDigestBuilder() {
+    public tools.elide.assets.AssetBundle.DigestSettings.Builder getDigestSettingsBuilder() {
       
       onChanged();
-      return getDigestFieldBuilder().getBuilder();
+      return getDigestSettingsFieldBuilder().getBuilder();
     }
     /**
      * <pre>
@@ -10979,14 +12818,14 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public tools.elide.assets.AssetBundle.DigestSettingsOrBuilder getDigestOrBuilder() {
-      if (digestBuilder_ != null) {
-        return digestBuilder_.getMessageOrBuilder();
+    public tools.elide.assets.AssetBundle.DigestSettingsOrBuilder getDigestSettingsOrBuilder() {
+      if (digestSettingsBuilder_ != null) {
+        return digestSettingsBuilder_.getMessageOrBuilder();
       } else {
-        return digest_ == null ?
-            tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digest_;
+        return digestSettings_ == null ?
+            tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digestSettings_;
       }
     }
     /**
@@ -10995,20 +12834,69 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         tools.elide.assets.AssetBundle.DigestSettings, tools.elide.assets.AssetBundle.DigestSettings.Builder, tools.elide.assets.AssetBundle.DigestSettingsOrBuilder> 
-        getDigestFieldBuilder() {
-      if (digestBuilder_ == null) {
-        digestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+        getDigestSettingsFieldBuilder() {
+      if (digestSettingsBuilder_ == null) {
+        digestSettingsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
             tools.elide.assets.AssetBundle.DigestSettings, tools.elide.assets.AssetBundle.DigestSettings.Builder, tools.elide.assets.AssetBundle.DigestSettingsOrBuilder>(
-                getDigest(),
+                getDigestSettings(),
                 getParentForChildren(),
                 isClean());
-        digest_ = null;
+        digestSettings_ = null;
       }
-      return digestBuilder_;
+      return digestSettingsBuilder_;
+    }
+
+    private com.google.protobuf.ByteString digest_ = com.google.protobuf.ByteString.EMPTY;
+    /**
+     * <pre>
+     * Raw bytes of a digest matching the algorithm for digests in file names, which represents a unique fingerprint of
+     * the full asset bundle.
+     * </pre>
+     *
+     * <code>bytes digest = 3;</code>
+     * @return The digest.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getDigest() {
+      return digest_;
+    }
+    /**
+     * <pre>
+     * Raw bytes of a digest matching the algorithm for digests in file names, which represents a unique fingerprint of
+     * the full asset bundle.
+     * </pre>
+     *
+     * <code>bytes digest = 3;</code>
+     * @param value The digest to set.
+     * @return This builder for chaining.
+     */
+    public Builder setDigest(com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      digest_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Raw bytes of a digest matching the algorithm for digests in file names, which represents a unique fingerprint of
+     * the full asset bundle.
+     * </pre>
+     *
+     * <code>bytes digest = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearDigest() {
+      
+      digest_ = getDefaultInstance().getDigest();
+      onChanged();
+      return this;
     }
 
     private com.google.protobuf.MapField<
@@ -11043,7 +12931,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
 
     @java.lang.Override
@@ -11066,7 +12954,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
     @java.lang.Override
 
@@ -11079,7 +12967,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
     @java.lang.Override
 
@@ -11097,7 +12985,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
     @java.lang.Override
 
@@ -11123,7 +13011,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
 
     public Builder removeStyles(
@@ -11147,7 +13035,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
     public Builder putStyles(
         java.lang.String key,
@@ -11167,7 +13055,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
 
     public Builder putAllStyles(
@@ -11209,7 +13097,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
 
     @java.lang.Override
@@ -11232,7 +13120,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
     @java.lang.Override
 
@@ -11245,7 +13133,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
     @java.lang.Override
 
@@ -11263,7 +13151,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
     @java.lang.Override
 
@@ -11289,7 +13177,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
 
     public Builder removeScripts(
@@ -11313,7 +13201,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
     public Builder putScripts(
         java.lang.String key,
@@ -11333,7 +13221,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
 
     public Builder putAllScripts(
@@ -11343,12 +13231,171 @@ java.lang.String defaultValue);
       return this;
     }
 
+    private com.google.protobuf.MapField<
+        java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> generic_;
+    private com.google.protobuf.MapField<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle>
+    internalGetGeneric() {
+      if (generic_ == null) {
+        return com.google.protobuf.MapField.emptyMapField(
+            GenericDefaultEntryHolder.defaultEntry);
+      }
+      return generic_;
+    }
+    private com.google.protobuf.MapField<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle>
+    internalGetMutableGeneric() {
+      onChanged();;
+      if (generic_ == null) {
+        generic_ = com.google.protobuf.MapField.newMapField(
+            GenericDefaultEntryHolder.defaultEntry);
+      }
+      if (!generic_.isMutable()) {
+        generic_ = generic_.copy();
+      }
+      return generic_;
+    }
+
+    public int getGenericCount() {
+      return internalGetGeneric().getMap().size();
+    }
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
+     */
+
+    @java.lang.Override
+    public boolean containsGeneric(
+        java.lang.String key) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      return internalGetGeneric().getMap().containsKey(key);
+    }
+    /**
+     * Use {@link #getGenericMap()} instead.
+     */
+    @java.lang.Override
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> getGeneric() {
+      return getGenericMap();
+    }
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
+     */
+    @java.lang.Override
+
+    public java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> getGenericMap() {
+      return internalGetGeneric().getMap();
+    }
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
+     */
+    @java.lang.Override
+
+    public tools.elide.assets.AssetBundle.GenericBundle getGenericOrDefault(
+        java.lang.String key,
+        tools.elide.assets.AssetBundle.GenericBundle defaultValue) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> map =
+          internalGetGeneric().getMap();
+      return map.containsKey(key) ? map.get(key) : defaultValue;
+    }
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
+     */
+    @java.lang.Override
+
+    public tools.elide.assets.AssetBundle.GenericBundle getGenericOrThrow(
+        java.lang.String key) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> map =
+          internalGetGeneric().getMap();
+      if (!map.containsKey(key)) {
+        throw new java.lang.IllegalArgumentException();
+      }
+      return map.get(key);
+    }
+
+    public Builder clearGeneric() {
+      internalGetMutableGeneric().getMutableMap()
+          .clear();
+      return this;
+    }
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
+     */
+
+    public Builder removeGeneric(
+        java.lang.String key) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      internalGetMutableGeneric().getMutableMap()
+          .remove(key);
+      return this;
+    }
+    /**
+     * Use alternate mutation accessors instead.
+     */
+    @java.lang.Deprecated
+    public java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle>
+    getMutableGeneric() {
+      return internalGetMutableGeneric().getMutableMap();
+    }
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
+     */
+    public Builder putGeneric(
+        java.lang.String key,
+        tools.elide.assets.AssetBundle.GenericBundle value) {
+      if (key == null) { throw new NullPointerException("map key"); }
+      if (value == null) {
+  throw new NullPointerException("map value");
+}
+
+      internalGetMutableGeneric().getMutableMap()
+          .put(key, value);
+      return this;
+    }
+    /**
+     * <pre>
+     * Generic assets which are mapped within this bundle.
+     * </pre>
+     *
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
+     */
+
+    public Builder putAllGeneric(
+        java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> values) {
+      internalGetMutableGeneric().getMutableMap()
+          .putAll(values);
+      return this;
+    }
+
     private java.util.List<tools.elide.assets.AssetBundle.AssetContent> asset_ =
       java.util.Collections.emptyList();
     private void ensureAssetIsMutable() {
-      if (!((bitField0_ & 0x00000004) != 0)) {
+      if (!((bitField0_ & 0x00000008) != 0)) {
         asset_ = new java.util.ArrayList<tools.elide.assets.AssetBundle.AssetContent>(asset_);
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
        }
     }
 
@@ -11361,7 +13408,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public java.util.List<tools.elide.assets.AssetBundle.AssetContent> getAssetList() {
       if (assetBuilder_ == null) {
@@ -11376,7 +13423,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public int getAssetCount() {
       if (assetBuilder_ == null) {
@@ -11391,7 +13438,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public tools.elide.assets.AssetBundle.AssetContent getAsset(int index) {
       if (assetBuilder_ == null) {
@@ -11406,7 +13453,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public Builder setAsset(
         int index, tools.elide.assets.AssetBundle.AssetContent value) {
@@ -11428,7 +13475,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public Builder setAsset(
         int index, tools.elide.assets.AssetBundle.AssetContent.Builder builderForValue) {
@@ -11447,7 +13494,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public Builder addAsset(tools.elide.assets.AssetBundle.AssetContent value) {
       if (assetBuilder_ == null) {
@@ -11468,7 +13515,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public Builder addAsset(
         int index, tools.elide.assets.AssetBundle.AssetContent value) {
@@ -11490,7 +13537,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public Builder addAsset(
         tools.elide.assets.AssetBundle.AssetContent.Builder builderForValue) {
@@ -11509,7 +13556,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public Builder addAsset(
         int index, tools.elide.assets.AssetBundle.AssetContent.Builder builderForValue) {
@@ -11528,7 +13575,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public Builder addAllAsset(
         java.lang.Iterable<? extends tools.elide.assets.AssetBundle.AssetContent> values) {
@@ -11548,12 +13595,12 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public Builder clearAsset() {
       if (assetBuilder_ == null) {
         asset_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
       } else {
         assetBuilder_.clear();
@@ -11566,7 +13613,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public Builder removeAsset(int index) {
       if (assetBuilder_ == null) {
@@ -11584,7 +13631,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public tools.elide.assets.AssetBundle.AssetContent.Builder getAssetBuilder(
         int index) {
@@ -11596,7 +13643,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public tools.elide.assets.AssetBundle.AssetContentOrBuilder getAssetOrBuilder(
         int index) {
@@ -11611,7 +13658,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public java.util.List<? extends tools.elide.assets.AssetBundle.AssetContentOrBuilder> 
          getAssetOrBuilderList() {
@@ -11627,7 +13674,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public tools.elide.assets.AssetBundle.AssetContent.Builder addAssetBuilder() {
       return getAssetFieldBuilder().addBuilder(
@@ -11639,7 +13686,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public tools.elide.assets.AssetBundle.AssetContent.Builder addAssetBuilder(
         int index) {
@@ -11652,7 +13699,7 @@ java.lang.String defaultValue);
      * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
      * </pre>
      *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
      */
     public java.util.List<tools.elide.assets.AssetBundle.AssetContent.Builder> 
          getAssetBuilderList() {
@@ -11665,7 +13712,7 @@ java.lang.String defaultValue);
         assetBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
             tools.elide.assets.AssetBundle.AssetContent, tools.elide.assets.AssetBundle.AssetContent.Builder, tools.elide.assets.AssetBundle.AssetContentOrBuilder>(
                 asset_,
-                ((bitField0_ & 0x00000004) != 0),
+                ((bitField0_ & 0x00000008) != 0),
                 getParentForChildren(),
                 isClean());
         asset_ = null;
@@ -11682,7 +13729,7 @@ java.lang.String defaultValue);
      * checking for updates to the asset bundle itself.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
      * @return Whether the generated field is set.
      */
     public boolean hasGenerated() {
@@ -11694,7 +13741,7 @@ java.lang.String defaultValue);
      * checking for updates to the asset bundle itself.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
      * @return The generated.
      */
     public com.google.protobuf.Timestamp getGenerated() {
@@ -11710,7 +13757,7 @@ java.lang.String defaultValue);
      * checking for updates to the asset bundle itself.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
      */
     public Builder setGenerated(com.google.protobuf.Timestamp value) {
       if (generatedBuilder_ == null) {
@@ -11731,7 +13778,7 @@ java.lang.String defaultValue);
      * checking for updates to the asset bundle itself.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
      */
     public Builder setGenerated(
         com.google.protobuf.Timestamp.Builder builderForValue) {
@@ -11750,7 +13797,7 @@ java.lang.String defaultValue);
      * checking for updates to the asset bundle itself.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
      */
     public Builder mergeGenerated(com.google.protobuf.Timestamp value) {
       if (generatedBuilder_ == null) {
@@ -11773,7 +13820,7 @@ java.lang.String defaultValue);
      * checking for updates to the asset bundle itself.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
      */
     public Builder clearGenerated() {
       if (generatedBuilder_ == null) {
@@ -11792,7 +13839,7 @@ java.lang.String defaultValue);
      * checking for updates to the asset bundle itself.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
      */
     public com.google.protobuf.Timestamp.Builder getGeneratedBuilder() {
       
@@ -11805,7 +13852,7 @@ java.lang.String defaultValue);
      * checking for updates to the asset bundle itself.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
      */
     public com.google.protobuf.TimestampOrBuilder getGeneratedOrBuilder() {
       if (generatedBuilder_ != null) {
@@ -11821,7 +13868,7 @@ java.lang.String defaultValue);
      * checking for updates to the asset bundle itself.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
@@ -11837,19 +13884,19 @@ java.lang.String defaultValue);
       return generatedBuilder_;
     }
 
-    private boolean rewrite_ ;
+    private boolean styleRewrite_ ;
     /**
      * <pre>
      * Whether style-rewriting is enabled or not, which should indicate the presence of generated style symbol maps, that
      * must be loaded by the server for SSR.
      * </pre>
      *
-     * <code>bool rewrite = 7;</code>
-     * @return The rewrite.
+     * <code>bool style_rewrite = 9;</code>
+     * @return The styleRewrite.
      */
     @java.lang.Override
-    public boolean getRewrite() {
-      return rewrite_;
+    public boolean getStyleRewrite() {
+      return styleRewrite_;
     }
     /**
      * <pre>
@@ -11857,13 +13904,13 @@ java.lang.String defaultValue);
      * must be loaded by the server for SSR.
      * </pre>
      *
-     * <code>bool rewrite = 7;</code>
-     * @param value The rewrite to set.
+     * <code>bool style_rewrite = 9;</code>
+     * @param value The styleRewrite to set.
      * @return This builder for chaining.
      */
-    public Builder setRewrite(boolean value) {
+    public Builder setStyleRewrite(boolean value) {
       
-      rewrite_ = value;
+      styleRewrite_ = value;
       onChanged();
       return this;
     }
@@ -11873,12 +13920,12 @@ java.lang.String defaultValue);
      * must be loaded by the server for SSR.
      * </pre>
      *
-     * <code>bool rewrite = 7;</code>
+     * <code>bool style_rewrite = 9;</code>
      * @return This builder for chaining.
      */
-    public Builder clearRewrite() {
+    public Builder clearStyleRewrite() {
       
-      rewrite_ = false;
+      styleRewrite_ = false;
       onChanged();
       return this;
     }

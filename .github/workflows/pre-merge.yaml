@@ -19,8 +19,6 @@ jobs:
             experimental: false
           - os: macos-latest
             experimental: true
-          - os: windows-latest
-            experimental: true
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     env:
@@ -78,14 +76,23 @@ jobs:
         if: success()
         with:
           arguments: |
-            bundleEmbeddedJs
+            example:build
             -Pelide.ci=true
             --scan
             --continue
+
+      ## CI: Build
+      - name: "Failure reports"
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: failure-reports
+          path: |
+            build/reports/**/*.*
 
       ## Job: Verify plugin output
       - name: Verify the plugin output
         if: success()
         run: |
-          file ./example/build/embedded-js/compile.js
-          grep -Fq "esbuild" ./example/build/embedded-js/compile.js
+          file ./example/build/distributions/bundle.opt.js
+          grep -Fq "esbuild" ./example/build/esbuild/esbuild.production.js

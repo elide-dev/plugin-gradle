@@ -60,6 +60,11 @@ public final class Bundle {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_assets_AssetBundle_ScriptBundle_ScriptAsset_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_assets_AssetBundle_GenericBundle_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_assets_AssetBundle_GenericBundle_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_assets_AssetBundle_AssetContent_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -74,6 +79,11 @@ public final class Bundle {
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_assets_AssetBundle_ScriptsEntry_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_assets_AssetBundle_GenericEntry_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_assets_AssetBundle_GenericEntry_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -87,48 +97,55 @@ public final class Bundle {
       "gle/protobuf/timestamp.proto\032\031elide/cryp" +
       "to/crypto.proto\032\025elide/data/data.proto\032\027" +
       "elide/model/model.proto\032\030elide/struct/bl" +
-      "oom.proto\032\025elide/page/page.proto\"\253\013\n\013Ass" +
-      "etBundle\022\017\n\007version\030\001 \001(\r\0222\n\006digest\030\002 \001(" +
-      "\0132\".assets.AssetBundle.DigestSettings\022/\n" +
-      "\006styles\030\003 \003(\0132\037.assets.AssetBundle.Style" +
-      "sEntry\0221\n\007scripts\030\004 \003(\0132 .assets.AssetBu" +
-      "ndle.ScriptsEntry\022/\n\005asset\030\005 \003(\0132 .asset" +
-      "s.AssetBundle.AssetContent\022-\n\tgenerated\030" +
-      "\006 \001(\0132\032.google.protobuf.Timestamp\022\017\n\007rew" +
-      "rite\030\007 \001(\010\032X\n\016DigestSettings\022(\n\talgorith" +
-      "m\030\001 \001(\0162\025.crypto.HashAlgorithm\022\014\n\004tail\030\002" +
-      " \001(\r\022\016\n\006rounds\030\003 \001(\r\032|\n\nRewriteMap\022\014\n\004fi" +
-      "le\030\001 \001(\t\0224\n\003map\030\002 \003(\0132\'.assets.AssetBund" +
-      "le.RewriteMap.MapEntry\032*\n\010MapEntry\022\013\n\003ke" +
-      "y\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032Z\n\021AssetDepen" +
-      "dencies\022\016\n\006direct\030\001 \003(\t\022\022\n\ntransitive\030\002 " +
-      "\003(\t\022!\n\004mask\030\003 \001(\0132\023.struct.BloomFilter\032\300" +
-      "\002\n\013StyleBundle\022\016\n\006module\030\001 \001(\t\0223\n\013rewrit" +
-      "e_map\030\002 \001(\0132\036.assets.AssetBundle.Rewrite" +
-      "Map\022;\n\014dependencies\030\003 \001(\0132%.assets.Asset" +
-      "Bundle.AssetDependencies\0229\n\005asset\030\004 \003(\0132" +
-      "*.assets.AssetBundle.StyleBundle.StyleAs" +
-      "set\032t\n\nStyleAsset\022\r\n\005token\030\001 \001(\t\022\020\n\010file" +
-      "name\030\002 \001(\t\0223\n\nstylesheet\030\003 \001(\0132\037.page.Co" +
-      "ntext.Styles.Stylesheet\022\020\n\010renaming\030\004 \001(" +
-      "\010\032\372\001\n\014ScriptBundle\022\016\n\006module\030\001 \001(\t\022;\n\014de" +
-      "pendencies\030\003 \001(\0132%.assets.AssetBundle.As" +
-      "setDependencies\022;\n\005asset\030\002 \003(\0132,.assets." +
-      "AssetBundle.ScriptBundle.ScriptAsset\032`\n\013" +
-      "ScriptAsset\022\r\n\005token\030\001 \001(\t\022\020\n\010filename\030\002" +
-      " \001(\t\0220\n\006script\030\003 \001(\0132 .page.Context.Scri" +
-      "pts.JavaScript\032f\n\014AssetContent\022\016\n\006module" +
-      "\030\001 \001(\t\022\020\n\010filename\030\002 \001(\t\022\r\n\005token\030\003 \001(\t\022" +
-      "%\n\007variant\030\004 \003(\0132\024.data.CompressedData\032N" +
-      "\n\013StylesEntry\022\013\n\003key\030\001 \001(\t\022.\n\005value\030\002 \001(" +
-      "\0132\037.assets.AssetBundle.StyleBundle:\0028\001\032P" +
-      "\n\014ScriptsEntry\022\013\n\003key\030\001 \001(\t\022/\n\005value\030\002 \001" +
-      "(\0132 .assets.AssetBundle.ScriptBundle:\0028\001" +
-      ":\004\200\367\002\004B\223\001\n\022tools.elide.assetsH\001P\001Z1githu" +
-      "b.com/elide-tools/elide/assets/bundle;bu" +
-      "ndle\330\001\001\370\001\001\242\002\003ELD\252\002\014Elide.Assets\272\002\005Elide\302" +
-      "\002\003ELD\312\002\014Elide\\Assets\352\002\rElide::Assetsb\006pr" +
-      "oto3"
+      "oom.proto\032\025elide/page/page.proto\"\343\r\n\013Ass" +
+      "etBundle\022\017\n\007version\030\001 \001(\r\022;\n\017digest_sett" +
+      "ings\030\002 \001(\0132\".assets.AssetBundle.DigestSe" +
+      "ttings\022\016\n\006digest\030\003 \001(\014\022/\n\006styles\030\004 \003(\0132\037" +
+      ".assets.AssetBundle.StylesEntry\0221\n\007scrip" +
+      "ts\030\005 \003(\0132 .assets.AssetBundle.ScriptsEnt" +
+      "ry\0221\n\007generic\030\006 \003(\0132 .assets.AssetBundle" +
+      ".GenericEntry\022/\n\005asset\030\007 \003(\0132 .assets.As" +
+      "setBundle.AssetContent\022-\n\tgenerated\030\010 \001(" +
+      "\0132\032.google.protobuf.Timestamp\022\025\n\rstyle_r" +
+      "ewrite\030\t \001(\010\032X\n\016DigestSettings\022(\n\talgori" +
+      "thm\030\001 \001(\0162\025.crypto.HashAlgorithm\022\014\n\004tail" +
+      "\030\002 \001(\r\022\016\n\006rounds\030\003 \001(\r\032|\n\nRewriteMap\022\014\n\004" +
+      "file\030\001 \001(\t\0224\n\003map\030\002 \003(\0132\'.assets.AssetBu" +
+      "ndle.RewriteMap.MapEntry\032*\n\010MapEntry\022\013\n\003" +
+      "key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032Z\n\021AssetDep" +
+      "endencies\022\016\n\006direct\030\001 \003(\t\022\022\n\ntransitive\030" +
+      "\002 \003(\t\022!\n\004mask\030\003 \001(\0132\023.struct.BloomFilter" +
+      "\032\300\002\n\013StyleBundle\022\016\n\006module\030\001 \001(\t\0223\n\013rewr" +
+      "ite_map\030\002 \001(\0132\036.assets.AssetBundle.Rewri" +
+      "teMap\022;\n\014dependencies\030\003 \001(\0132%.assets.Ass" +
+      "etBundle.AssetDependencies\0229\n\005asset\030\004 \003(" +
+      "\0132*.assets.AssetBundle.StyleBundle.Style" +
+      "Asset\032t\n\nStyleAsset\022\r\n\005token\030\001 \001(\t\022\020\n\010fi" +
+      "lename\030\002 \001(\t\0223\n\nstylesheet\030\003 \001(\0132\037.page." +
+      "Context.Styles.Stylesheet\022\020\n\010renaming\030\004 " +
+      "\001(\010\032\372\001\n\014ScriptBundle\022\016\n\006module\030\001 \001(\t\022;\n\014" +
+      "dependencies\030\003 \001(\0132%.assets.AssetBundle." +
+      "AssetDependencies\022;\n\005asset\030\002 \003(\0132,.asset" +
+      "s.AssetBundle.ScriptBundle.ScriptAsset\032`" +
+      "\n\013ScriptAsset\022\r\n\005token\030\001 \001(\t\022\020\n\010filename" +
+      "\030\002 \001(\t\0220\n\006script\030\003 \001(\0132 .page.Context.Sc" +
+      "ripts.JavaScript\032\220\001\n\rGenericBundle\022\016\n\006mo" +
+      "dule\030\001 \001(\t\022\020\n\010filename\030\002 \001(\t\022\r\n\005token\030\003 " +
+      "\001(\t\022%\n\007variant\030\004 \003(\0132\024.data.CompressedDa" +
+      "ta\022\024\n\014compressable\030\005 \001(\010\022\021\n\tcacheable\030\006 " +
+      "\001(\010\032f\n\014AssetContent\022\016\n\006module\030\001 \001(\t\022\020\n\010f" +
+      "ilename\030\002 \001(\t\022\r\n\005token\030\003 \001(\t\022%\n\007variant\030" +
+      "\004 \003(\0132\024.data.CompressedData\032N\n\013StylesEnt" +
+      "ry\022\013\n\003key\030\001 \001(\t\022.\n\005value\030\002 \001(\0132\037.assets." +
+      "AssetBundle.StyleBundle:\0028\001\032P\n\014ScriptsEn" +
+      "try\022\013\n\003key\030\001 \001(\t\022/\n\005value\030\002 \001(\0132 .assets" +
+      ".AssetBundle.ScriptBundle:\0028\001\032Q\n\014Generic" +
+      "Entry\022\013\n\003key\030\001 \001(\t\0220\n\005value\030\002 \001(\0132!.asse" +
+      "ts.AssetBundle.GenericBundle:\0028\001:\004\200\367\002\004B\223" +
+      "\001\n\022tools.elide.assetsH\001P\001Z1github.com/el" +
+      "ide-tools/elide/assets/bundle;bundle\330\001\001\370" +
+      "\001\001\242\002\003ELD\252\002\014Elide.Assets\272\002\005Elide\302\002\003ELD\312\002\014" +
+      "Elide\\Assets\352\002\rElide::Assetsb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -145,7 +162,7 @@ public final class Bundle {
     internal_static_assets_AssetBundle_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_assets_AssetBundle_descriptor,
-        new java.lang.String[] { "Version", "Digest", "Styles", "Scripts", "Asset", "Generated", "Rewrite", });
+        new java.lang.String[] { "Version", "DigestSettings", "Digest", "Styles", "Scripts", "Generic", "Asset", "Generated", "StyleRewrite", });
     internal_static_assets_AssetBundle_DigestSettings_descriptor =
       internal_static_assets_AssetBundle_descriptor.getNestedTypes().get(0);
     internal_static_assets_AssetBundle_DigestSettings_fieldAccessorTable = new
@@ -194,23 +211,35 @@ public final class Bundle {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_assets_AssetBundle_ScriptBundle_ScriptAsset_descriptor,
         new java.lang.String[] { "Token", "Filename", "Script", });
-    internal_static_assets_AssetBundle_AssetContent_descriptor =
+    internal_static_assets_AssetBundle_GenericBundle_descriptor =
       internal_static_assets_AssetBundle_descriptor.getNestedTypes().get(5);
+    internal_static_assets_AssetBundle_GenericBundle_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_assets_AssetBundle_GenericBundle_descriptor,
+        new java.lang.String[] { "Module", "Filename", "Token", "Variant", "Compressable", "Cacheable", });
+    internal_static_assets_AssetBundle_AssetContent_descriptor =
+      internal_static_assets_AssetBundle_descriptor.getNestedTypes().get(6);
     internal_static_assets_AssetBundle_AssetContent_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_assets_AssetBundle_AssetContent_descriptor,
         new java.lang.String[] { "Module", "Filename", "Token", "Variant", });
     internal_static_assets_AssetBundle_StylesEntry_descriptor =
-      internal_static_assets_AssetBundle_descriptor.getNestedTypes().get(6);
+      internal_static_assets_AssetBundle_descriptor.getNestedTypes().get(7);
     internal_static_assets_AssetBundle_StylesEntry_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_assets_AssetBundle_StylesEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
     internal_static_assets_AssetBundle_ScriptsEntry_descriptor =
-      internal_static_assets_AssetBundle_descriptor.getNestedTypes().get(7);
+      internal_static_assets_AssetBundle_descriptor.getNestedTypes().get(8);
     internal_static_assets_AssetBundle_ScriptsEntry_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_assets_AssetBundle_ScriptsEntry_descriptor,
+        new java.lang.String[] { "Key", "Value", });
+    internal_static_assets_AssetBundle_GenericEntry_descriptor =
+      internal_static_assets_AssetBundle_descriptor.getNestedTypes().get(9);
+    internal_static_assets_AssetBundle_GenericEntry_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_assets_AssetBundle_GenericEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
     com.google.protobuf.ExtensionRegistry registry =
         com.google.protobuf.ExtensionRegistry.newInstance();

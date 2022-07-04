@@ -11,7 +11,7 @@ import java.util.Properties
 
 plugins {
     java
-    alias(libs.plugins.kotlin) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.sonar)

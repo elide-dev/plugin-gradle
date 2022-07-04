@@ -5,12 +5,14 @@
     "DSL_SCOPE_VIOLATION",
 )
 
+import dev.elide.buildtools.gradle.plugin.BuildMode
+
 plugins {
-    java
+    kotlin("js")
+    alias(libs.plugins.node)
     id("dev.elide.buildtools.plugin")
-    alias(libs.plugins.protobuf)
 }
 
 elide {
-//    message.set("Just trying this gradle plugin...")
+    mode.set(BuildMode.PRODUCTION)
 }

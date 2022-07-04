@@ -98,19 +98,31 @@ public class AssetBundler implements Callable<Integer> {
   private static final ManifestFormat DEFAULT_FORMAT = ManifestFormat.TEXT;
 
   /** Default algorithm to use when digesting chunks. */
-  private static final DigestAlgorithm DEFAULT_ALGORITHM = DigestAlgorithm.SHA1;
+  private static final DigestAlgorithm DEFAULT_ALGORITHM = DigestAlgorithm.SHA256;
 
   /** Private log pipe, addressed to this class. */
   private static final Logger logger = LoggerFactory.getLogger(AssetBundler.class);
+
+  /** Whether to load Brotli libraries and use them for compression. */
+  private static final boolean brotliEnabled = false;
 
   /** Executor to use for async calls. */
   private static final ListeningExecutorService executorService = MoreExecutors.listeningDecorator(
     Executors.newFixedThreadPool(3));
 
   static {
-    brotliAvailable = (
-        BrotliLoader.isBrotliAvailable()
-    );
+    boolean isBrotliAvailable = false;
+    if (brotliEnabled) {
+        try {
+            isBrotliAvailable = (
+                BrotliLoader.isBrotliAvailable()
+            );
+        } catch (RuntimeException rxe) {
+            // brotli is not available
+            isBrotliAvailable = false;
+        }
+    }
+    brotliAvailable = isBrotliAvailable;
   }
 
   // -- Generic Options -- //
@@ -1160,10 +1172,10 @@ public class AssetBundler implements Callable<Integer> {
         // prep the bundle builder
         final AssetBundle.Builder builder = AssetBundle.newBuilder()
           .setVersion(version)
-          .setRewrite(rewriteMaps)
+          .setStyleRewrite(rewriteMaps)
           .setGenerated(Timestamp.newBuilder()
             .setSeconds(System.currentTimeMillis() / 1000))
-          .setDigest(DigestSettings.newBuilder()
+          .setDigestSettings(DigestSettings.newBuilder()
             .setAlgorithm(this.digest.toEnum())
             .setTail(this.digestLength)
             .setRounds(this.digestRounds));

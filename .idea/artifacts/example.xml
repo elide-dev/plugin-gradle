@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="example">
+    <output-path>$PROJECT_DIR$/example/build/libs</output-path>
+    <root id="archive" name="example.jar">
+      <element id="module-output" name="elide-gradle-plugin.example.main" />
+    </root>
+  </artifact>
+</component>
