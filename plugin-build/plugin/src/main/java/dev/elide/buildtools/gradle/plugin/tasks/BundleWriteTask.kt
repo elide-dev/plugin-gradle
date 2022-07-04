@@ -40,7 +40,6 @@ abstract class BundleWriteTask : DefaultTask() {
     )
     abstract val outputSpecName: Property<String>
 
-
     /**
      * Write the prepared asset catalog bundle to the [outputBundleFolder], under the [outputSpecName]; this method is
      * expected to be called from the concrete task action method.

@@ -6,7 +6,8 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 /** Definition for the main Elide build-tools plugin. */
-@Suppress("unused") abstract class ElidePlugin : Plugin<Project> {
+@Suppress("unused")
+abstract class ElidePlugin : Plugin<Project> {
     companion object {
         const val EXTENSION_NAME = "elide"
     }

@@ -27,10 +27,11 @@ import java.util.concurrent.atomic.AtomicReference
  *
  * @see BundleWriteTask which is responsible for ultimately writing the bundle created by an implementation of this task
  */
-abstract class BundleSpecTask<M: Message, Spec> : DefaultTask() {
+abstract class BundleSpecTask<M : Message, Spec> : DefaultTask() {
     companion object {
         /** Asset bundler tool. */
-        @Suppress("unused") internal val bundler: AssetBundler = AssetBundler.create()
+        @Suppress("unused")
+        internal val bundler: AssetBundler = AssetBundler.create()
 
         /** Proto-JSON printer. */
         internal val jsonPrinter = JsonFormat
@@ -41,9 +42,9 @@ abstract class BundleSpecTask<M: Message, Spec> : DefaultTask() {
         /** @return Digester for the provided algorithm. */
         @JvmStatic internal fun HashAlgorithm.digester(): MessageDigest? = when (this) {
             HashAlgorithm.MD5 -> MessageDigest.getInstance("MD5")
-            HashAlgorithm.SHA1 ->  MessageDigest.getInstance("SHA-1")
-            HashAlgorithm.SHA256 ->  MessageDigest.getInstance("SHA-256")
-            HashAlgorithm.SHA512 ->  MessageDigest.getInstance("SHA-512")
+            HashAlgorithm.SHA1 -> MessageDigest.getInstance("SHA-1")
+            HashAlgorithm.SHA256 -> MessageDigest.getInstance("SHA-256")
+            HashAlgorithm.SHA512 -> MessageDigest.getInstance("SHA-512")
             HashAlgorithm.IDENTITY -> null
             else -> throw IllegalArgumentException("Unrecognized hash algorithm: $name")
         }
@@ -72,6 +73,7 @@ abstract class BundleSpecTask<M: Message, Spec> : DefaultTask() {
         }
 
         @JvmStatic
+        @Suppress("SwallowedException")
         protected fun resolveInflateRuntimeTask(project: Project, extension: ElideExtension): InflateRuntimeTask {
             // resolve the inflate-runtime task installed on the root project, or if there is not one, create it.
             return try {
@@ -124,8 +126,9 @@ abstract class BundleSpecTask<M: Message, Spec> : DefaultTask() {
                 it.sourceTaskName.set(sourceTask.name)
                 it.outputs.file(it.outputAssetSpecFile)
             }
-            task.dependsOn(*deps.plus(project.tasks.named(sourceTaskName)).toTypedArray())
-            task.shouldRunAfter(*deps.plus(project.tasks.named(sourceTaskName)).toTypedArray())
+            val allDeps = deps.plus(project.tasks.named(sourceTaskName)).toTypedArray()
+            task.dependsOn(allDeps)
+            task.shouldRunAfter(allDeps)
             return task
         }
     }

@@ -11,6 +11,7 @@ import tools.elide.assets.assetBundle
 import java.time.Instant
 
 /** Task which creates Elide asset specifications for embedding in app JARs. */
+@Suppress("UnusedPrivateMember")
 abstract class BundleAssetsBuildTask : BundleSpecTask<AssetBundle, AssetBundleSpec>() {
     companion object {
         private const val TASK_NAME = "bundleAssets"

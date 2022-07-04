@@ -34,8 +34,9 @@ object UntarUtil {
         while (entry != null) {
             val pathEntryOutput: Path = pathOutput.resolve(entry.name)
             if (entry.isDirectory) {
-                if (!Files.exists(pathEntryOutput))
+                if (!Files.exists(pathEntryOutput)) {
                     Files.createDirectory(pathEntryOutput)
+                }
             } else if (!pathEntryOutput.exists()) {
                 Files.copy(
                     tarInputStream,
