@@ -26,6 +26,7 @@ abstract class ElidePlugin : Plugin<Project> {
         const val prepack = "0.2.54"
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun resolveJsIrLinkTask(project: Project): KotlinJsIrLink {
         // resolve the Kotlin JS compile task (IR only)
         return try {

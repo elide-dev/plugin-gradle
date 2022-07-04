@@ -222,7 +222,8 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
         }
 
         @Suppress("UNUSED_PARAMETER")
-        @JvmStatic fun setupBrowserWebpackBuildTask(
+        @JvmStatic
+        fun setupBrowserWebpackBuildTask(
             mode: BuildMode,
             project: Project,
             fetchSources: Copy,

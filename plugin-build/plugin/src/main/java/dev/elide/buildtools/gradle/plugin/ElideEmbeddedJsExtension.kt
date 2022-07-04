@@ -8,6 +8,7 @@ import org.gradle.api.tasks.Optional
 import javax.inject.Inject
 
 /** */
+@Suppress("UnnecessaryAbstractClass")
 abstract class ElideEmbeddedJsExtension @Inject constructor(project: Project) {
     companion object {
         const val EXTENSION_NAME = "embedded"
