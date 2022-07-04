@@ -7,16 +7,23 @@ import dev.elide.buildtools.gradle.plugin.tasks.EmbeddedJsBuildTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.DuplicatesStrategy
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.Copy
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
+import org.jetbrains.kotlin.gradle.targets.js.npm.NpmDependencyExtension
 
 @Suppress("unused")
 abstract class ElidePlugin : Plugin<Project> {
     companion object {
         const val EXTENSION_NAME = "elide"
         const val BUNDLE_ASSETS_TASK_NAME = "bundleAssets"
+    }
+
+    object Versions {
+        const val esbuild = "0.14.48"
+        const val prepack = "0.2.54"
     }
 
     private fun resolveJsIrLinkTask(project: Project): KotlinJsIrLink {
@@ -43,10 +50,14 @@ abstract class ElidePlugin : Plugin<Project> {
         if (project.plugins.hasPlugin("org.jetbrains.kotlin.js")) {
             kotlinPluginFound = true
 
-            // inject project dependencies
-//            project.configurations.create("embeddedNpmTools") {
-//
-//            }
+            // make sure node plugin is applied
+            project.plugins.apply("com.github.node-gradle.node")
+            project.dependencies.apply {
+                (this as ExtensionAware).extensions.configure(NpmDependencyExtension::class.java) { npm ->
+                    add("implementation", npm("esbuild", Versions.esbuild))
+                    add("implementation", npm("prepack", Versions.prepack))
+                }
+            }
 
             // load JS plugin, configure with output, connect outputs to embedded build
             project.plugins.withId("org.jetbrains.kotlin.js") { _ ->
