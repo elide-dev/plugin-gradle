@@ -44,7 +44,7 @@ abstract class BundleAssetsBuildTask : BundleSpecTask<AssetBundle, AssetBundleSp
         with(project) {
             // set the default output bundle folder
             outputBundleFolder.set(
-                file("$buildDir\\${defaultOutputBundleFolder}").absolutePath
+                file("$buildDir\\$defaultOutputBundleFolder").absolutePath
             )
 
             // setup asset spec
