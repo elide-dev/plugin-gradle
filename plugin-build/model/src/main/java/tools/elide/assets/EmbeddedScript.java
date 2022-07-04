@@ -5,6 +5,8 @@ package tools.elide.assets;
 
 /**
  * <pre>
+ * Describes a single embedded script asset, which is embedded within an Elide application. The script is enclosed
+ * within the protocol buffer record, along with a digest and various metadata.
  * </pre>
  *
  * Protobuf type {@code assets.EmbeddedScript}
@@ -22,9 +24,8 @@ private static final long serialVersionUID = 0L;
     module_ = "";
     filename_ = "";
     language_ = 0;
-    hashAlgorithm_ = 0;
-    fingerprint_ = com.google.protobuf.ByteString.EMPTY;
-    sourcemap_ = "";
+    directDependency_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    transitiveDependency_ = com.google.protobuf.LazyStringArrayList.EMPTY;
   }
 
   @java.lang.Override
@@ -47,6 +48,7 @@ private static final long serialVersionUID = 0L;
     if (extensionRegistry == null) {
       throw new java.lang.NullPointerException();
     }
+    int mutable_bitField0_ = 0;
     com.google.protobuf.UnknownFieldSet.Builder unknownFields =
         com.google.protobuf.UnknownFieldSet.newBuilder();
     try {
@@ -75,18 +77,7 @@ private static final long serialVersionUID = 0L;
             language_ = rawValue;
             break;
           }
-          case 32: {
-            int rawValue = input.readEnum();
-
-            hashAlgorithm_ = rawValue;
-            break;
-          }
-          case 42: {
-
-            fingerprint_ = input.readBytes();
-            break;
-          }
-          case 50: {
+          case 34: {
             tools.elide.assets.EmbeddedScriptMetadata.Builder subBuilder = null;
             if (metadata_ != null) {
               subBuilder = metadata_.toBuilder();
@@ -99,7 +90,7 @@ private static final long serialVersionUID = 0L;
 
             break;
           }
-          case 58: {
+          case 42: {
             com.google.protobuf.Timestamp.Builder subBuilder = null;
             if (lastModified_ != null) {
               subBuilder = lastModified_.toBuilder();
@@ -112,10 +103,48 @@ private static final long serialVersionUID = 0L;
 
             break;
           }
+          case 50: {
+            tools.elide.assets.DataContainerRef.Builder subBuilder = null;
+            if (script_ != null) {
+              subBuilder = script_.toBuilder();
+            }
+            script_ = input.readMessage(tools.elide.assets.DataContainerRef.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(script_);
+              script_ = subBuilder.buildPartial();
+            }
+
+            break;
+          }
+          case 58: {
+            tools.elide.assets.DataContainerRef.Builder subBuilder = null;
+            if (sourcemap_ != null) {
+              subBuilder = sourcemap_.toBuilder();
+            }
+            sourcemap_ = input.readMessage(tools.elide.assets.DataContainerRef.parser(), extensionRegistry);
+            if (subBuilder != null) {
+              subBuilder.mergeFrom(sourcemap_);
+              sourcemap_ = subBuilder.buildPartial();
+            }
+
+            break;
+          }
           case 66: {
             java.lang.String s = input.readStringRequireUtf8();
-
-            sourcemap_ = s;
+            if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+              directDependency_ = new com.google.protobuf.LazyStringArrayList();
+              mutable_bitField0_ |= 0x00000001;
+            }
+            directDependency_.add(s);
+            break;
+          }
+          case 74: {
+            java.lang.String s = input.readStringRequireUtf8();
+            if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+              transitiveDependency_ = new com.google.protobuf.LazyStringArrayList();
+              mutable_bitField0_ |= 0x00000002;
+            }
+            transitiveDependency_.add(s);
             break;
           }
           default: {
@@ -135,6 +164,12 @@ private static final long serialVersionUID = 0L;
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
+      if (((mutable_bitField0_ & 0x00000001) != 0)) {
+        directDependency_ = directDependency_.getUnmodifiableView();
+      }
+      if (((mutable_bitField0_ & 0x00000002) != 0)) {
+        transitiveDependency_ = transitiveDependency_.getUnmodifiableView();
+      }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
@@ -156,6 +191,7 @@ private static final long serialVersionUID = 0L;
   private volatile java.lang.Object module_;
   /**
    * <pre>
+   * Module name / ID for this embedded script. Set at build time.
    * </pre>
    *
    * <code>string module = 1;</code>
@@ -176,6 +212,7 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * Module name / ID for this embedded script. Set at build time.
    * </pre>
    *
    * <code>string module = 1;</code>
@@ -200,6 +237,7 @@ private static final long serialVersionUID = 0L;
   private volatile java.lang.Object filename_;
   /**
    * <pre>
+   * Filename, or some synthesized filename, for this script.
    * </pre>
    *
    * <code>string filename = 2;</code>
@@ -220,6 +258,7 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * Filename, or some synthesized filename, for this script.
    * </pre>
    *
    * <code>string filename = 2;</code>
@@ -244,6 +283,7 @@ private static final long serialVersionUID = 0L;
   private int language_;
   /**
    * <pre>
+   * Language of the embedded script, and expected interpreted language.
    * </pre>
    *
    * <code>.assets.EmbeddedScriptLanguage language = 3;</code>
@@ -254,6 +294,7 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * Language of the embedded script, and expected interpreted language.
    * </pre>
    *
    * <code>.assets.EmbeddedScriptLanguage language = 3;</code>
@@ -265,52 +306,14 @@ private static final long serialVersionUID = 0L;
     return result == null ? tools.elide.assets.EmbeddedScriptLanguage.UNRECOGNIZED : result;
   }
 
-  public static final int HASH_ALGORITHM_FIELD_NUMBER = 4;
-  private int hashAlgorithm_;
-  /**
-   * <pre>
-   * </pre>
-   *
-   * <code>.crypto.HashAlgorithm hash_algorithm = 4;</code>
-   * @return The enum numeric value on the wire for hashAlgorithm.
-   */
-  @java.lang.Override public int getHashAlgorithmValue() {
-    return hashAlgorithm_;
-  }
-  /**
-   * <pre>
-   * </pre>
-   *
-   * <code>.crypto.HashAlgorithm hash_algorithm = 4;</code>
-   * @return The hashAlgorithm.
-   */
-  @java.lang.Override public tools.elide.crypto.HashAlgorithm getHashAlgorithm() {
-    @SuppressWarnings("deprecation")
-    tools.elide.crypto.HashAlgorithm result = tools.elide.crypto.HashAlgorithm.valueOf(hashAlgorithm_);
-    return result == null ? tools.elide.crypto.HashAlgorithm.UNRECOGNIZED : result;
-  }
-
-  public static final int FINGERPRINT_FIELD_NUMBER = 5;
-  private com.google.protobuf.ByteString fingerprint_;
-  /**
-   * <pre>
-   * </pre>
-   *
-   * <code>bytes fingerprint = 5;</code>
-   * @return The fingerprint.
-   */
-  @java.lang.Override
-  public com.google.protobuf.ByteString getFingerprint() {
-    return fingerprint_;
-  }
-
-  public static final int METADATA_FIELD_NUMBER = 6;
+  public static final int METADATA_FIELD_NUMBER = 4;
   private tools.elide.assets.EmbeddedScriptMetadata metadata_;
   /**
    * <pre>
+   * Embedded script-level metadata, including language-specific metadata.
    * </pre>
    *
-   * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+   * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
    * @return Whether the metadata field is set.
    */
   @java.lang.Override
@@ -319,9 +322,10 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * Embedded script-level metadata, including language-specific metadata.
    * </pre>
    *
-   * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+   * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
    * @return The metadata.
    */
   @java.lang.Override
@@ -330,22 +334,24 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * Embedded script-level metadata, including language-specific metadata.
    * </pre>
    *
-   * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+   * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
    */
   @java.lang.Override
   public tools.elide.assets.EmbeddedScriptMetadataOrBuilder getMetadataOrBuilder() {
     return getMetadata();
   }
 
-  public static final int LAST_MODIFIED_FIELD_NUMBER = 7;
+  public static final int LAST_MODIFIED_FIELD_NUMBER = 5;
   private com.google.protobuf.Timestamp lastModified_;
   /**
    * <pre>
+   * Last-modified timestamp for the assets underlying this script.
    * </pre>
    *
-   * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+   * <code>.google.protobuf.Timestamp last_modified = 5;</code>
    * @return Whether the lastModified field is set.
    */
   @java.lang.Override
@@ -354,9 +360,10 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * Last-modified timestamp for the assets underlying this script.
    * </pre>
    *
-   * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+   * <code>.google.protobuf.Timestamp last_modified = 5;</code>
    * @return The lastModified.
    */
   @java.lang.Override
@@ -365,57 +372,203 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * Last-modified timestamp for the assets underlying this script.
    * </pre>
    *
-   * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+   * <code>.google.protobuf.Timestamp last_modified = 5;</code>
    */
   @java.lang.Override
   public com.google.protobuf.TimestampOrBuilder getLastModifiedOrBuilder() {
     return getLastModified();
   }
 
-  public static final int SOURCEMAP_FIELD_NUMBER = 8;
-  private volatile java.lang.Object sourcemap_;
+  public static final int SCRIPT_FIELD_NUMBER = 6;
+  private tools.elide.assets.DataContainerRef script_;
   /**
    * <pre>
+   * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+   * digest payload additionally specifies the algorithm used.
    * </pre>
    *
-   * <code>string sourcemap = 8;</code>
-   * @return The sourcemap.
+   * <code>.assets.DataContainerRef script = 6;</code>
+   * @return Whether the script field is set.
    */
   @java.lang.Override
-  public java.lang.String getSourcemap() {
-    java.lang.Object ref = sourcemap_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      sourcemap_ = s;
-      return s;
-    }
+  public boolean hasScript() {
+    return script_ != null;
   }
   /**
    * <pre>
+   * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+   * digest payload additionally specifies the algorithm used.
    * </pre>
    *
-   * <code>string sourcemap = 8;</code>
-   * @return The bytes for sourcemap.
+   * <code>.assets.DataContainerRef script = 6;</code>
+   * @return The script.
    */
   @java.lang.Override
+  public tools.elide.assets.DataContainerRef getScript() {
+    return script_ == null ? tools.elide.assets.DataContainerRef.getDefaultInstance() : script_;
+  }
+  /**
+   * <pre>
+   * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+   * digest payload additionally specifies the algorithm used.
+   * </pre>
+   *
+   * <code>.assets.DataContainerRef script = 6;</code>
+   */
+  @java.lang.Override
+  public tools.elide.assets.DataContainerRefOrBuilder getScriptOrBuilder() {
+    return getScript();
+  }
+
+  public static final int SOURCEMAP_FIELD_NUMBER = 7;
+  private tools.elide.assets.DataContainerRef sourcemap_;
+  /**
+   * <pre>
+   * Source-map file path for the embedded script, if generated as an external file.
+   * </pre>
+   *
+   * <code>.assets.DataContainerRef sourcemap = 7;</code>
+   * @return Whether the sourcemap field is set.
+   */
+  @java.lang.Override
+  public boolean hasSourcemap() {
+    return sourcemap_ != null;
+  }
+  /**
+   * <pre>
+   * Source-map file path for the embedded script, if generated as an external file.
+   * </pre>
+   *
+   * <code>.assets.DataContainerRef sourcemap = 7;</code>
+   * @return The sourcemap.
+   */
+  @java.lang.Override
+  public tools.elide.assets.DataContainerRef getSourcemap() {
+    return sourcemap_ == null ? tools.elide.assets.DataContainerRef.getDefaultInstance() : sourcemap_;
+  }
+  /**
+   * <pre>
+   * Source-map file path for the embedded script, if generated as an external file.
+   * </pre>
+   *
+   * <code>.assets.DataContainerRef sourcemap = 7;</code>
+   */
+  @java.lang.Override
+  public tools.elide.assets.DataContainerRefOrBuilder getSourcemapOrBuilder() {
+    return getSourcemap();
+  }
+
+  public static final int DIRECT_DEPENDENCY_FIELD_NUMBER = 8;
+  private com.google.protobuf.LazyStringList directDependency_;
+  /**
+   * <pre>
+   * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+   * scripts (same language, same runtime level). Expressed as a `module` ID.
+   * </pre>
+   *
+   * <code>repeated string direct_dependency = 8;</code>
+   * @return A list containing the directDependency.
+   */
+  public com.google.protobuf.ProtocolStringList
+      getDirectDependencyList() {
+    return directDependency_;
+  }
+  /**
+   * <pre>
+   * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+   * scripts (same language, same runtime level). Expressed as a `module` ID.
+   * </pre>
+   *
+   * <code>repeated string direct_dependency = 8;</code>
+   * @return The count of directDependency.
+   */
+  public int getDirectDependencyCount() {
+    return directDependency_.size();
+  }
+  /**
+   * <pre>
+   * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+   * scripts (same language, same runtime level). Expressed as a `module` ID.
+   * </pre>
+   *
+   * <code>repeated string direct_dependency = 8;</code>
+   * @param index The index of the element to return.
+   * @return The directDependency at the given index.
+   */
+  public java.lang.String getDirectDependency(int index) {
+    return directDependency_.get(index);
+  }
+  /**
+   * <pre>
+   * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+   * scripts (same language, same runtime level). Expressed as a `module` ID.
+   * </pre>
+   *
+   * <code>repeated string direct_dependency = 8;</code>
+   * @param index The index of the value to return.
+   * @return The bytes of the directDependency at the given index.
+   */
   public com.google.protobuf.ByteString
-      getSourcemapBytes() {
-    java.lang.Object ref = sourcemap_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (java.lang.String) ref);
-      sourcemap_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
+      getDirectDependencyBytes(int index) {
+    return directDependency_.getByteString(index);
+  }
+
+  public static final int TRANSITIVE_DEPENDENCY_FIELD_NUMBER = 9;
+  private com.google.protobuf.LazyStringList transitiveDependency_;
+  /**
+   * <pre>
+   * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+   * scripts (same language, same runtime level). Expressed as a `module` ID.
+   * </pre>
+   *
+   * <code>repeated string transitive_dependency = 9;</code>
+   * @return A list containing the transitiveDependency.
+   */
+  public com.google.protobuf.ProtocolStringList
+      getTransitiveDependencyList() {
+    return transitiveDependency_;
+  }
+  /**
+   * <pre>
+   * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+   * scripts (same language, same runtime level). Expressed as a `module` ID.
+   * </pre>
+   *
+   * <code>repeated string transitive_dependency = 9;</code>
+   * @return The count of transitiveDependency.
+   */
+  public int getTransitiveDependencyCount() {
+    return transitiveDependency_.size();
+  }
+  /**
+   * <pre>
+   * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+   * scripts (same language, same runtime level). Expressed as a `module` ID.
+   * </pre>
+   *
+   * <code>repeated string transitive_dependency = 9;</code>
+   * @param index The index of the element to return.
+   * @return The transitiveDependency at the given index.
+   */
+  public java.lang.String getTransitiveDependency(int index) {
+    return transitiveDependency_.get(index);
+  }
+  /**
+   * <pre>
+   * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+   * scripts (same language, same runtime level). Expressed as a `module` ID.
+   * </pre>
+   *
+   * <code>repeated string transitive_dependency = 9;</code>
+   * @param index The index of the value to return.
+   * @return The bytes of the transitiveDependency at the given index.
+   */
+  public com.google.protobuf.ByteString
+      getTransitiveDependencyBytes(int index) {
+    return transitiveDependency_.getByteString(index);
   }
 
   private byte memoizedIsInitialized = -1;
@@ -441,20 +594,23 @@ private static final long serialVersionUID = 0L;
     if (language_ != tools.elide.assets.EmbeddedScriptLanguage.LANGUAGE_UNSPECIFIED.getNumber()) {
       output.writeEnum(3, language_);
     }
-    if (hashAlgorithm_ != tools.elide.crypto.HashAlgorithm.IDENTITY.getNumber()) {
-      output.writeEnum(4, hashAlgorithm_);
-    }
-    if (!fingerprint_.isEmpty()) {
-      output.writeBytes(5, fingerprint_);
-    }
     if (metadata_ != null) {
-      output.writeMessage(6, getMetadata());
+      output.writeMessage(4, getMetadata());
     }
     if (lastModified_ != null) {
-      output.writeMessage(7, getLastModified());
+      output.writeMessage(5, getLastModified());
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(sourcemap_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, sourcemap_);
+    if (script_ != null) {
+      output.writeMessage(6, getScript());
+    }
+    if (sourcemap_ != null) {
+      output.writeMessage(7, getSourcemap());
+    }
+    for (int i = 0; i < directDependency_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 8, directDependency_.getRaw(i));
+    }
+    for (int i = 0; i < transitiveDependency_.size(); i++) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 9, transitiveDependency_.getRaw(i));
     }
     unknownFields.writeTo(output);
   }
@@ -475,24 +631,37 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeEnumSize(3, language_);
     }
-    if (hashAlgorithm_ != tools.elide.crypto.HashAlgorithm.IDENTITY.getNumber()) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeEnumSize(4, hashAlgorithm_);
-    }
-    if (!fingerprint_.isEmpty()) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeBytesSize(5, fingerprint_);
-    }
     if (metadata_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(6, getMetadata());
+        .computeMessageSize(4, getMetadata());
     }
     if (lastModified_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(7, getLastModified());
+        .computeMessageSize(5, getLastModified());
     }
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(sourcemap_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, sourcemap_);
+    if (script_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(6, getScript());
+    }
+    if (sourcemap_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(7, getSourcemap());
+    }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < directDependency_.size(); i++) {
+        dataSize += computeStringSizeNoTag(directDependency_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getDirectDependencyList().size();
+    }
+    {
+      int dataSize = 0;
+      for (int i = 0; i < transitiveDependency_.size(); i++) {
+        dataSize += computeStringSizeNoTag(transitiveDependency_.getRaw(i));
+      }
+      size += dataSize;
+      size += 1 * getTransitiveDependencyList().size();
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -514,9 +683,6 @@ private static final long serialVersionUID = 0L;
     if (!getFilename()
         .equals(other.getFilename())) return false;
     if (language_ != other.language_) return false;
-    if (hashAlgorithm_ != other.hashAlgorithm_) return false;
-    if (!getFingerprint()
-        .equals(other.getFingerprint())) return false;
     if (hasMetadata() != other.hasMetadata()) return false;
     if (hasMetadata()) {
       if (!getMetadata()
@@ -527,8 +693,20 @@ private static final long serialVersionUID = 0L;
       if (!getLastModified()
           .equals(other.getLastModified())) return false;
     }
-    if (!getSourcemap()
-        .equals(other.getSourcemap())) return false;
+    if (hasScript() != other.hasScript()) return false;
+    if (hasScript()) {
+      if (!getScript()
+          .equals(other.getScript())) return false;
+    }
+    if (hasSourcemap() != other.hasSourcemap()) return false;
+    if (hasSourcemap()) {
+      if (!getSourcemap()
+          .equals(other.getSourcemap())) return false;
+    }
+    if (!getDirectDependencyList()
+        .equals(other.getDirectDependencyList())) return false;
+    if (!getTransitiveDependencyList()
+        .equals(other.getTransitiveDependencyList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -546,10 +724,6 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getFilename().hashCode();
     hash = (37 * hash) + LANGUAGE_FIELD_NUMBER;
     hash = (53 * hash) + language_;
-    hash = (37 * hash) + HASH_ALGORITHM_FIELD_NUMBER;
-    hash = (53 * hash) + hashAlgorithm_;
-    hash = (37 * hash) + FINGERPRINT_FIELD_NUMBER;
-    hash = (53 * hash) + getFingerprint().hashCode();
     if (hasMetadata()) {
       hash = (37 * hash) + METADATA_FIELD_NUMBER;
       hash = (53 * hash) + getMetadata().hashCode();
@@ -558,8 +732,22 @@ private static final long serialVersionUID = 0L;
       hash = (37 * hash) + LAST_MODIFIED_FIELD_NUMBER;
       hash = (53 * hash) + getLastModified().hashCode();
     }
-    hash = (37 * hash) + SOURCEMAP_FIELD_NUMBER;
-    hash = (53 * hash) + getSourcemap().hashCode();
+    if (hasScript()) {
+      hash = (37 * hash) + SCRIPT_FIELD_NUMBER;
+      hash = (53 * hash) + getScript().hashCode();
+    }
+    if (hasSourcemap()) {
+      hash = (37 * hash) + SOURCEMAP_FIELD_NUMBER;
+      hash = (53 * hash) + getSourcemap().hashCode();
+    }
+    if (getDirectDependencyCount() > 0) {
+      hash = (37 * hash) + DIRECT_DEPENDENCY_FIELD_NUMBER;
+      hash = (53 * hash) + getDirectDependencyList().hashCode();
+    }
+    if (getTransitiveDependencyCount() > 0) {
+      hash = (37 * hash) + TRANSITIVE_DEPENDENCY_FIELD_NUMBER;
+      hash = (53 * hash) + getTransitiveDependencyList().hashCode();
+    }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -657,6 +845,8 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * Describes a single embedded script asset, which is embedded within an Elide application. The script is enclosed
+   * within the protocol buffer record, along with a digest and various metadata.
    * </pre>
    *
    * Protobuf type {@code assets.EmbeddedScript}
@@ -702,10 +892,6 @@ private static final long serialVersionUID = 0L;
 
       language_ = 0;
 
-      hashAlgorithm_ = 0;
-
-      fingerprint_ = com.google.protobuf.ByteString.EMPTY;
-
       if (metadataBuilder_ == null) {
         metadata_ = null;
       } else {
@@ -718,8 +904,22 @@ private static final long serialVersionUID = 0L;
         lastModified_ = null;
         lastModifiedBuilder_ = null;
       }
-      sourcemap_ = "";
-
+      if (scriptBuilder_ == null) {
+        script_ = null;
+      } else {
+        script_ = null;
+        scriptBuilder_ = null;
+      }
+      if (sourcemapBuilder_ == null) {
+        sourcemap_ = null;
+      } else {
+        sourcemap_ = null;
+        sourcemapBuilder_ = null;
+      }
+      directDependency_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000001);
+      transitiveDependency_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000002);
       return this;
     }
 
@@ -746,11 +946,10 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public tools.elide.assets.EmbeddedScript buildPartial() {
       tools.elide.assets.EmbeddedScript result = new tools.elide.assets.EmbeddedScript(this);
+      int from_bitField0_ = bitField0_;
       result.module_ = module_;
       result.filename_ = filename_;
       result.language_ = language_;
-      result.hashAlgorithm_ = hashAlgorithm_;
-      result.fingerprint_ = fingerprint_;
       if (metadataBuilder_ == null) {
         result.metadata_ = metadata_;
       } else {
@@ -761,7 +960,26 @@ private static final long serialVersionUID = 0L;
       } else {
         result.lastModified_ = lastModifiedBuilder_.build();
       }
-      result.sourcemap_ = sourcemap_;
+      if (scriptBuilder_ == null) {
+        result.script_ = script_;
+      } else {
+        result.script_ = scriptBuilder_.build();
+      }
+      if (sourcemapBuilder_ == null) {
+        result.sourcemap_ = sourcemap_;
+      } else {
+        result.sourcemap_ = sourcemapBuilder_.build();
+      }
+      if (((bitField0_ & 0x00000001) != 0)) {
+        directDependency_ = directDependency_.getUnmodifiableView();
+        bitField0_ = (bitField0_ & ~0x00000001);
+      }
+      result.directDependency_ = directDependency_;
+      if (((bitField0_ & 0x00000002) != 0)) {
+        transitiveDependency_ = transitiveDependency_.getUnmodifiableView();
+        bitField0_ = (bitField0_ & ~0x00000002);
+      }
+      result.transitiveDependency_ = transitiveDependency_;
       onBuilt();
       return result;
     }
@@ -821,20 +1039,36 @@ private static final long serialVersionUID = 0L;
       if (other.language_ != 0) {
         setLanguageValue(other.getLanguageValue());
       }
-      if (other.hashAlgorithm_ != 0) {
-        setHashAlgorithmValue(other.getHashAlgorithmValue());
-      }
-      if (other.getFingerprint() != com.google.protobuf.ByteString.EMPTY) {
-        setFingerprint(other.getFingerprint());
-      }
       if (other.hasMetadata()) {
         mergeMetadata(other.getMetadata());
       }
       if (other.hasLastModified()) {
         mergeLastModified(other.getLastModified());
       }
-      if (!other.getSourcemap().isEmpty()) {
-        sourcemap_ = other.sourcemap_;
+      if (other.hasScript()) {
+        mergeScript(other.getScript());
+      }
+      if (other.hasSourcemap()) {
+        mergeSourcemap(other.getSourcemap());
+      }
+      if (!other.directDependency_.isEmpty()) {
+        if (directDependency_.isEmpty()) {
+          directDependency_ = other.directDependency_;
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          ensureDirectDependencyIsMutable();
+          directDependency_.addAll(other.directDependency_);
+        }
+        onChanged();
+      }
+      if (!other.transitiveDependency_.isEmpty()) {
+        if (transitiveDependency_.isEmpty()) {
+          transitiveDependency_ = other.transitiveDependency_;
+          bitField0_ = (bitField0_ & ~0x00000002);
+        } else {
+          ensureTransitiveDependencyIsMutable();
+          transitiveDependency_.addAll(other.transitiveDependency_);
+        }
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -865,10 +1099,12 @@ private static final long serialVersionUID = 0L;
       }
       return this;
     }
+    private int bitField0_;
 
     private java.lang.Object module_ = "";
     /**
      * <pre>
+     * Module name / ID for this embedded script. Set at build time.
      * </pre>
      *
      * <code>string module = 1;</code>
@@ -888,6 +1124,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Module name / ID for this embedded script. Set at build time.
      * </pre>
      *
      * <code>string module = 1;</code>
@@ -908,6 +1145,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Module name / ID for this embedded script. Set at build time.
      * </pre>
      *
      * <code>string module = 1;</code>
@@ -926,6 +1164,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Module name / ID for this embedded script. Set at build time.
      * </pre>
      *
      * <code>string module = 1;</code>
@@ -939,6 +1178,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Module name / ID for this embedded script. Set at build time.
      * </pre>
      *
      * <code>string module = 1;</code>
@@ -960,6 +1200,7 @@ private static final long serialVersionUID = 0L;
     private java.lang.Object filename_ = "";
     /**
      * <pre>
+     * Filename, or some synthesized filename, for this script.
      * </pre>
      *
      * <code>string filename = 2;</code>
@@ -979,6 +1220,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Filename, or some synthesized filename, for this script.
      * </pre>
      *
      * <code>string filename = 2;</code>
@@ -999,6 +1241,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Filename, or some synthesized filename, for this script.
      * </pre>
      *
      * <code>string filename = 2;</code>
@@ -1017,6 +1260,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Filename, or some synthesized filename, for this script.
      * </pre>
      *
      * <code>string filename = 2;</code>
@@ -1030,6 +1274,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Filename, or some synthesized filename, for this script.
      * </pre>
      *
      * <code>string filename = 2;</code>
@@ -1051,6 +1296,7 @@ private static final long serialVersionUID = 0L;
     private int language_ = 0;
     /**
      * <pre>
+     * Language of the embedded script, and expected interpreted language.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptLanguage language = 3;</code>
@@ -1061,6 +1307,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Language of the embedded script, and expected interpreted language.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptLanguage language = 3;</code>
@@ -1075,6 +1322,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Language of the embedded script, and expected interpreted language.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptLanguage language = 3;</code>
@@ -1088,6 +1336,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Language of the embedded script, and expected interpreted language.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptLanguage language = 3;</code>
@@ -1105,6 +1354,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Language of the embedded script, and expected interpreted language.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptLanguage language = 3;</code>
@@ -1117,126 +1367,15 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private int hashAlgorithm_ = 0;
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>.crypto.HashAlgorithm hash_algorithm = 4;</code>
-     * @return The enum numeric value on the wire for hashAlgorithm.
-     */
-    @java.lang.Override public int getHashAlgorithmValue() {
-      return hashAlgorithm_;
-    }
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>.crypto.HashAlgorithm hash_algorithm = 4;</code>
-     * @param value The enum numeric value on the wire for hashAlgorithm to set.
-     * @return This builder for chaining.
-     */
-    public Builder setHashAlgorithmValue(int value) {
-      
-      hashAlgorithm_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>.crypto.HashAlgorithm hash_algorithm = 4;</code>
-     * @return The hashAlgorithm.
-     */
-    @java.lang.Override
-    public tools.elide.crypto.HashAlgorithm getHashAlgorithm() {
-      @SuppressWarnings("deprecation")
-      tools.elide.crypto.HashAlgorithm result = tools.elide.crypto.HashAlgorithm.valueOf(hashAlgorithm_);
-      return result == null ? tools.elide.crypto.HashAlgorithm.UNRECOGNIZED : result;
-    }
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>.crypto.HashAlgorithm hash_algorithm = 4;</code>
-     * @param value The hashAlgorithm to set.
-     * @return This builder for chaining.
-     */
-    public Builder setHashAlgorithm(tools.elide.crypto.HashAlgorithm value) {
-      if (value == null) {
-        throw new NullPointerException();
-      }
-      
-      hashAlgorithm_ = value.getNumber();
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>.crypto.HashAlgorithm hash_algorithm = 4;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearHashAlgorithm() {
-      
-      hashAlgorithm_ = 0;
-      onChanged();
-      return this;
-    }
-
-    private com.google.protobuf.ByteString fingerprint_ = com.google.protobuf.ByteString.EMPTY;
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>bytes fingerprint = 5;</code>
-     * @return The fingerprint.
-     */
-    @java.lang.Override
-    public com.google.protobuf.ByteString getFingerprint() {
-      return fingerprint_;
-    }
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>bytes fingerprint = 5;</code>
-     * @param value The fingerprint to set.
-     * @return This builder for chaining.
-     */
-    public Builder setFingerprint(com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  
-      fingerprint_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>bytes fingerprint = 5;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearFingerprint() {
-      
-      fingerprint_ = getDefaultInstance().getFingerprint();
-      onChanged();
-      return this;
-    }
-
     private tools.elide.assets.EmbeddedScriptMetadata metadata_;
     private com.google.protobuf.SingleFieldBuilderV3<
         tools.elide.assets.EmbeddedScriptMetadata, tools.elide.assets.EmbeddedScriptMetadata.Builder, tools.elide.assets.EmbeddedScriptMetadataOrBuilder> metadataBuilder_;
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      * @return Whether the metadata field is set.
      */
     public boolean hasMetadata() {
@@ -1244,9 +1383,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      * @return The metadata.
      */
     public tools.elide.assets.EmbeddedScriptMetadata getMetadata() {
@@ -1258,9 +1398,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      */
     public Builder setMetadata(tools.elide.assets.EmbeddedScriptMetadata value) {
       if (metadataBuilder_ == null) {
@@ -1277,9 +1418,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      */
     public Builder setMetadata(
         tools.elide.assets.EmbeddedScriptMetadata.Builder builderForValue) {
@@ -1294,9 +1436,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      */
     public Builder mergeMetadata(tools.elide.assets.EmbeddedScriptMetadata value) {
       if (metadataBuilder_ == null) {
@@ -1315,9 +1458,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      */
     public Builder clearMetadata() {
       if (metadataBuilder_ == null) {
@@ -1332,9 +1476,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      */
     public tools.elide.assets.EmbeddedScriptMetadata.Builder getMetadataBuilder() {
       
@@ -1343,9 +1488,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      */
     public tools.elide.assets.EmbeddedScriptMetadataOrBuilder getMetadataOrBuilder() {
       if (metadataBuilder_ != null) {
@@ -1357,9 +1503,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         tools.elide.assets.EmbeddedScriptMetadata, tools.elide.assets.EmbeddedScriptMetadata.Builder, tools.elide.assets.EmbeddedScriptMetadataOrBuilder> 
@@ -1380,9 +1527,10 @@ private static final long serialVersionUID = 0L;
         com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> lastModifiedBuilder_;
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      * @return Whether the lastModified field is set.
      */
     public boolean hasLastModified() {
@@ -1390,9 +1538,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      * @return The lastModified.
      */
     public com.google.protobuf.Timestamp getLastModified() {
@@ -1404,9 +1553,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      */
     public Builder setLastModified(com.google.protobuf.Timestamp value) {
       if (lastModifiedBuilder_ == null) {
@@ -1423,9 +1573,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      */
     public Builder setLastModified(
         com.google.protobuf.Timestamp.Builder builderForValue) {
@@ -1440,9 +1591,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      */
     public Builder mergeLastModified(com.google.protobuf.Timestamp value) {
       if (lastModifiedBuilder_ == null) {
@@ -1461,9 +1613,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      */
     public Builder clearLastModified() {
       if (lastModifiedBuilder_ == null) {
@@ -1478,9 +1631,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      */
     public com.google.protobuf.Timestamp.Builder getLastModifiedBuilder() {
       
@@ -1489,9 +1643,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      */
     public com.google.protobuf.TimestampOrBuilder getLastModifiedOrBuilder() {
       if (lastModifiedBuilder_ != null) {
@@ -1503,9 +1658,10 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
@@ -1521,93 +1677,631 @@ private static final long serialVersionUID = 0L;
       return lastModifiedBuilder_;
     }
 
-    private java.lang.Object sourcemap_ = "";
+    private tools.elide.assets.DataContainerRef script_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        tools.elide.assets.DataContainerRef, tools.elide.assets.DataContainerRef.Builder, tools.elide.assets.DataContainerRefOrBuilder> scriptBuilder_;
     /**
      * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
      * </pre>
      *
-     * <code>string sourcemap = 8;</code>
+     * <code>.assets.DataContainerRef script = 6;</code>
+     * @return Whether the script field is set.
+     */
+    public boolean hasScript() {
+      return scriptBuilder_ != null || script_ != null;
+    }
+    /**
+     * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef script = 6;</code>
+     * @return The script.
+     */
+    public tools.elide.assets.DataContainerRef getScript() {
+      if (scriptBuilder_ == null) {
+        return script_ == null ? tools.elide.assets.DataContainerRef.getDefaultInstance() : script_;
+      } else {
+        return scriptBuilder_.getMessage();
+      }
+    }
+    /**
+     * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef script = 6;</code>
+     */
+    public Builder setScript(tools.elide.assets.DataContainerRef value) {
+      if (scriptBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        script_ = value;
+        onChanged();
+      } else {
+        scriptBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef script = 6;</code>
+     */
+    public Builder setScript(
+        tools.elide.assets.DataContainerRef.Builder builderForValue) {
+      if (scriptBuilder_ == null) {
+        script_ = builderForValue.build();
+        onChanged();
+      } else {
+        scriptBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef script = 6;</code>
+     */
+    public Builder mergeScript(tools.elide.assets.DataContainerRef value) {
+      if (scriptBuilder_ == null) {
+        if (script_ != null) {
+          script_ =
+            tools.elide.assets.DataContainerRef.newBuilder(script_).mergeFrom(value).buildPartial();
+        } else {
+          script_ = value;
+        }
+        onChanged();
+      } else {
+        scriptBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef script = 6;</code>
+     */
+    public Builder clearScript() {
+      if (scriptBuilder_ == null) {
+        script_ = null;
+        onChanged();
+      } else {
+        script_ = null;
+        scriptBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef script = 6;</code>
+     */
+    public tools.elide.assets.DataContainerRef.Builder getScriptBuilder() {
+      
+      onChanged();
+      return getScriptFieldBuilder().getBuilder();
+    }
+    /**
+     * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef script = 6;</code>
+     */
+    public tools.elide.assets.DataContainerRefOrBuilder getScriptOrBuilder() {
+      if (scriptBuilder_ != null) {
+        return scriptBuilder_.getMessageOrBuilder();
+      } else {
+        return script_ == null ?
+            tools.elide.assets.DataContainerRef.getDefaultInstance() : script_;
+      }
+    }
+    /**
+     * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef script = 6;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        tools.elide.assets.DataContainerRef, tools.elide.assets.DataContainerRef.Builder, tools.elide.assets.DataContainerRefOrBuilder> 
+        getScriptFieldBuilder() {
+      if (scriptBuilder_ == null) {
+        scriptBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            tools.elide.assets.DataContainerRef, tools.elide.assets.DataContainerRef.Builder, tools.elide.assets.DataContainerRefOrBuilder>(
+                getScript(),
+                getParentForChildren(),
+                isClean());
+        script_ = null;
+      }
+      return scriptBuilder_;
+    }
+
+    private tools.elide.assets.DataContainerRef sourcemap_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        tools.elide.assets.DataContainerRef, tools.elide.assets.DataContainerRef.Builder, tools.elide.assets.DataContainerRefOrBuilder> sourcemapBuilder_;
+    /**
+     * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
+     * @return Whether the sourcemap field is set.
+     */
+    public boolean hasSourcemap() {
+      return sourcemapBuilder_ != null || sourcemap_ != null;
+    }
+    /**
+     * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
      * @return The sourcemap.
      */
-    public java.lang.String getSourcemap() {
-      java.lang.Object ref = sourcemap_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        sourcemap_ = s;
-        return s;
+    public tools.elide.assets.DataContainerRef getSourcemap() {
+      if (sourcemapBuilder_ == null) {
+        return sourcemap_ == null ? tools.elide.assets.DataContainerRef.getDefaultInstance() : sourcemap_;
       } else {
-        return (java.lang.String) ref;
+        return sourcemapBuilder_.getMessage();
       }
     }
     /**
      * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
      * </pre>
      *
-     * <code>string sourcemap = 8;</code>
-     * @return The bytes for sourcemap.
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
      */
-    public com.google.protobuf.ByteString
-        getSourcemapBytes() {
-      java.lang.Object ref = sourcemap_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        sourcemap_ = b;
-        return b;
+    public Builder setSourcemap(tools.elide.assets.DataContainerRef value) {
+      if (sourcemapBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        sourcemap_ = value;
+        onChanged();
       } else {
-        return (com.google.protobuf.ByteString) ref;
+        sourcemapBuilder_.setMessage(value);
       }
+
+      return this;
     }
     /**
      * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
      * </pre>
      *
-     * <code>string sourcemap = 8;</code>
-     * @param value The sourcemap to set.
-     * @return This builder for chaining.
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
      */
     public Builder setSourcemap(
+        tools.elide.assets.DataContainerRef.Builder builderForValue) {
+      if (sourcemapBuilder_ == null) {
+        sourcemap_ = builderForValue.build();
+        onChanged();
+      } else {
+        sourcemapBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
+     */
+    public Builder mergeSourcemap(tools.elide.assets.DataContainerRef value) {
+      if (sourcemapBuilder_ == null) {
+        if (sourcemap_ != null) {
+          sourcemap_ =
+            tools.elide.assets.DataContainerRef.newBuilder(sourcemap_).mergeFrom(value).buildPartial();
+        } else {
+          sourcemap_ = value;
+        }
+        onChanged();
+      } else {
+        sourcemapBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
+     */
+    public Builder clearSourcemap() {
+      if (sourcemapBuilder_ == null) {
+        sourcemap_ = null;
+        onChanged();
+      } else {
+        sourcemap_ = null;
+        sourcemapBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
+     */
+    public tools.elide.assets.DataContainerRef.Builder getSourcemapBuilder() {
+      
+      onChanged();
+      return getSourcemapFieldBuilder().getBuilder();
+    }
+    /**
+     * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
+     */
+    public tools.elide.assets.DataContainerRefOrBuilder getSourcemapOrBuilder() {
+      if (sourcemapBuilder_ != null) {
+        return sourcemapBuilder_.getMessageOrBuilder();
+      } else {
+        return sourcemap_ == null ?
+            tools.elide.assets.DataContainerRef.getDefaultInstance() : sourcemap_;
+      }
+    }
+    /**
+     * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        tools.elide.assets.DataContainerRef, tools.elide.assets.DataContainerRef.Builder, tools.elide.assets.DataContainerRefOrBuilder> 
+        getSourcemapFieldBuilder() {
+      if (sourcemapBuilder_ == null) {
+        sourcemapBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            tools.elide.assets.DataContainerRef, tools.elide.assets.DataContainerRef.Builder, tools.elide.assets.DataContainerRefOrBuilder>(
+                getSourcemap(),
+                getParentForChildren(),
+                isClean());
+        sourcemap_ = null;
+      }
+      return sourcemapBuilder_;
+    }
+
+    private com.google.protobuf.LazyStringList directDependency_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    private void ensureDirectDependencyIsMutable() {
+      if (!((bitField0_ & 0x00000001) != 0)) {
+        directDependency_ = new com.google.protobuf.LazyStringArrayList(directDependency_);
+        bitField0_ |= 0x00000001;
+       }
+    }
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @return A list containing the directDependency.
+     */
+    public com.google.protobuf.ProtocolStringList
+        getDirectDependencyList() {
+      return directDependency_.getUnmodifiableView();
+    }
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @return The count of directDependency.
+     */
+    public int getDirectDependencyCount() {
+      return directDependency_.size();
+    }
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @param index The index of the element to return.
+     * @return The directDependency at the given index.
+     */
+    public java.lang.String getDirectDependency(int index) {
+      return directDependency_.get(index);
+    }
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the directDependency at the given index.
+     */
+    public com.google.protobuf.ByteString
+        getDirectDependencyBytes(int index) {
+      return directDependency_.getByteString(index);
+    }
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @param index The index to set the value at.
+     * @param value The directDependency to set.
+     * @return This builder for chaining.
+     */
+    public Builder setDirectDependency(
+        int index, java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureDirectDependencyIsMutable();
+      directDependency_.set(index, value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @param value The directDependency to add.
+     * @return This builder for chaining.
+     */
+    public Builder addDirectDependency(
         java.lang.String value) {
       if (value == null) {
     throw new NullPointerException();
   }
-  
-      sourcemap_ = value;
+  ensureDirectDependencyIsMutable();
+      directDependency_.add(value);
       onChanged();
       return this;
     }
     /**
      * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
      * </pre>
      *
-     * <code>string sourcemap = 8;</code>
+     * <code>repeated string direct_dependency = 8;</code>
+     * @param values The directDependency to add.
      * @return This builder for chaining.
      */
-    public Builder clearSourcemap() {
-      
-      sourcemap_ = getDefaultInstance().getSourcemap();
+    public Builder addAllDirectDependency(
+        java.lang.Iterable<java.lang.String> values) {
+      ensureDirectDependencyIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, directDependency_);
       onChanged();
       return this;
     }
     /**
      * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
      * </pre>
      *
-     * <code>string sourcemap = 8;</code>
-     * @param value The bytes for sourcemap to set.
+     * <code>repeated string direct_dependency = 8;</code>
      * @return This builder for chaining.
      */
-    public Builder setSourcemapBytes(
+    public Builder clearDirectDependency() {
+      directDependency_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000001);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @param value The bytes of the directDependency to add.
+     * @return This builder for chaining.
+     */
+    public Builder addDirectDependencyBytes(
         com.google.protobuf.ByteString value) {
       if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-      
-      sourcemap_ = value;
+      ensureDirectDependencyIsMutable();
+      directDependency_.add(value);
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.LazyStringList transitiveDependency_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    private void ensureTransitiveDependencyIsMutable() {
+      if (!((bitField0_ & 0x00000002) != 0)) {
+        transitiveDependency_ = new com.google.protobuf.LazyStringArrayList(transitiveDependency_);
+        bitField0_ |= 0x00000002;
+       }
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @return A list containing the transitiveDependency.
+     */
+    public com.google.protobuf.ProtocolStringList
+        getTransitiveDependencyList() {
+      return transitiveDependency_.getUnmodifiableView();
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @return The count of transitiveDependency.
+     */
+    public int getTransitiveDependencyCount() {
+      return transitiveDependency_.size();
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @param index The index of the element to return.
+     * @return The transitiveDependency at the given index.
+     */
+    public java.lang.String getTransitiveDependency(int index) {
+      return transitiveDependency_.get(index);
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the transitiveDependency at the given index.
+     */
+    public com.google.protobuf.ByteString
+        getTransitiveDependencyBytes(int index) {
+      return transitiveDependency_.getByteString(index);
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @param index The index to set the value at.
+     * @param value The transitiveDependency to set.
+     * @return This builder for chaining.
+     */
+    public Builder setTransitiveDependency(
+        int index, java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureTransitiveDependencyIsMutable();
+      transitiveDependency_.set(index, value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @param value The transitiveDependency to add.
+     * @return This builder for chaining.
+     */
+    public Builder addTransitiveDependency(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureTransitiveDependencyIsMutable();
+      transitiveDependency_.add(value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @param values The transitiveDependency to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllTransitiveDependency(
+        java.lang.Iterable<java.lang.String> values) {
+      ensureTransitiveDependencyIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, transitiveDependency_);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearTransitiveDependency() {
+      transitiveDependency_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      bitField0_ = (bitField0_ & ~0x00000002);
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @param value The bytes of the transitiveDependency to add.
+     * @return This builder for chaining.
+     */
+    public Builder addTransitiveDependencyBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      ensureTransitiveDependencyIsMutable();
+      transitiveDependency_.add(value);
       onChanged();
       return this;
     }

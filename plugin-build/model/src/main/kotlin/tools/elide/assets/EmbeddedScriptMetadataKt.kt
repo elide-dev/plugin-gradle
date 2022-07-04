@@ -24,6 +24,7 @@ public object EmbeddedScriptMetadataKt {
 
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -37,6 +38,7 @@ public object EmbeddedScriptMetadataKt {
       }
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -46,6 +48,7 @@ public object EmbeddedScriptMetadataKt {
     }
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -83,6 +86,7 @@ public object EmbeddedScriptMetadataKt {
 
       /**
        * <pre>
+       * Describes the JavaScript language level for the embedded script.
        * </pre>
        *
        * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel level = 1;</code>
@@ -96,6 +100,7 @@ public object EmbeddedScriptMetadataKt {
         }
       /**
        * <pre>
+       * Describes the JavaScript language level for the embedded script.
        * </pre>
        *
        * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel level = 1;</code>

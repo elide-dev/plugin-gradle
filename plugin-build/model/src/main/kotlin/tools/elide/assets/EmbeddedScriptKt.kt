@@ -24,6 +24,7 @@ public object EmbeddedScriptKt {
 
     /**
      * <pre>
+     * Module name / ID for this embedded script. Set at build time.
      * </pre>
      *
      * <code>string module = 1;</code>
@@ -37,6 +38,7 @@ public object EmbeddedScriptKt {
       }
     /**
      * <pre>
+     * Module name / ID for this embedded script. Set at build time.
      * </pre>
      *
      * <code>string module = 1;</code>
@@ -47,6 +49,7 @@ public object EmbeddedScriptKt {
 
     /**
      * <pre>
+     * Filename, or some synthesized filename, for this script.
      * </pre>
      *
      * <code>string filename = 2;</code>
@@ -60,6 +63,7 @@ public object EmbeddedScriptKt {
       }
     /**
      * <pre>
+     * Filename, or some synthesized filename, for this script.
      * </pre>
      *
      * <code>string filename = 2;</code>
@@ -70,6 +74,7 @@ public object EmbeddedScriptKt {
 
     /**
      * <pre>
+     * Language of the embedded script, and expected interpreted language.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptLanguage language = 3;</code>
@@ -83,6 +88,7 @@ public object EmbeddedScriptKt {
       }
     /**
      * <pre>
+     * Language of the embedded script, and expected interpreted language.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptLanguage language = 3;</code>
@@ -93,55 +99,10 @@ public object EmbeddedScriptKt {
 
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.crypto.HashAlgorithm hash_algorithm = 4;</code>
-     */
-    public var hashAlgorithm: tools.elide.crypto.HashAlgorithm
-      @JvmName("getHashAlgorithm")
-      get() = _builder.getHashAlgorithm()
-      @JvmName("setHashAlgorithm")
-      set(value) {
-        _builder.setHashAlgorithm(value)
-      }
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>.crypto.HashAlgorithm hash_algorithm = 4;</code>
-     */
-    public fun clearHashAlgorithm() {
-      _builder.clearHashAlgorithm()
-    }
-
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>bytes fingerprint = 5;</code>
-     */
-    public var fingerprint: com.google.protobuf.ByteString
-      @JvmName("getFingerprint")
-      get() = _builder.getFingerprint()
-      @JvmName("setFingerprint")
-      set(value) {
-        _builder.setFingerprint(value)
-      }
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>bytes fingerprint = 5;</code>
-     */
-    public fun clearFingerprint() {
-      _builder.clearFingerprint()
-    }
-
-    /**
-     * <pre>
-     * </pre>
-     *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      */
     public var metadata: tools.elide.assets.EmbeddedScriptMetadata
       @JvmName("getMetadata")
@@ -152,18 +113,20 @@ public object EmbeddedScriptKt {
       }
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      */
     public fun clearMetadata() {
       _builder.clearMetadata()
     }
     /**
      * <pre>
+     * Embedded script-level metadata, including language-specific metadata.
      * </pre>
      *
-     * <code>.assets.EmbeddedScriptMetadata metadata = 6;</code>
+     * <code>.assets.EmbeddedScriptMetadata metadata = 4;</code>
      * @return Whether the metadata field is set.
      */
     public fun hasMetadata(): kotlin.Boolean {
@@ -172,9 +135,10 @@ public object EmbeddedScriptKt {
 
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      */
     public var lastModified: com.google.protobuf.Timestamp
       @JvmName("getLastModified")
@@ -185,18 +149,20 @@ public object EmbeddedScriptKt {
       }
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      */
     public fun clearLastModified() {
       _builder.clearLastModified()
     }
     /**
      * <pre>
+     * Last-modified timestamp for the assets underlying this script.
      * </pre>
      *
-     * <code>.google.protobuf.Timestamp last_modified = 7;</code>
+     * <code>.google.protobuf.Timestamp last_modified = 5;</code>
      * @return Whether the lastModified field is set.
      */
     public fun hasLastModified(): kotlin.Boolean {
@@ -205,11 +171,51 @@ public object EmbeddedScriptKt {
 
     /**
      * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
      * </pre>
      *
-     * <code>string sourcemap = 8;</code>
+     * <code>.assets.DataContainerRef script = 6;</code>
      */
-    public var sourcemap: kotlin.String
+    public var script: tools.elide.assets.DataContainerRef
+      @JvmName("getScript")
+      get() = _builder.getScript()
+      @JvmName("setScript")
+      set(value) {
+        _builder.setScript(value)
+      }
+    /**
+     * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef script = 6;</code>
+     */
+    public fun clearScript() {
+      _builder.clearScript()
+    }
+    /**
+     * <pre>
+     * Describes the raw data for the script content itself, plus a digest of the data for verification purposes; the
+     * digest payload additionally specifies the algorithm used.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef script = 6;</code>
+     * @return Whether the script field is set.
+     */
+    public fun hasScript(): kotlin.Boolean {
+      return _builder.hasScript()
+    }
+
+    /**
+     * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
+     */
+    public var sourcemap: tools.elide.assets.DataContainerRef
       @JvmName("getSourcemap")
       get() = _builder.getSourcemap()
       @JvmName("setSourcemap")
@@ -218,14 +224,236 @@ public object EmbeddedScriptKt {
       }
     /**
      * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
      * </pre>
      *
-     * <code>string sourcemap = 8;</code>
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
      */
     public fun clearSourcemap() {
       _builder.clearSourcemap()
     }
-  }
+    /**
+     * <pre>
+     * Source-map file path for the embedded script, if generated as an external file.
+     * </pre>
+     *
+     * <code>.assets.DataContainerRef sourcemap = 7;</code>
+     * @return Whether the sourcemap field is set.
+     */
+    public fun hasSourcemap(): kotlin.Boolean {
+      return _builder.hasSourcemap()
+    }
+
+    /**
+     * An uninstantiable, behaviorless type to represent the field in
+     * generics.
+     */
+    @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
+    public class DirectDependencyProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @return A list containing the directDependency.
+     */
+    public val directDependency: com.google.protobuf.kotlin.DslList<kotlin.String, DirectDependencyProxy>
+      @kotlin.jvm.JvmSynthetic
+      get() = com.google.protobuf.kotlin.DslList(
+        _builder.getDirectDependencyList()
+      )
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @param value The directDependency to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("addDirectDependency")
+    public fun com.google.protobuf.kotlin.DslList<kotlin.String, DirectDependencyProxy>.add(value: kotlin.String) {
+      _builder.addDirectDependency(value)
+    }
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @param value The directDependency to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("plusAssignDirectDependency")
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun com.google.protobuf.kotlin.DslList<kotlin.String, DirectDependencyProxy>.plusAssign(value: kotlin.String) {
+      add(value)
+    }
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @param values The directDependency to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("addAllDirectDependency")
+    public fun com.google.protobuf.kotlin.DslList<kotlin.String, DirectDependencyProxy>.addAll(values: kotlin.collections.Iterable<kotlin.String>) {
+      _builder.addAllDirectDependency(values)
+    }
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @param values The directDependency to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("plusAssignAllDirectDependency")
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun com.google.protobuf.kotlin.DslList<kotlin.String, DirectDependencyProxy>.plusAssign(values: kotlin.collections.Iterable<kotlin.String>) {
+      addAll(values)
+    }
+    /**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     * @param index The index to set the value at.
+     * @param value The directDependency to set.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("setDirectDependency")
+    public operator fun com.google.protobuf.kotlin.DslList<kotlin.String, DirectDependencyProxy>.set(index: kotlin.Int, value: kotlin.String) {
+      _builder.setDirectDependency(index, value)
+    }/**
+     * <pre>
+     * Unique set of direct dependencies for this embedded script asset; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string direct_dependency = 8;</code>
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("clearDirectDependency")
+    public fun com.google.protobuf.kotlin.DslList<kotlin.String, DirectDependencyProxy>.clear() {
+      _builder.clearDirectDependency()
+    }
+    /**
+     * An uninstantiable, behaviorless type to represent the field in
+     * generics.
+     */
+    @kotlin.OptIn(com.google.protobuf.kotlin.OnlyForUseByGeneratedProtoCode::class)
+    public class TransitiveDependencyProxy private constructor() : com.google.protobuf.kotlin.DslProxy()
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @return A list containing the transitiveDependency.
+     */
+    public val transitiveDependency: com.google.protobuf.kotlin.DslList<kotlin.String, TransitiveDependencyProxy>
+      @kotlin.jvm.JvmSynthetic
+      get() = com.google.protobuf.kotlin.DslList(
+        _builder.getTransitiveDependencyList()
+      )
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @param value The transitiveDependency to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("addTransitiveDependency")
+    public fun com.google.protobuf.kotlin.DslList<kotlin.String, TransitiveDependencyProxy>.add(value: kotlin.String) {
+      _builder.addTransitiveDependency(value)
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @param value The transitiveDependency to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("plusAssignTransitiveDependency")
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun com.google.protobuf.kotlin.DslList<kotlin.String, TransitiveDependencyProxy>.plusAssign(value: kotlin.String) {
+      add(value)
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @param values The transitiveDependency to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("addAllTransitiveDependency")
+    public fun com.google.protobuf.kotlin.DslList<kotlin.String, TransitiveDependencyProxy>.addAll(values: kotlin.collections.Iterable<kotlin.String>) {
+      _builder.addAllTransitiveDependency(values)
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @param values The transitiveDependency to add.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("plusAssignAllTransitiveDependency")
+    @Suppress("NOTHING_TO_INLINE")
+    public inline operator fun com.google.protobuf.kotlin.DslList<kotlin.String, TransitiveDependencyProxy>.plusAssign(values: kotlin.collections.Iterable<kotlin.String>) {
+      addAll(values)
+    }
+    /**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     * @param index The index to set the value at.
+     * @param value The transitiveDependency to set.
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("setTransitiveDependency")
+    public operator fun com.google.protobuf.kotlin.DslList<kotlin.String, TransitiveDependencyProxy>.set(index: kotlin.Int, value: kotlin.String) {
+      _builder.setTransitiveDependency(index, value)
+    }/**
+     * <pre>
+     * Unique transitive closure of all dependencies this module relies upon; expected to be other, compatible embedded
+     * scripts (same language, same runtime level). Expressed as a `module` ID.
+     * </pre>
+     *
+     * <code>repeated string transitive_dependency = 9;</code>
+     */
+    @kotlin.jvm.JvmSynthetic
+    @kotlin.jvm.JvmName("clearTransitiveDependency")
+    public fun com.google.protobuf.kotlin.DslList<kotlin.String, TransitiveDependencyProxy>.clear() {
+      _builder.clearTransitiveDependency()
+    }}
 }
 @kotlin.jvm.JvmSynthetic
 public inline fun tools.elide.assets.EmbeddedScript.copy(block: tools.elide.assets.EmbeddedScriptKt.Dsl.() -> kotlin.Unit): tools.elide.assets.EmbeddedScript =
@@ -236,4 +464,10 @@ val tools.elide.assets.EmbeddedScriptOrBuilder.metadataOrNull: tools.elide.asset
 
 val tools.elide.assets.EmbeddedScriptOrBuilder.lastModifiedOrNull: com.google.protobuf.Timestamp?
   get() = if (hasLastModified()) getLastModified() else null
+
+val tools.elide.assets.EmbeddedScriptOrBuilder.scriptOrNull: tools.elide.assets.DataContainerRef?
+  get() = if (hasScript()) getScript() else null
+
+val tools.elide.assets.EmbeddedScriptOrBuilder.sourcemapOrNull: tools.elide.assets.DataContainerRef?
+  get() = if (hasSourcemap()) getSourcemap() else null
 

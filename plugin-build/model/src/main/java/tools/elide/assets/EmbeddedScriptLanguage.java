@@ -5,6 +5,7 @@ package tools.elide.assets;
 
 /**
  * <pre>
+ * Enumerates languages which are supported for embedded scripting in Elide.
  * </pre>
  *
  * Protobuf enum {@code assets.EmbeddedScriptLanguage}
@@ -13,6 +14,7 @@ public enum EmbeddedScriptLanguage
     implements com.google.protobuf.ProtocolMessageEnum {
   /**
    * <pre>
+   * The language is unknown or unspecified; regular code should not use this value.
    * </pre>
    *
    * <code>LANGUAGE_UNSPECIFIED = 0;</code>
@@ -20,6 +22,7 @@ public enum EmbeddedScriptLanguage
   LANGUAGE_UNSPECIFIED(0),
   /**
    * <pre>
+   * The language is a dialect of JavaScript.
    * </pre>
    *
    * <code>JS = 1;</code>
@@ -30,6 +33,7 @@ public enum EmbeddedScriptLanguage
 
   /**
    * <pre>
+   * The language is unknown or unspecified; regular code should not use this value.
    * </pre>
    *
    * <code>LANGUAGE_UNSPECIFIED = 0;</code>
@@ -37,6 +41,7 @@ public enum EmbeddedScriptLanguage
   public static final int LANGUAGE_UNSPECIFIED_VALUE = 0;
   /**
    * <pre>
+   * The language is a dialect of JavaScript.
    * </pre>
    *
    * <code>JS = 1;</code>

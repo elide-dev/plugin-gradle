@@ -9,6 +9,7 @@ public interface EmbeddedScriptMetadataOrBuilder extends
 
   /**
    * <pre>
+   * JavaScript-related metadata.
    * </pre>
    *
    * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -17,6 +18,7 @@ public interface EmbeddedScriptMetadataOrBuilder extends
   boolean hasJavascript();
   /**
    * <pre>
+   * JavaScript-related metadata.
    * </pre>
    *
    * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -25,6 +27,7 @@ public interface EmbeddedScriptMetadataOrBuilder extends
   tools.elide.assets.EmbeddedScriptMetadata.JsScriptMetadata getJavascript();
   /**
    * <pre>
+   * JavaScript-related metadata.
    * </pre>
    *
    * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>

@@ -5,6 +5,7 @@ package tools.elide.assets;
 
 /**
  * <pre>
+ * Describes embedded script-level metadata which is enclosed with the asset spec for an embedded script.
  * </pre>
  *
  * Protobuf type {@code assets.EmbeddedScriptMetadata}
@@ -105,6 +106,7 @@ private static final long serialVersionUID = 0L;
 
     /**
      * <pre>
+     * Describes the JavaScript language level for the embedded script.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel level = 1;</code>
@@ -113,6 +115,7 @@ private static final long serialVersionUID = 0L;
     int getLevelValue();
     /**
      * <pre>
+     * Describes the JavaScript language level for the embedded script.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel level = 1;</code>
@@ -122,6 +125,7 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * Specifies JavaScript-specific script metadata.
    * </pre>
    *
    * Protobuf type {@code assets.EmbeddedScriptMetadata.JsScriptMetadata}
@@ -211,6 +215,7 @@ private static final long serialVersionUID = 0L;
 
     /**
      * <pre>
+     * Enumerates supported JavaScript language levels.
      * </pre>
      *
      * Protobuf enum {@code assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel}
@@ -219,6 +224,7 @@ private static final long serialVersionUID = 0L;
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <pre>
+       * The language level is unknown or unspecified; regular code should not use this value.
        * </pre>
        *
        * <code>JS_LANGUAGE_LEVEL_DEFAULT = 0;</code>
@@ -226,6 +232,7 @@ private static final long serialVersionUID = 0L;
       JS_LANGUAGE_LEVEL_DEFAULT(0),
       /**
        * <pre>
+       * The language level is ES5.
        * </pre>
        *
        * <code>ES5 = 1;</code>
@@ -233,6 +240,7 @@ private static final long serialVersionUID = 0L;
       ES5(1),
       /**
        * <pre>
+       * The language level is ES6.
        * </pre>
        *
        * <code>ES6 = 2;</code>
@@ -240,6 +248,7 @@ private static final long serialVersionUID = 0L;
       ES6(2),
       /**
        * <pre>
+       * The language level is ES2017.
        * </pre>
        *
        * <code>ES2017 = 3;</code>
@@ -247,6 +256,7 @@ private static final long serialVersionUID = 0L;
       ES2017(3),
       /**
        * <pre>
+       * The language level is ES2018.
        * </pre>
        *
        * <code>ES2018 = 4;</code>
@@ -254,6 +264,7 @@ private static final long serialVersionUID = 0L;
       ES2018(4),
       /**
        * <pre>
+       * The language level is ES2019.
        * </pre>
        *
        * <code>ES2019 = 5;</code>
@@ -261,6 +272,7 @@ private static final long serialVersionUID = 0L;
       ES2019(5),
       /**
        * <pre>
+       * The language level is ES2020.
        * </pre>
        *
        * <code>ES2020 = 6;</code>
@@ -271,6 +283,7 @@ private static final long serialVersionUID = 0L;
 
       /**
        * <pre>
+       * The language level is unknown or unspecified; regular code should not use this value.
        * </pre>
        *
        * <code>JS_LANGUAGE_LEVEL_DEFAULT = 0;</code>
@@ -278,6 +291,7 @@ private static final long serialVersionUID = 0L;
       public static final int JS_LANGUAGE_LEVEL_DEFAULT_VALUE = 0;
       /**
        * <pre>
+       * The language level is ES5.
        * </pre>
        *
        * <code>ES5 = 1;</code>
@@ -285,6 +299,7 @@ private static final long serialVersionUID = 0L;
       public static final int ES5_VALUE = 1;
       /**
        * <pre>
+       * The language level is ES6.
        * </pre>
        *
        * <code>ES6 = 2;</code>
@@ -292,6 +307,7 @@ private static final long serialVersionUID = 0L;
       public static final int ES6_VALUE = 2;
       /**
        * <pre>
+       * The language level is ES2017.
        * </pre>
        *
        * <code>ES2017 = 3;</code>
@@ -299,6 +315,7 @@ private static final long serialVersionUID = 0L;
       public static final int ES2017_VALUE = 3;
       /**
        * <pre>
+       * The language level is ES2018.
        * </pre>
        *
        * <code>ES2018 = 4;</code>
@@ -306,6 +323,7 @@ private static final long serialVersionUID = 0L;
       public static final int ES2018_VALUE = 4;
       /**
        * <pre>
+       * The language level is ES2019.
        * </pre>
        *
        * <code>ES2019 = 5;</code>
@@ -313,6 +331,7 @@ private static final long serialVersionUID = 0L;
       public static final int ES2019_VALUE = 5;
       /**
        * <pre>
+       * The language level is ES2020.
        * </pre>
        *
        * <code>ES2020 = 6;</code>
@@ -411,6 +430,7 @@ private static final long serialVersionUID = 0L;
     private int level_;
     /**
      * <pre>
+     * Describes the JavaScript language level for the embedded script.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel level = 1;</code>
@@ -421,6 +441,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Describes the JavaScript language level for the embedded script.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel level = 1;</code>
@@ -588,6 +609,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * Specifies JavaScript-specific script metadata.
      * </pre>
      *
      * Protobuf type {@code assets.EmbeddedScriptMetadata.JsScriptMetadata}
@@ -739,6 +761,7 @@ private static final long serialVersionUID = 0L;
       private int level_ = 0;
       /**
        * <pre>
+       * Describes the JavaScript language level for the embedded script.
        * </pre>
        *
        * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel level = 1;</code>
@@ -749,6 +772,7 @@ private static final long serialVersionUID = 0L;
       }
       /**
        * <pre>
+       * Describes the JavaScript language level for the embedded script.
        * </pre>
        *
        * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel level = 1;</code>
@@ -763,6 +787,7 @@ private static final long serialVersionUID = 0L;
       }
       /**
        * <pre>
+       * Describes the JavaScript language level for the embedded script.
        * </pre>
        *
        * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel level = 1;</code>
@@ -776,6 +801,7 @@ private static final long serialVersionUID = 0L;
       }
       /**
        * <pre>
+       * Describes the JavaScript language level for the embedded script.
        * </pre>
        *
        * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel level = 1;</code>
@@ -793,6 +819,7 @@ private static final long serialVersionUID = 0L;
       }
       /**
        * <pre>
+       * Describes the JavaScript language level for the embedded script.
        * </pre>
        *
        * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel level = 1;</code>
@@ -899,6 +926,7 @@ private static final long serialVersionUID = 0L;
   public static final int JAVASCRIPT_FIELD_NUMBER = 1;
   /**
    * <pre>
+   * JavaScript-related metadata.
    * </pre>
    *
    * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -910,6 +938,7 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * JavaScript-related metadata.
    * </pre>
    *
    * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -924,6 +953,7 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * JavaScript-related metadata.
    * </pre>
    *
    * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -1106,6 +1136,7 @@ private static final long serialVersionUID = 0L;
   }
   /**
    * <pre>
+   * Describes embedded script-level metadata which is enclosed with the asset spec for an embedded script.
    * </pre>
    *
    * Protobuf type {@code assets.EmbeddedScriptMetadata}
@@ -1286,6 +1317,7 @@ private static final long serialVersionUID = 0L;
         tools.elide.assets.EmbeddedScriptMetadata.JsScriptMetadata, tools.elide.assets.EmbeddedScriptMetadata.JsScriptMetadata.Builder, tools.elide.assets.EmbeddedScriptMetadata.JsScriptMetadataOrBuilder> javascriptBuilder_;
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -1297,6 +1329,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -1318,6 +1351,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -1337,6 +1371,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -1354,6 +1389,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -1380,6 +1416,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -1402,6 +1439,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -1411,6 +1449,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
@@ -1428,6 +1467,7 @@ private static final long serialVersionUID = 0L;
     }
     /**
      * <pre>
+     * JavaScript-related metadata.
      * </pre>
      *
      * <code>.assets.EmbeddedScriptMetadata.JsScriptMetadata javascript = 1;</code>
