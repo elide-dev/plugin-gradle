@@ -1,7 +1,6 @@
 package dev.elide.buildtools.gradle.plugin.tasks
 
 import com.github.gradle.node.task.NodeTask
-import com.google.protobuf.ByteString
 import com.google.protobuf.Timestamp
 import dev.elide.buildtools.gradle.plugin.BuildMode
 import dev.elide.buildtools.gradle.plugin.ElideEmbeddedJsExtension
@@ -30,7 +29,6 @@ import org.jetbrains.kotlin.gradle.targets.js.npm.NpmDependencyExtension
 import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.RootPackageJsonTask
 import tools.elide.assets.*
 import tools.elide.assets.EmbeddedScriptMetadataKt.jsScriptMetadata
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
@@ -330,12 +328,6 @@ abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBund
             // add to project artifacts
             project.artifacts.add(
                 nodeDist.name,
-                project.tasks.named(targetEmbeddedTask, NodeTask::class.java).map {
-                    it.outputs.files.files.single()
-                },
-            )
-            project.artifacts.add(
-                nodeDist.name,
                 catalogGenTask.outputs.files.files.single()
             )
         }
@@ -396,25 +388,6 @@ abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBund
             entryFile.set(file(
                 entryFileName?.ifBlank { defaultEntrypoint } ?: defaultEntrypoint
             ))
-
-            // set the default set of module paths
-            modulesFolders.set(listOf(
-                file("$projectDir/build/js/node_modules"), // project-level NPM deps
-                file("$projectDir/build/js/packages"), // project-level modules
-                file("$projectDir/node_modules"), // project-level regular node modules
-                file("$rootDir/build/js/node_modules"), // multi-module Kotlin/JS projects
-                file("$rootDir/build/js/packages"), // multi-module Kotlin/JS projects
-                file("$rootDir/node_modules"), // root-project regular node modules
-            ).plus(if (enableReact) {
-                listOf(
-                    file("$rootDir/build/js/elide/runtime/base"), // base runtime
-                    file("$rootDir/build/js/elide/runtime/react"), // react support
-                )
-            } else {
-                listOf(
-                    file("$rootDir/build/js/elide/runtime/base"), // just the runtime, no react
-                )
-            }))
         }
     }
 
@@ -624,24 +597,10 @@ abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBund
         filename = outputBundleName.get()
         language = EmbeddedScriptLanguage.JS
         lastModified = Timestamp.newBuilder().setSeconds(Instant.now().epochSecond).build()
-        hashAlgorithm = StaticValues.assetHashAlgo
         metadata = embeddedScriptMetadata {
             javascript = jsScriptMetadata {
                 level = EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel.ES2020
             }
-        }
-
-        val digester = StaticValues.assetHashAlgo.digester()
-        if (digester != null) {
-            val buf = ByteArrayOutputStream()
-            buf.use { stream ->
-                stream.write(processShim.get().readBytes())
-                stream.write(outputConfig.get().readBytes())
-            }
-
-            fingerprint = ByteString.copyFrom(
-                buf.toByteArray()
-            )
         }
     }
 

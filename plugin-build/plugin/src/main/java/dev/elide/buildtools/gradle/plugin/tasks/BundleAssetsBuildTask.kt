@@ -2,7 +2,6 @@ package dev.elide.buildtools.gradle.plugin.tasks
 
 import com.google.protobuf.Timestamp
 import dev.elide.buildtools.gradle.plugin.ElideExtension
-import dev.elide.buildtools.gradle.plugin.ElidePlugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.tasks.Input
@@ -14,13 +13,13 @@ import java.time.Instant
 /** Task which creates Elide asset specifications for embedding in app JARs. */
 abstract class BundleAssetsBuildTask : BundleSpecTask<AssetBundle, AssetBundleSpec>() {
     companion object {
-        const val TASK_NAME = "bundleAssets"
+        private const val TASK_NAME = "bundleAssets"
 
-        @JvmStatic public fun isEligible(project: Project): Boolean {
+        @JvmStatic fun isEligible(project: Project): Boolean {
             return project.plugins.hasPlugin("org.jetbrains.kotlin.jvm")
         }
 
-        @JvmStatic public fun install(extension: ElideExtension, project: Project) {
+        @JvmStatic fun install(extension: ElideExtension, project: Project) {
             project.plugins.withId("org.jetbrains.kotlin.jvm") {
                 // we're applying to a JVM Kotlin target. in this case, we're consuming static assets from other
                 // modules  or from within the resource section of this module.
