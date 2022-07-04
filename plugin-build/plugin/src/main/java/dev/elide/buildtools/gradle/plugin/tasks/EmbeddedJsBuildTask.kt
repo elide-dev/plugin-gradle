@@ -1,17 +1,20 @@
 package dev.elide.buildtools.gradle.plugin.tasks
 
 import com.github.gradle.node.task.NodeTask
+import com.google.protobuf.ByteString
+import com.google.protobuf.Timestamp
 import dev.elide.buildtools.gradle.plugin.BuildMode
 import dev.elide.buildtools.gradle.plugin.ElideEmbeddedJsExtension
 import dev.elide.buildtools.gradle.plugin.ElideExtension
 import dev.elide.buildtools.gradle.plugin.js.BundleTarget
 import dev.elide.buildtools.gradle.plugin.js.BundleTool
 import dev.elide.buildtools.gradle.plugin.js.BundleType
-import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.plugins.BasePlugin
+import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Copy
@@ -19,17 +22,23 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import org.gradle.configurationcache.extensions.capitalized
+import org.jetbrains.kotlin.gradle.dsl.KotlinJsProjectExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinJsCompilerType
+import org.jetbrains.kotlin.gradle.targets.js.npm.NpmDependencyExtension
 import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.RootPackageJsonTask
+import tools.elide.assets.*
+import tools.elide.assets.EmbeddedScriptMetadataKt.jsScriptMetadata
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.nio.charset.StandardCharsets
+import java.time.Instant
 
 /** Task which builds JavaScript targets for embedded use with Elide. */
 @Suppress("unused")
-abstract class EmbeddedJsBuildTask : DefaultTask() {
+abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBundleSpec>() {
     companion object {
         private const val TASK_NAME = "bundleEmbeddedJs"
         private val defaultTargetMode: BuildMode = BuildMode.DEVELOPMENT
@@ -49,6 +58,84 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
         const val esbuildConfigTemplatePath = "/dev/elide/buildtools/js/esbuild-wrapper.js.hbs"
         const val processShimTemplatePath = "/dev/elide/buildtools/js/process-wrapper.js.hbs"
 
+        @JvmStatic fun isEligible(project: Project): Boolean {
+            return project.plugins.hasPlugin("org.jetbrains.kotlin.js")
+        }
+
+        @JvmStatic fun install(extension: ElideExtension, project: Project) {
+            // apply NPM deps for tooling
+            injectDeps(project)
+
+            // resolve the inflate-runtime task installed on the root project, or if there is not one, create it.
+            val inflateRuntime = resolveInflateRuntimeTask(project, extension)
+
+            // load JS plugin, configure with output, connect outputs to embedded build
+            project.plugins.withId("org.jetbrains.kotlin.js") { _ ->
+                project.extensions.configure(KotlinJsProjectExtension::class.java) { jsExt ->
+                    val elideJsExt = project.extensions.create(
+                        ElideEmbeddedJsExtension.EXTENSION_NAME,
+                        ElideEmbeddedJsExtension::class.java,
+                        project,
+                    )
+                    val hasNode = project.plugins.hasPlugin(
+                        "com.github.node-gradle.node"
+                    )
+
+                    jsExt.js(KotlinJsCompilerType.IR) {
+                        if (hasNode || elideJsExt.target.getOrElse(BundleTarget.EMBEDDED) == BundleTarget.EMBEDDED) {
+                            nodejs {
+                                binaries.executable()
+                            }
+                        } else {
+                            browser {
+                                binaries.executable()
+                            }
+                        }
+                    }
+
+                    // resolve JS IR link task that we just set up
+                    val compileProdKotlinJs = resolveJsIrLinkTask(
+                        project
+                    )
+
+                    // resolve embedded sources at `ssr/ssr.js`
+                    val fetchBuildSources = project.tasks.create("prepareEmbeddedJsBuild", Copy::class.java) {
+                        it.dependsOn(compileProdKotlinJs)
+                        it.from(compileProdKotlinJs.outputs.files.files) { copySpec ->
+                            copySpec.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+                        }
+                        it.from(compileProdKotlinJs.outputFileProperty) { copySpec ->
+                            copySpec.rename { "ssr.js" }
+                        }
+                        it.into(
+                            "${project.buildDir}/ssr"
+                        )
+                    }
+
+                    val target = elideJsExt.target.getOrElse(
+                        BundleTarget.EMBEDDED
+                    )
+                    val tool = elideJsExt.tool.getOrElse(
+                        if (hasNode || elideJsExt.target.getOrElse(BundleTarget.EMBEDDED) == BundleTarget.EMBEDDED) {
+                            BundleTool.ESBUILD
+                        } else {
+                            BundleTool.WEBPACK
+                        }
+                    )
+                    setup(
+                        project,
+                        fetchBuildSources,
+                        compileProdKotlinJs,
+                        tool,
+                        target,
+                        extension,
+                        elideJsExt,
+                        inflateRuntime,
+                    )
+                }
+            }
+        }
+
         // Load an embedded resource from the plugin JAR.
         @JvmStatic private fun loadEmbedded(filename: String): String {
             return (EmbeddedJsBuildTask::class.java.getResourceAsStream(
@@ -60,6 +147,17 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
             ).readText()
         }
 
+        @JvmStatic fun injectDeps(project: Project) {
+            // make sure node plugin is applied
+            project.plugins.apply("com.github.node-gradle.node")
+            project.dependencies.apply {
+                (this as ExtensionAware).extensions.configure(NpmDependencyExtension::class.java) { npm ->
+                    add("implementation", npm("esbuild", Versions.esbuild))
+                    add("implementation", npm("prepack", Versions.prepack))
+                }
+            }
+        }
+
         // Setup build tasks for the provided project.
         @JvmStatic fun setup(
             project: Project,
@@ -69,6 +167,7 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
             target: BundleTarget,
             extension: ElideExtension,
             jsExtension: ElideEmbeddedJsExtension,
+            inflateRuntime: InflateRuntimeTask,
         ) {
             if (tool == BundleTool.ESBUILD && target == BundleTarget.EMBEDDED) {
                 BuildMode.values().forEach { mode ->
@@ -78,11 +177,12 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
                         fetchSources,
                         kotlinJsLink,
                         jsExtension,
+                        inflateRuntime,
                     )
                 }
                 setupEsbuildEntrypointTask(
                     project,
-                    extension
+                    extension,
                 )
             } else if (tool == BundleTool.WEBPACK && target != BundleTarget.EMBEDDED) {
                 BuildMode.values().forEach { mode ->
@@ -106,9 +206,11 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
         ) {
             val activeMode = extension.mode.getOrElse(BuildMode.PRODUCTION)
             val targetBundleTask = "generate${activeMode.name.lowercase().capitalized()}EsBuildConfig"
+            val genSpecTaskName = "generate${activeMode.name.lowercase().capitalized()}EmbeddedJsSpec"
             val targetEmbeddedTask = "${activeMode.name.lowercase()}EmbeddedExecutable"
 
             project.tasks.create(TASK_NAME) {
+                it.dependsOn(genSpecTaskName)
                 it.dependsOn(targetBundleTask)
                 it.dependsOn(targetEmbeddedTask)
             }
@@ -123,6 +225,7 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
             fetchSources: Copy,
             kotlinJsLink: Task,
             jsExtension: ElideEmbeddedJsExtension,
+            inflateRuntime: InflateRuntimeTask,
         ) {
             // resolve root-package-json task
             val rootPackageJson = project.rootProject.tasks.withType(
@@ -133,6 +236,7 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
             val targetBundleTask = "generate${modeName}EsBuildConfig"
             val buildTask = project.tasks.create(targetBundleTask, EmbeddedJsBuildTask::class.java) {
                 // setup deps
+                it.dependsOn(project.tasks.named("productionExecutableCompileSync"))
                 it.dependsOn(kotlinJsLink)
                 it.dependsOn(fetchSources)
 
@@ -186,10 +290,12 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
                 it.dependsOn(buildTask)
                 it.dependsOn(buildTask.processShim)
                 it.dependsOn(buildTask.outputConfig)
+                it.dependsOn(inflateRuntime)
                 it.script.set(buildTask.outputConfig.get())
 
                 it.setNodeModulesPath(
                     listOf(
+                        inflateRuntime.modulesPath.get().absolutePath,
                         "${project.rootDir}/node_modules",
                         "${rootPackageJson.rootPackageJson.parentFile / "node_modules"}"
                     ).joinToString(":")
@@ -205,6 +311,15 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
                     it.outputs.file(buildTask.outputBundleFile.absolutePath)
                 }
             }
+            val catalogGenTask = installCatalogTask(
+                targetBundleTask,
+                mode,
+                project,
+                listOf(
+                    targetBundleTask,
+                    targetEmbeddedTask,
+                )
+            )
 
             // create a distribution for the bundle
             val nodeDist = project.configurations.create("nodeSsrDist${mode.name.capitalized()}") {
@@ -218,6 +333,10 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
                 project.tasks.named(targetEmbeddedTask, NodeTask::class.java).map {
                     it.outputs.files.files.single()
                 },
+            )
+            project.artifacts.add(
+                nodeDist.name,
+                catalogGenTask.outputs.files.files.single()
             )
         }
 
@@ -246,6 +365,14 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
                 file("$buildDir\\$defaultOutputBundleFolder").absolutePath
             )
 
+            // setup asset spec
+            outputSpecName.set(
+                StaticValues.defaultEncoding.fileNamed("embedded")
+            )
+            bundleEncoding.set(
+                StaticValues.defaultEncoding
+            )
+
             // set the default output bundle name and optimized bundle name
             outputBundleName.set(
                 defaultOutputBundleName
@@ -272,9 +399,11 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
 
             // set the default set of module paths
             modulesFolders.set(listOf(
-                file("$projectDir/build/js/node_modules"), // single-module Kotlin/JS projects
+                file("$projectDir/build/js/node_modules"), // project-level NPM deps
+                file("$projectDir/build/js/packages"), // project-level modules
                 file("$projectDir/node_modules"), // project-level regular node modules
                 file("$rootDir/build/js/node_modules"), // multi-module Kotlin/JS projects
+                file("$rootDir/build/js/packages"), // multi-module Kotlin/JS projects
                 file("$rootDir/node_modules"), // root-project regular node modules
             ).plus(if (enableReact) {
                 listOf(
@@ -364,14 +493,6 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
         description = "Where to put the generated Node process shim. Typically managed by the plugin.",
     )
     abstract val processShim: Property<File>
-
-    /** Folder in which to put built bundle targets. */
-    @get:Input
-    @get:Option(
-        option = "outputBundleFolder",
-        description = "Where to put compiled bundle outputs on the filesystem. Typically managed by the plugin.",
-    )
-    abstract val outputBundleFolder: Property<String>
 
     /** Name to give the bundle being compiled by this task. */
     @get:Input
@@ -492,17 +613,48 @@ abstract class EmbeddedJsBuildTask : DefaultTask() {
         return subj
     }
 
-    @TaskAction fun writeFiles() {
+    /** @inheritDoc */
+    override fun buildAssetCatalog(builderOp: EmbeddedBundleSpec.() -> Unit): EmbeddedScript {
+        return embeddedScript(builderOp)
+    }
+
+    /** @inheritDoc */
+    override fun assetCatalog(): EmbeddedBundleSpec.() -> Unit = {
+        module = libraryName
+        filename = outputBundleName.get()
+        language = EmbeddedScriptLanguage.JS
+        lastModified = Timestamp.newBuilder().setSeconds(Instant.now().epochSecond).build()
+        hashAlgorithm = StaticValues.assetHashAlgo
+        metadata = embeddedScriptMetadata {
+            javascript = jsScriptMetadata {
+                level = EmbeddedScriptMetadata.JsScriptMetadata.JsLanguageLevel.ES2020
+            }
+        }
+
+        val digester = StaticValues.assetHashAlgo.digester()
+        if (digester != null) {
+            val buf = ByteArrayOutputStream()
+            buf.use { stream ->
+                stream.write(processShim.get().readBytes())
+                stream.write(outputConfig.get().readBytes())
+            }
+
+            fingerprint = ByteString.copyFrom(
+                buf.toByteArray()
+            )
+        }
+    }
+
+    /** @inheritDoc */
+    override fun runAction() {
         processShim.get().writeText(
             renderTemplateVals(processShimTemplate)
         )
         outputConfig.get().writeText(
             renderTemplateVals(configTemplate)
         )
-
         logger.lifecycle(
-            "Config generated for `${tool.name.lowercase()}` (mode: ${mode.name}): " +
-            outputConfig.get().path
+            "Config generated for `${tool.name.lowercase()}` (mode: ${mode.name}): " + outputConfig.get().path
         )
     }
 }

@@ -17,6 +17,12 @@ dependencies {
     implementation("com.github.node-gradle:gradle-node-plugin:3.4.0")
     implementation("org.gradle.kotlin:gradle-kotlin-dsl-plugins:2.4.0")
 
+    // Protocol Buffers
+    implementation(libs.protobuf.java)
+    implementation(libs.protobuf.util)
+    implementation(libs.protobuf.kotlin)
+    implementation(libs.commons.compress)
+
     testImplementation(libs.junit)
 }
 
@@ -55,6 +61,40 @@ pluginBundle {
     }
 }
 
+tasks.create<Copy>("copyNodeRuntimeAssets") {
+    description = "Copy runtime Node assets to build root"
+    group = "build"
+    from("${project.projectDir}/src/main/node/runtime") {
+        include("**/*.js")
+        include("**/*.json")
+    }
+    into("${project.buildDir}/elideJsRuntime/sources")
+}
+
+tasks.create<Tar>("packageRuntimeAssets") {
+    description = "Packages Node runtime code as an embedded tarball"
+    group = "build"
+    compression = Compression.GZIP
+
+    archiveBaseName.set("js-runtime")
+    archiveExtension.set("tar.gz")
+    archiveVersion.set("")
+    destinationDirectory.set(
+        file("${project.buildDir}/resources/main/dev/elide/buildtools/js/runtime")
+    )
+
+    dependsOn(
+        tasks.named("copyNodeRuntimeAssets")
+    )
+    into("/") {
+        from("${project.buildDir}/elideJsRuntime/sources")
+        include(
+            "**/*.json",
+            "**/*.js",
+        )
+    }
+}
+
 tasks.create("setupPluginUploadFromEnvironment") {
     doLast {
         val key = System.getenv("GRADLE_PUBLISH_KEY")
@@ -67,4 +107,11 @@ tasks.create("setupPluginUploadFromEnvironment") {
         System.setProperty("gradle.publish.key", key)
         System.setProperty("gradle.publish.secret", secret)
     }
+}
+
+@Suppress("UnstableApiUsage")
+tasks.named<ProcessResources>("processResources") {
+    dependsOn(
+        tasks.named("packageRuntimeAssets")
+    )
 }

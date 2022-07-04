@@ -3,6 +3,8 @@
 package dev.elide.buildtools.gradle.plugin.tasks
 
 import com.github.gradle.node.task.NodeTask
+import tools.elide.assets.AssetBundleKt
+import tools.elide.assets.EmbeddedScriptKt
 import java.io.File
 
 internal fun String.fixSlashes() =
@@ -13,6 +15,9 @@ internal val EmbeddedJsBuildTask.outputBundleFile
 
 internal val EmbeddedJsBuildTask.outputOptimizedFile
     get() = File(outputBundleFolder.get(), outputOptimizedName.get())
+
+internal val BundleWriteTask.outputAssetSpecFile
+    get() = File(outputBundleFolder.get(), outputSpecName.get())
 
 internal fun StringBuilder.appendLine(element: String = ""): StringBuilder =
     append(element).append("\n")
@@ -30,3 +35,7 @@ internal fun NodeTask.setNodeModulesPath(path: String) =
 @Suppress("UnstableApiUsage")
 internal fun NodeTask.setNodeModulesPath(folder: File) =
     environment.put("NODE_PATH", folder.normalize().absolutePath)
+
+internal typealias AssetBundleSpec = AssetBundleKt.Dsl
+
+internal typealias EmbeddedBundleSpec = EmbeddedScriptKt.Dsl

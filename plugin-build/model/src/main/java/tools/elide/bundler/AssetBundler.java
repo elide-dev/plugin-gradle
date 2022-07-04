@@ -98,7 +98,7 @@ public class AssetBundler implements Callable<Integer> {
   private static final ManifestFormat DEFAULT_FORMAT = ManifestFormat.TEXT;
 
   /** Default algorithm to use when digesting chunks. */
-  private static final DigestAlgorithm DEFAULT_ALGORITHM = DigestAlgorithm.SHA1;
+  private static final DigestAlgorithm DEFAULT_ALGORITHM = DigestAlgorithm.SHA256;
 
   /** Private log pipe, addressed to this class. */
   private static final Logger logger = LoggerFactory.getLogger(AssetBundler.class);
@@ -1172,10 +1172,10 @@ public class AssetBundler implements Callable<Integer> {
         // prep the bundle builder
         final AssetBundle.Builder builder = AssetBundle.newBuilder()
           .setVersion(version)
-          .setRewrite(rewriteMaps)
+          .setStyleRewrite(rewriteMaps)
           .setGenerated(Timestamp.newBuilder()
             .setSeconds(System.currentTimeMillis() / 1000))
-          .setDigest(DigestSettings.newBuilder()
+          .setDigestSettings(DigestSettings.newBuilder()
             .setAlgorithm(this.digest.toEnum())
             .setTail(this.digestLength)
             .setRounds(this.digestRounds));

@@ -25,6 +25,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private AssetBundle() {
+    digest_ = com.google.protobuf.ByteString.EMPTY;
     asset_ = java.util.Collections.emptyList();
   }
 
@@ -66,18 +67,23 @@ private static final long serialVersionUID = 0L;
           }
           case 18: {
             tools.elide.assets.AssetBundle.DigestSettings.Builder subBuilder = null;
-            if (digest_ != null) {
-              subBuilder = digest_.toBuilder();
+            if (digestSettings_ != null) {
+              subBuilder = digestSettings_.toBuilder();
             }
-            digest_ = input.readMessage(tools.elide.assets.AssetBundle.DigestSettings.parser(), extensionRegistry);
+            digestSettings_ = input.readMessage(tools.elide.assets.AssetBundle.DigestSettings.parser(), extensionRegistry);
             if (subBuilder != null) {
-              subBuilder.mergeFrom(digest_);
-              digest_ = subBuilder.buildPartial();
+              subBuilder.mergeFrom(digestSettings_);
+              digestSettings_ = subBuilder.buildPartial();
             }
 
             break;
           }
           case 26: {
+
+            digest_ = input.readBytes();
+            break;
+          }
+          case 34: {
             if (!((mutable_bitField0_ & 0x00000001) != 0)) {
               styles_ = com.google.protobuf.MapField.newMapField(
                   StylesDefaultEntryHolder.defaultEntry);
@@ -90,7 +96,7 @@ private static final long serialVersionUID = 0L;
                 styles__.getKey(), styles__.getValue());
             break;
           }
-          case 34: {
+          case 42: {
             if (!((mutable_bitField0_ & 0x00000002) != 0)) {
               scripts_ = com.google.protobuf.MapField.newMapField(
                   ScriptsDefaultEntryHolder.defaultEntry);
@@ -103,16 +109,29 @@ private static final long serialVersionUID = 0L;
                 scripts__.getKey(), scripts__.getValue());
             break;
           }
-          case 42: {
+          case 50: {
             if (!((mutable_bitField0_ & 0x00000004) != 0)) {
-              asset_ = new java.util.ArrayList<tools.elide.assets.AssetBundle.AssetContent>();
+              generic_ = com.google.protobuf.MapField.newMapField(
+                  GenericDefaultEntryHolder.defaultEntry);
               mutable_bitField0_ |= 0x00000004;
+            }
+            com.google.protobuf.MapEntry<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle>
+            generic__ = input.readMessage(
+                GenericDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
+            generic_.getMutableMap().put(
+                generic__.getKey(), generic__.getValue());
+            break;
+          }
+          case 58: {
+            if (!((mutable_bitField0_ & 0x00000008) != 0)) {
+              asset_ = new java.util.ArrayList<tools.elide.assets.AssetBundle.AssetContent>();
+              mutable_bitField0_ |= 0x00000008;
             }
             asset_.add(
                 input.readMessage(tools.elide.assets.AssetBundle.AssetContent.parser(), extensionRegistry));
             break;
           }
-          case 50: {
+          case 66: {
             com.google.protobuf.Timestamp.Builder subBuilder = null;
             if (generated_ != null) {
               subBuilder = generated_.toBuilder();
@@ -125,22 +144,9 @@ private static final long serialVersionUID = 0L;
 
             break;
           }
-          case 56: {
+          case 72: {
 
-            rewrite_ = input.readBool();
-            break;
-          }
-          case 66: {
-            if (!((mutable_bitField0_ & 0x00000008) != 0)) {
-              generic_ = com.google.protobuf.MapField.newMapField(
-                  GenericDefaultEntryHolder.defaultEntry);
-              mutable_bitField0_ |= 0x00000008;
-            }
-            com.google.protobuf.MapEntry<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle>
-            generic__ = input.readMessage(
-                GenericDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
-            generic_.getMutableMap().put(
-                generic__.getKey(), generic__.getValue());
+            styleRewrite_ = input.readBool();
             break;
           }
           default: {
@@ -160,7 +166,7 @@ private static final long serialVersionUID = 0L;
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
-      if (((mutable_bitField0_ & 0x00000004) != 0)) {
+      if (((mutable_bitField0_ & 0x00000008) != 0)) {
         asset_ = java.util.Collections.unmodifiableList(asset_);
       }
       this.unknownFields = unknownFields.build();
@@ -177,11 +183,11 @@ private static final long serialVersionUID = 0L;
   protected com.google.protobuf.MapField internalGetMapField(
       int number) {
     switch (number) {
-      case 3:
-        return internalGetStyles();
       case 4:
+        return internalGetStyles();
+      case 5:
         return internalGetScripts();
-      case 8:
+      case 6:
         return internalGetGeneric();
       default:
         throw new RuntimeException(
@@ -11582,20 +11588,20 @@ java.lang.String defaultValue);
     return version_;
   }
 
-  public static final int DIGEST_FIELD_NUMBER = 2;
-  private tools.elide.assets.AssetBundle.DigestSettings digest_;
+  public static final int DIGEST_SETTINGS_FIELD_NUMBER = 2;
+  private tools.elide.assets.AssetBundle.DigestSettings digestSettings_;
   /**
    * <pre>
    * Digest algorithm settings in use to calculate chunk tokens. These tokens are used to address pre-compressed asset
    * content, and are used to address assets dynamically from the server and frontend.
    * </pre>
    *
-   * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
-   * @return Whether the digest field is set.
+   * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
+   * @return Whether the digestSettings field is set.
    */
   @java.lang.Override
-  public boolean hasDigest() {
-    return digest_ != null;
+  public boolean hasDigestSettings() {
+    return digestSettings_ != null;
   }
   /**
    * <pre>
@@ -11603,27 +11609,43 @@ java.lang.String defaultValue);
    * content, and are used to address assets dynamically from the server and frontend.
    * </pre>
    *
-   * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+   * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
+   * @return The digestSettings.
+   */
+  @java.lang.Override
+  public tools.elide.assets.AssetBundle.DigestSettings getDigestSettings() {
+    return digestSettings_ == null ? tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digestSettings_;
+  }
+  /**
+   * <pre>
+   * Digest algorithm settings in use to calculate chunk tokens. These tokens are used to address pre-compressed asset
+   * content, and are used to address assets dynamically from the server and frontend.
+   * </pre>
+   *
+   * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
+   */
+  @java.lang.Override
+  public tools.elide.assets.AssetBundle.DigestSettingsOrBuilder getDigestSettingsOrBuilder() {
+    return getDigestSettings();
+  }
+
+  public static final int DIGEST_FIELD_NUMBER = 3;
+  private com.google.protobuf.ByteString digest_;
+  /**
+   * <pre>
+   * Raw bytes of a digest matching the algorithm for digests in file names, which represents a unique fingerprint of
+   * the full asset bundle.
+   * </pre>
+   *
+   * <code>bytes digest = 3;</code>
    * @return The digest.
    */
   @java.lang.Override
-  public tools.elide.assets.AssetBundle.DigestSettings getDigest() {
-    return digest_ == null ? tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digest_;
-  }
-  /**
-   * <pre>
-   * Digest algorithm settings in use to calculate chunk tokens. These tokens are used to address pre-compressed asset
-   * content, and are used to address assets dynamically from the server and frontend.
-   * </pre>
-   *
-   * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
-   */
-  @java.lang.Override
-  public tools.elide.assets.AssetBundle.DigestSettingsOrBuilder getDigestOrBuilder() {
-    return getDigest();
+  public com.google.protobuf.ByteString getDigest() {
+    return digest_;
   }
 
-  public static final int STYLES_FIELD_NUMBER = 3;
+  public static final int STYLES_FIELD_NUMBER = 4;
   private static final class StylesDefaultEntryHolder {
     static final com.google.protobuf.MapEntry<
         java.lang.String, tools.elide.assets.AssetBundle.StyleBundle> defaultEntry =
@@ -11655,7 +11677,7 @@ java.lang.String defaultValue);
    * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
    */
 
   @java.lang.Override
@@ -11678,7 +11700,7 @@ java.lang.String defaultValue);
    * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
    */
   @java.lang.Override
 
@@ -11691,7 +11713,7 @@ java.lang.String defaultValue);
    * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
    */
   @java.lang.Override
 
@@ -11709,7 +11731,7 @@ java.lang.String defaultValue);
    * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+   * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
    */
   @java.lang.Override
 
@@ -11724,7 +11746,7 @@ java.lang.String defaultValue);
     return map.get(key);
   }
 
-  public static final int SCRIPTS_FIELD_NUMBER = 4;
+  public static final int SCRIPTS_FIELD_NUMBER = 5;
   private static final class ScriptsDefaultEntryHolder {
     static final com.google.protobuf.MapEntry<
         java.lang.String, tools.elide.assets.AssetBundle.ScriptBundle> defaultEntry =
@@ -11756,7 +11778,7 @@ java.lang.String defaultValue);
    * their script sources and settings. Generally, a Closure module name is used for scripts.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
    */
 
   @java.lang.Override
@@ -11779,7 +11801,7 @@ java.lang.String defaultValue);
    * their script sources and settings. Generally, a Closure module name is used for scripts.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
    */
   @java.lang.Override
 
@@ -11792,7 +11814,7 @@ java.lang.String defaultValue);
    * their script sources and settings. Generally, a Closure module name is used for scripts.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
    */
   @java.lang.Override
 
@@ -11810,7 +11832,7 @@ java.lang.String defaultValue);
    * their script sources and settings. Generally, a Closure module name is used for scripts.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+   * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
    */
   @java.lang.Override
 
@@ -11825,129 +11847,7 @@ java.lang.String defaultValue);
     return map.get(key);
   }
 
-  public static final int ASSET_FIELD_NUMBER = 5;
-  private java.util.List<tools.elide.assets.AssetBundle.AssetContent> asset_;
-  /**
-   * <pre>
-   * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-   * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-   * </pre>
-   *
-   * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-   */
-  @java.lang.Override
-  public java.util.List<tools.elide.assets.AssetBundle.AssetContent> getAssetList() {
-    return asset_;
-  }
-  /**
-   * <pre>
-   * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-   * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-   * </pre>
-   *
-   * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-   */
-  @java.lang.Override
-  public java.util.List<? extends tools.elide.assets.AssetBundle.AssetContentOrBuilder> 
-      getAssetOrBuilderList() {
-    return asset_;
-  }
-  /**
-   * <pre>
-   * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-   * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-   * </pre>
-   *
-   * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-   */
-  @java.lang.Override
-  public int getAssetCount() {
-    return asset_.size();
-  }
-  /**
-   * <pre>
-   * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-   * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-   * </pre>
-   *
-   * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-   */
-  @java.lang.Override
-  public tools.elide.assets.AssetBundle.AssetContent getAsset(int index) {
-    return asset_.get(index);
-  }
-  /**
-   * <pre>
-   * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-   * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-   * </pre>
-   *
-   * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-   */
-  @java.lang.Override
-  public tools.elide.assets.AssetBundle.AssetContentOrBuilder getAssetOrBuilder(
-      int index) {
-    return asset_.get(index);
-  }
-
-  public static final int GENERATED_FIELD_NUMBER = 6;
-  private com.google.protobuf.Timestamp generated_;
-  /**
-   * <pre>
-   * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-   * checking for updates to the asset bundle itself.
-   * </pre>
-   *
-   * <code>.google.protobuf.Timestamp generated = 6;</code>
-   * @return Whether the generated field is set.
-   */
-  @java.lang.Override
-  public boolean hasGenerated() {
-    return generated_ != null;
-  }
-  /**
-   * <pre>
-   * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-   * checking for updates to the asset bundle itself.
-   * </pre>
-   *
-   * <code>.google.protobuf.Timestamp generated = 6;</code>
-   * @return The generated.
-   */
-  @java.lang.Override
-  public com.google.protobuf.Timestamp getGenerated() {
-    return generated_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : generated_;
-  }
-  /**
-   * <pre>
-   * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-   * checking for updates to the asset bundle itself.
-   * </pre>
-   *
-   * <code>.google.protobuf.Timestamp generated = 6;</code>
-   */
-  @java.lang.Override
-  public com.google.protobuf.TimestampOrBuilder getGeneratedOrBuilder() {
-    return getGenerated();
-  }
-
-  public static final int REWRITE_FIELD_NUMBER = 7;
-  private boolean rewrite_;
-  /**
-   * <pre>
-   * Whether style-rewriting is enabled or not, which should indicate the presence of generated style symbol maps, that
-   * must be loaded by the server for SSR.
-   * </pre>
-   *
-   * <code>bool rewrite = 7;</code>
-   * @return The rewrite.
-   */
-  @java.lang.Override
-  public boolean getRewrite() {
-    return rewrite_;
-  }
-
-  public static final int GENERIC_FIELD_NUMBER = 8;
+  public static final int GENERIC_FIELD_NUMBER = 6;
   private static final class GenericDefaultEntryHolder {
     static final com.google.protobuf.MapEntry<
         java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> defaultEntry =
@@ -11978,7 +11878,7 @@ java.lang.String defaultValue);
    * Generic assets which are mapped within this bundle.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
    */
 
   @java.lang.Override
@@ -12000,7 +11900,7 @@ java.lang.String defaultValue);
    * Generic assets which are mapped within this bundle.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
    */
   @java.lang.Override
 
@@ -12012,7 +11912,7 @@ java.lang.String defaultValue);
    * Generic assets which are mapped within this bundle.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
    */
   @java.lang.Override
 
@@ -12029,7 +11929,7 @@ java.lang.String defaultValue);
    * Generic assets which are mapped within this bundle.
    * </pre>
    *
-   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+   * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
    */
   @java.lang.Override
 
@@ -12042,6 +11942,128 @@ java.lang.String defaultValue);
       throw new java.lang.IllegalArgumentException();
     }
     return map.get(key);
+  }
+
+  public static final int ASSET_FIELD_NUMBER = 7;
+  private java.util.List<tools.elide.assets.AssetBundle.AssetContent> asset_;
+  /**
+   * <pre>
+   * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+   * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+   * </pre>
+   *
+   * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+   */
+  @java.lang.Override
+  public java.util.List<tools.elide.assets.AssetBundle.AssetContent> getAssetList() {
+    return asset_;
+  }
+  /**
+   * <pre>
+   * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+   * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+   * </pre>
+   *
+   * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+   */
+  @java.lang.Override
+  public java.util.List<? extends tools.elide.assets.AssetBundle.AssetContentOrBuilder> 
+      getAssetOrBuilderList() {
+    return asset_;
+  }
+  /**
+   * <pre>
+   * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+   * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+   * </pre>
+   *
+   * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+   */
+  @java.lang.Override
+  public int getAssetCount() {
+    return asset_.size();
+  }
+  /**
+   * <pre>
+   * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+   * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+   * </pre>
+   *
+   * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+   */
+  @java.lang.Override
+  public tools.elide.assets.AssetBundle.AssetContent getAsset(int index) {
+    return asset_.get(index);
+  }
+  /**
+   * <pre>
+   * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+   * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+   * </pre>
+   *
+   * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+   */
+  @java.lang.Override
+  public tools.elide.assets.AssetBundle.AssetContentOrBuilder getAssetOrBuilder(
+      int index) {
+    return asset_.get(index);
+  }
+
+  public static final int GENERATED_FIELD_NUMBER = 8;
+  private com.google.protobuf.Timestamp generated_;
+  /**
+   * <pre>
+   * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+   * checking for updates to the asset bundle itself.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp generated = 8;</code>
+   * @return Whether the generated field is set.
+   */
+  @java.lang.Override
+  public boolean hasGenerated() {
+    return generated_ != null;
+  }
+  /**
+   * <pre>
+   * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+   * checking for updates to the asset bundle itself.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp generated = 8;</code>
+   * @return The generated.
+   */
+  @java.lang.Override
+  public com.google.protobuf.Timestamp getGenerated() {
+    return generated_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : generated_;
+  }
+  /**
+   * <pre>
+   * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+   * checking for updates to the asset bundle itself.
+   * </pre>
+   *
+   * <code>.google.protobuf.Timestamp generated = 8;</code>
+   */
+  @java.lang.Override
+  public com.google.protobuf.TimestampOrBuilder getGeneratedOrBuilder() {
+    return getGenerated();
+  }
+
+  public static final int STYLE_REWRITE_FIELD_NUMBER = 9;
+  private boolean styleRewrite_;
+  /**
+   * <pre>
+   * Whether style-rewriting is enabled or not, which should indicate the presence of generated style symbol maps, that
+   * must be loaded by the server for SSR.
+   * </pre>
+   *
+   * <code>bool style_rewrite = 9;</code>
+   * @return The styleRewrite.
+   */
+  @java.lang.Override
+  public boolean getStyleRewrite() {
+    return styleRewrite_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -12061,36 +12083,39 @@ java.lang.String defaultValue);
     if (version_ != 0) {
       output.writeUInt32(1, version_);
     }
-    if (digest_ != null) {
-      output.writeMessage(2, getDigest());
+    if (digestSettings_ != null) {
+      output.writeMessage(2, getDigestSettings());
+    }
+    if (!digest_.isEmpty()) {
+      output.writeBytes(3, digest_);
     }
     com.google.protobuf.GeneratedMessageV3
       .serializeStringMapTo(
         output,
         internalGetStyles(),
         StylesDefaultEntryHolder.defaultEntry,
-        3);
+        4);
     com.google.protobuf.GeneratedMessageV3
       .serializeStringMapTo(
         output,
         internalGetScripts(),
         ScriptsDefaultEntryHolder.defaultEntry,
-        4);
-    for (int i = 0; i < asset_.size(); i++) {
-      output.writeMessage(5, asset_.get(i));
-    }
-    if (generated_ != null) {
-      output.writeMessage(6, getGenerated());
-    }
-    if (rewrite_ != false) {
-      output.writeBool(7, rewrite_);
-    }
+        5);
     com.google.protobuf.GeneratedMessageV3
       .serializeStringMapTo(
         output,
         internalGetGeneric(),
         GenericDefaultEntryHolder.defaultEntry,
-        8);
+        6);
+    for (int i = 0; i < asset_.size(); i++) {
+      output.writeMessage(7, asset_.get(i));
+    }
+    if (generated_ != null) {
+      output.writeMessage(8, getGenerated());
+    }
+    if (styleRewrite_ != false) {
+      output.writeBool(9, styleRewrite_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -12104,9 +12129,13 @@ java.lang.String defaultValue);
       size += com.google.protobuf.CodedOutputStream
         .computeUInt32Size(1, version_);
     }
-    if (digest_ != null) {
+    if (digestSettings_ != null) {
       size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(2, getDigest());
+        .computeMessageSize(2, getDigestSettings());
+    }
+    if (!digest_.isEmpty()) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBytesSize(3, digest_);
     }
     for (java.util.Map.Entry<java.lang.String, tools.elide.assets.AssetBundle.StyleBundle> entry
          : internalGetStyles().getMap().entrySet()) {
@@ -12116,7 +12145,7 @@ java.lang.String defaultValue);
           .setValue(entry.getValue())
           .build();
       size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, styles__);
+          .computeMessageSize(4, styles__);
     }
     for (java.util.Map.Entry<java.lang.String, tools.elide.assets.AssetBundle.ScriptBundle> entry
          : internalGetScripts().getMap().entrySet()) {
@@ -12126,19 +12155,7 @@ java.lang.String defaultValue);
           .setValue(entry.getValue())
           .build();
       size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, scripts__);
-    }
-    for (int i = 0; i < asset_.size(); i++) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(5, asset_.get(i));
-    }
-    if (generated_ != null) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(6, getGenerated());
-    }
-    if (rewrite_ != false) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeBoolSize(7, rewrite_);
+          .computeMessageSize(5, scripts__);
     }
     for (java.util.Map.Entry<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> entry
          : internalGetGeneric().getMap().entrySet()) {
@@ -12148,7 +12165,19 @@ java.lang.String defaultValue);
           .setValue(entry.getValue())
           .build();
       size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(8, generic__);
+          .computeMessageSize(6, generic__);
+    }
+    for (int i = 0; i < asset_.size(); i++) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(7, asset_.get(i));
+    }
+    if (generated_ != null) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(8, getGenerated());
+    }
+    if (styleRewrite_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(9, styleRewrite_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -12167,15 +12196,19 @@ java.lang.String defaultValue);
 
     if (getVersion()
         != other.getVersion()) return false;
-    if (hasDigest() != other.hasDigest()) return false;
-    if (hasDigest()) {
-      if (!getDigest()
-          .equals(other.getDigest())) return false;
+    if (hasDigestSettings() != other.hasDigestSettings()) return false;
+    if (hasDigestSettings()) {
+      if (!getDigestSettings()
+          .equals(other.getDigestSettings())) return false;
     }
+    if (!getDigest()
+        .equals(other.getDigest())) return false;
     if (!internalGetStyles().equals(
         other.internalGetStyles())) return false;
     if (!internalGetScripts().equals(
         other.internalGetScripts())) return false;
+    if (!internalGetGeneric().equals(
+        other.internalGetGeneric())) return false;
     if (!getAssetList()
         .equals(other.getAssetList())) return false;
     if (hasGenerated() != other.hasGenerated()) return false;
@@ -12183,10 +12216,8 @@ java.lang.String defaultValue);
       if (!getGenerated()
           .equals(other.getGenerated())) return false;
     }
-    if (getRewrite()
-        != other.getRewrite()) return false;
-    if (!internalGetGeneric().equals(
-        other.internalGetGeneric())) return false;
+    if (getStyleRewrite()
+        != other.getStyleRewrite()) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -12200,10 +12231,12 @@ java.lang.String defaultValue);
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + VERSION_FIELD_NUMBER;
     hash = (53 * hash) + getVersion();
-    if (hasDigest()) {
-      hash = (37 * hash) + DIGEST_FIELD_NUMBER;
-      hash = (53 * hash) + getDigest().hashCode();
+    if (hasDigestSettings()) {
+      hash = (37 * hash) + DIGEST_SETTINGS_FIELD_NUMBER;
+      hash = (53 * hash) + getDigestSettings().hashCode();
     }
+    hash = (37 * hash) + DIGEST_FIELD_NUMBER;
+    hash = (53 * hash) + getDigest().hashCode();
     if (!internalGetStyles().getMap().isEmpty()) {
       hash = (37 * hash) + STYLES_FIELD_NUMBER;
       hash = (53 * hash) + internalGetStyles().hashCode();
@@ -12211,6 +12244,10 @@ java.lang.String defaultValue);
     if (!internalGetScripts().getMap().isEmpty()) {
       hash = (37 * hash) + SCRIPTS_FIELD_NUMBER;
       hash = (53 * hash) + internalGetScripts().hashCode();
+    }
+    if (!internalGetGeneric().getMap().isEmpty()) {
+      hash = (37 * hash) + GENERIC_FIELD_NUMBER;
+      hash = (53 * hash) + internalGetGeneric().hashCode();
     }
     if (getAssetCount() > 0) {
       hash = (37 * hash) + ASSET_FIELD_NUMBER;
@@ -12220,13 +12257,9 @@ java.lang.String defaultValue);
       hash = (37 * hash) + GENERATED_FIELD_NUMBER;
       hash = (53 * hash) + getGenerated().hashCode();
     }
-    hash = (37 * hash) + REWRITE_FIELD_NUMBER;
+    hash = (37 * hash) + STYLE_REWRITE_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-        getRewrite());
-    if (!internalGetGeneric().getMap().isEmpty()) {
-      hash = (37 * hash) + GENERIC_FIELD_NUMBER;
-      hash = (53 * hash) + internalGetGeneric().hashCode();
-    }
+        getStyleRewrite());
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -12347,11 +12380,11 @@ java.lang.String defaultValue);
     protected com.google.protobuf.MapField internalGetMapField(
         int number) {
       switch (number) {
-        case 3:
-          return internalGetStyles();
         case 4:
+          return internalGetStyles();
+        case 5:
           return internalGetScripts();
-        case 8:
+        case 6:
           return internalGetGeneric();
         default:
           throw new RuntimeException(
@@ -12362,11 +12395,11 @@ java.lang.String defaultValue);
     protected com.google.protobuf.MapField internalGetMutableMapField(
         int number) {
       switch (number) {
-        case 3:
-          return internalGetMutableStyles();
         case 4:
+          return internalGetMutableStyles();
+        case 5:
           return internalGetMutableScripts();
-        case 8:
+        case 6:
           return internalGetMutableGeneric();
         default:
           throw new RuntimeException(
@@ -12402,17 +12435,20 @@ java.lang.String defaultValue);
       super.clear();
       version_ = 0;
 
-      if (digestBuilder_ == null) {
-        digest_ = null;
+      if (digestSettingsBuilder_ == null) {
+        digestSettings_ = null;
       } else {
-        digest_ = null;
-        digestBuilder_ = null;
+        digestSettings_ = null;
+        digestSettingsBuilder_ = null;
       }
+      digest_ = com.google.protobuf.ByteString.EMPTY;
+
       internalGetMutableStyles().clear();
       internalGetMutableScripts().clear();
+      internalGetMutableGeneric().clear();
       if (assetBuilder_ == null) {
         asset_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
       } else {
         assetBuilder_.clear();
       }
@@ -12422,9 +12458,8 @@ java.lang.String defaultValue);
         generated_ = null;
         generatedBuilder_ = null;
       }
-      rewrite_ = false;
+      styleRewrite_ = false;
 
-      internalGetMutableGeneric().clear();
       return this;
     }
 
@@ -12453,19 +12488,22 @@ java.lang.String defaultValue);
       tools.elide.assets.AssetBundle result = new tools.elide.assets.AssetBundle(this);
       int from_bitField0_ = bitField0_;
       result.version_ = version_;
-      if (digestBuilder_ == null) {
-        result.digest_ = digest_;
+      if (digestSettingsBuilder_ == null) {
+        result.digestSettings_ = digestSettings_;
       } else {
-        result.digest_ = digestBuilder_.build();
+        result.digestSettings_ = digestSettingsBuilder_.build();
       }
+      result.digest_ = digest_;
       result.styles_ = internalGetStyles();
       result.styles_.makeImmutable();
       result.scripts_ = internalGetScripts();
       result.scripts_.makeImmutable();
+      result.generic_ = internalGetGeneric();
+      result.generic_.makeImmutable();
       if (assetBuilder_ == null) {
-        if (((bitField0_ & 0x00000004) != 0)) {
+        if (((bitField0_ & 0x00000008) != 0)) {
           asset_ = java.util.Collections.unmodifiableList(asset_);
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
         }
         result.asset_ = asset_;
       } else {
@@ -12476,9 +12514,7 @@ java.lang.String defaultValue);
       } else {
         result.generated_ = generatedBuilder_.build();
       }
-      result.rewrite_ = rewrite_;
-      result.generic_ = internalGetGeneric();
-      result.generic_.makeImmutable();
+      result.styleRewrite_ = styleRewrite_;
       onBuilt();
       return result;
     }
@@ -12530,18 +12566,23 @@ java.lang.String defaultValue);
       if (other.getVersion() != 0) {
         setVersion(other.getVersion());
       }
-      if (other.hasDigest()) {
-        mergeDigest(other.getDigest());
+      if (other.hasDigestSettings()) {
+        mergeDigestSettings(other.getDigestSettings());
+      }
+      if (other.getDigest() != com.google.protobuf.ByteString.EMPTY) {
+        setDigest(other.getDigest());
       }
       internalGetMutableStyles().mergeFrom(
           other.internalGetStyles());
       internalGetMutableScripts().mergeFrom(
           other.internalGetScripts());
+      internalGetMutableGeneric().mergeFrom(
+          other.internalGetGeneric());
       if (assetBuilder_ == null) {
         if (!other.asset_.isEmpty()) {
           if (asset_.isEmpty()) {
             asset_ = other.asset_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
           } else {
             ensureAssetIsMutable();
             asset_.addAll(other.asset_);
@@ -12554,7 +12595,7 @@ java.lang.String defaultValue);
             assetBuilder_.dispose();
             assetBuilder_ = null;
             asset_ = other.asset_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
             assetBuilder_ = 
               com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                  getAssetFieldBuilder() : null;
@@ -12566,11 +12607,9 @@ java.lang.String defaultValue);
       if (other.hasGenerated()) {
         mergeGenerated(other.getGenerated());
       }
-      if (other.getRewrite() != false) {
-        setRewrite(other.getRewrite());
+      if (other.getStyleRewrite() != false) {
+        setStyleRewrite(other.getStyleRewrite());
       }
-      internalGetMutableGeneric().mergeFrom(
-          other.internalGetGeneric());
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
       return this;
@@ -12647,20 +12686,20 @@ java.lang.String defaultValue);
       return this;
     }
 
-    private tools.elide.assets.AssetBundle.DigestSettings digest_;
+    private tools.elide.assets.AssetBundle.DigestSettings digestSettings_;
     private com.google.protobuf.SingleFieldBuilderV3<
-        tools.elide.assets.AssetBundle.DigestSettings, tools.elide.assets.AssetBundle.DigestSettings.Builder, tools.elide.assets.AssetBundle.DigestSettingsOrBuilder> digestBuilder_;
+        tools.elide.assets.AssetBundle.DigestSettings, tools.elide.assets.AssetBundle.DigestSettings.Builder, tools.elide.assets.AssetBundle.DigestSettingsOrBuilder> digestSettingsBuilder_;
     /**
      * <pre>
      * Digest algorithm settings in use to calculate chunk tokens. These tokens are used to address pre-compressed asset
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
-     * @return Whether the digest field is set.
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
+     * @return Whether the digestSettings field is set.
      */
-    public boolean hasDigest() {
-      return digestBuilder_ != null || digest_ != null;
+    public boolean hasDigestSettings() {
+      return digestSettingsBuilder_ != null || digestSettings_ != null;
     }
     /**
      * <pre>
@@ -12668,14 +12707,14 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
-     * @return The digest.
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
+     * @return The digestSettings.
      */
-    public tools.elide.assets.AssetBundle.DigestSettings getDigest() {
-      if (digestBuilder_ == null) {
-        return digest_ == null ? tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digest_;
+    public tools.elide.assets.AssetBundle.DigestSettings getDigestSettings() {
+      if (digestSettingsBuilder_ == null) {
+        return digestSettings_ == null ? tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digestSettings_;
       } else {
-        return digestBuilder_.getMessage();
+        return digestSettingsBuilder_.getMessage();
       }
     }
     /**
@@ -12684,17 +12723,17 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public Builder setDigest(tools.elide.assets.AssetBundle.DigestSettings value) {
-      if (digestBuilder_ == null) {
+    public Builder setDigestSettings(tools.elide.assets.AssetBundle.DigestSettings value) {
+      if (digestSettingsBuilder_ == null) {
         if (value == null) {
           throw new NullPointerException();
         }
-        digest_ = value;
+        digestSettings_ = value;
         onChanged();
       } else {
-        digestBuilder_.setMessage(value);
+        digestSettingsBuilder_.setMessage(value);
       }
 
       return this;
@@ -12705,15 +12744,15 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public Builder setDigest(
+    public Builder setDigestSettings(
         tools.elide.assets.AssetBundle.DigestSettings.Builder builderForValue) {
-      if (digestBuilder_ == null) {
-        digest_ = builderForValue.build();
+      if (digestSettingsBuilder_ == null) {
+        digestSettings_ = builderForValue.build();
         onChanged();
       } else {
-        digestBuilder_.setMessage(builderForValue.build());
+        digestSettingsBuilder_.setMessage(builderForValue.build());
       }
 
       return this;
@@ -12724,19 +12763,19 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public Builder mergeDigest(tools.elide.assets.AssetBundle.DigestSettings value) {
-      if (digestBuilder_ == null) {
-        if (digest_ != null) {
-          digest_ =
-            tools.elide.assets.AssetBundle.DigestSettings.newBuilder(digest_).mergeFrom(value).buildPartial();
+    public Builder mergeDigestSettings(tools.elide.assets.AssetBundle.DigestSettings value) {
+      if (digestSettingsBuilder_ == null) {
+        if (digestSettings_ != null) {
+          digestSettings_ =
+            tools.elide.assets.AssetBundle.DigestSettings.newBuilder(digestSettings_).mergeFrom(value).buildPartial();
         } else {
-          digest_ = value;
+          digestSettings_ = value;
         }
         onChanged();
       } else {
-        digestBuilder_.mergeFrom(value);
+        digestSettingsBuilder_.mergeFrom(value);
       }
 
       return this;
@@ -12747,15 +12786,15 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public Builder clearDigest() {
-      if (digestBuilder_ == null) {
-        digest_ = null;
+    public Builder clearDigestSettings() {
+      if (digestSettingsBuilder_ == null) {
+        digestSettings_ = null;
         onChanged();
       } else {
-        digest_ = null;
-        digestBuilder_ = null;
+        digestSettings_ = null;
+        digestSettingsBuilder_ = null;
       }
 
       return this;
@@ -12766,12 +12805,12 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public tools.elide.assets.AssetBundle.DigestSettings.Builder getDigestBuilder() {
+    public tools.elide.assets.AssetBundle.DigestSettings.Builder getDigestSettingsBuilder() {
       
       onChanged();
-      return getDigestFieldBuilder().getBuilder();
+      return getDigestSettingsFieldBuilder().getBuilder();
     }
     /**
      * <pre>
@@ -12779,14 +12818,14 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
-    public tools.elide.assets.AssetBundle.DigestSettingsOrBuilder getDigestOrBuilder() {
-      if (digestBuilder_ != null) {
-        return digestBuilder_.getMessageOrBuilder();
+    public tools.elide.assets.AssetBundle.DigestSettingsOrBuilder getDigestSettingsOrBuilder() {
+      if (digestSettingsBuilder_ != null) {
+        return digestSettingsBuilder_.getMessageOrBuilder();
       } else {
-        return digest_ == null ?
-            tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digest_;
+        return digestSettings_ == null ?
+            tools.elide.assets.AssetBundle.DigestSettings.getDefaultInstance() : digestSettings_;
       }
     }
     /**
@@ -12795,20 +12834,69 @@ java.lang.String defaultValue);
      * content, and are used to address assets dynamically from the server and frontend.
      * </pre>
      *
-     * <code>.assets.AssetBundle.DigestSettings digest = 2;</code>
+     * <code>.assets.AssetBundle.DigestSettings digest_settings = 2;</code>
      */
     private com.google.protobuf.SingleFieldBuilderV3<
         tools.elide.assets.AssetBundle.DigestSettings, tools.elide.assets.AssetBundle.DigestSettings.Builder, tools.elide.assets.AssetBundle.DigestSettingsOrBuilder> 
-        getDigestFieldBuilder() {
-      if (digestBuilder_ == null) {
-        digestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+        getDigestSettingsFieldBuilder() {
+      if (digestSettingsBuilder_ == null) {
+        digestSettingsBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
             tools.elide.assets.AssetBundle.DigestSettings, tools.elide.assets.AssetBundle.DigestSettings.Builder, tools.elide.assets.AssetBundle.DigestSettingsOrBuilder>(
-                getDigest(),
+                getDigestSettings(),
                 getParentForChildren(),
                 isClean());
-        digest_ = null;
+        digestSettings_ = null;
       }
-      return digestBuilder_;
+      return digestSettingsBuilder_;
+    }
+
+    private com.google.protobuf.ByteString digest_ = com.google.protobuf.ByteString.EMPTY;
+    /**
+     * <pre>
+     * Raw bytes of a digest matching the algorithm for digests in file names, which represents a unique fingerprint of
+     * the full asset bundle.
+     * </pre>
+     *
+     * <code>bytes digest = 3;</code>
+     * @return The digest.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString getDigest() {
+      return digest_;
+    }
+    /**
+     * <pre>
+     * Raw bytes of a digest matching the algorithm for digests in file names, which represents a unique fingerprint of
+     * the full asset bundle.
+     * </pre>
+     *
+     * <code>bytes digest = 3;</code>
+     * @param value The digest to set.
+     * @return This builder for chaining.
+     */
+    public Builder setDigest(com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      digest_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Raw bytes of a digest matching the algorithm for digests in file names, which represents a unique fingerprint of
+     * the full asset bundle.
+     * </pre>
+     *
+     * <code>bytes digest = 3;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearDigest() {
+      
+      digest_ = getDefaultInstance().getDigest();
+      onChanged();
+      return this;
     }
 
     private com.google.protobuf.MapField<
@@ -12843,7 +12931,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
 
     @java.lang.Override
@@ -12866,7 +12954,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
     @java.lang.Override
 
@@ -12879,7 +12967,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
     @java.lang.Override
 
@@ -12897,7 +12985,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
     @java.lang.Override
 
@@ -12923,7 +13011,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
 
     public Builder removeStyles(
@@ -12947,7 +13035,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
     public Builder putStyles(
         java.lang.String key,
@@ -12967,7 +13055,7 @@ java.lang.String defaultValue);
      * their stylesheet sources and settings. Generally, the GSS module name is used for stylesheets.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 3;</code>
+     * <code>map&lt;string, .assets.AssetBundle.StyleBundle&gt; styles = 4;</code>
      */
 
     public Builder putAllStyles(
@@ -13009,7 +13097,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
 
     @java.lang.Override
@@ -13032,7 +13120,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
     @java.lang.Override
 
@@ -13045,7 +13133,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
     @java.lang.Override
 
@@ -13063,7 +13151,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
     @java.lang.Override
 
@@ -13089,7 +13177,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
 
     public Builder removeScripts(
@@ -13113,7 +13201,7 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
     public Builder putScripts(
         java.lang.String key,
@@ -13133,553 +13221,13 @@ java.lang.String defaultValue);
      * their script sources and settings. Generally, a Closure module name is used for scripts.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 4;</code>
+     * <code>map&lt;string, .assets.AssetBundle.ScriptBundle&gt; scripts = 5;</code>
      */
 
     public Builder putAllScripts(
         java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.ScriptBundle> values) {
       internalGetMutableScripts().getMutableMap()
           .putAll(values);
-      return this;
-    }
-
-    private java.util.List<tools.elide.assets.AssetBundle.AssetContent> asset_ =
-      java.util.Collections.emptyList();
-    private void ensureAssetIsMutable() {
-      if (!((bitField0_ & 0x00000004) != 0)) {
-        asset_ = new java.util.ArrayList<tools.elide.assets.AssetBundle.AssetContent>(asset_);
-        bitField0_ |= 0x00000004;
-       }
-    }
-
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        tools.elide.assets.AssetBundle.AssetContent, tools.elide.assets.AssetBundle.AssetContent.Builder, tools.elide.assets.AssetBundle.AssetContentOrBuilder> assetBuilder_;
-
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public java.util.List<tools.elide.assets.AssetBundle.AssetContent> getAssetList() {
-      if (assetBuilder_ == null) {
-        return java.util.Collections.unmodifiableList(asset_);
-      } else {
-        return assetBuilder_.getMessageList();
-      }
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public int getAssetCount() {
-      if (assetBuilder_ == null) {
-        return asset_.size();
-      } else {
-        return assetBuilder_.getCount();
-      }
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public tools.elide.assets.AssetBundle.AssetContent getAsset(int index) {
-      if (assetBuilder_ == null) {
-        return asset_.get(index);
-      } else {
-        return assetBuilder_.getMessage(index);
-      }
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public Builder setAsset(
-        int index, tools.elide.assets.AssetBundle.AssetContent value) {
-      if (assetBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureAssetIsMutable();
-        asset_.set(index, value);
-        onChanged();
-      } else {
-        assetBuilder_.setMessage(index, value);
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public Builder setAsset(
-        int index, tools.elide.assets.AssetBundle.AssetContent.Builder builderForValue) {
-      if (assetBuilder_ == null) {
-        ensureAssetIsMutable();
-        asset_.set(index, builderForValue.build());
-        onChanged();
-      } else {
-        assetBuilder_.setMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public Builder addAsset(tools.elide.assets.AssetBundle.AssetContent value) {
-      if (assetBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureAssetIsMutable();
-        asset_.add(value);
-        onChanged();
-      } else {
-        assetBuilder_.addMessage(value);
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public Builder addAsset(
-        int index, tools.elide.assets.AssetBundle.AssetContent value) {
-      if (assetBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        ensureAssetIsMutable();
-        asset_.add(index, value);
-        onChanged();
-      } else {
-        assetBuilder_.addMessage(index, value);
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public Builder addAsset(
-        tools.elide.assets.AssetBundle.AssetContent.Builder builderForValue) {
-      if (assetBuilder_ == null) {
-        ensureAssetIsMutable();
-        asset_.add(builderForValue.build());
-        onChanged();
-      } else {
-        assetBuilder_.addMessage(builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public Builder addAsset(
-        int index, tools.elide.assets.AssetBundle.AssetContent.Builder builderForValue) {
-      if (assetBuilder_ == null) {
-        ensureAssetIsMutable();
-        asset_.add(index, builderForValue.build());
-        onChanged();
-      } else {
-        assetBuilder_.addMessage(index, builderForValue.build());
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public Builder addAllAsset(
-        java.lang.Iterable<? extends tools.elide.assets.AssetBundle.AssetContent> values) {
-      if (assetBuilder_ == null) {
-        ensureAssetIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, asset_);
-        onChanged();
-      } else {
-        assetBuilder_.addAllMessages(values);
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public Builder clearAsset() {
-      if (assetBuilder_ == null) {
-        asset_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
-        onChanged();
-      } else {
-        assetBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public Builder removeAsset(int index) {
-      if (assetBuilder_ == null) {
-        ensureAssetIsMutable();
-        asset_.remove(index);
-        onChanged();
-      } else {
-        assetBuilder_.remove(index);
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public tools.elide.assets.AssetBundle.AssetContent.Builder getAssetBuilder(
-        int index) {
-      return getAssetFieldBuilder().getBuilder(index);
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public tools.elide.assets.AssetBundle.AssetContentOrBuilder getAssetOrBuilder(
-        int index) {
-      if (assetBuilder_ == null) {
-        return asset_.get(index);  } else {
-        return assetBuilder_.getMessageOrBuilder(index);
-      }
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public java.util.List<? extends tools.elide.assets.AssetBundle.AssetContentOrBuilder> 
-         getAssetOrBuilderList() {
-      if (assetBuilder_ != null) {
-        return assetBuilder_.getMessageOrBuilderList();
-      } else {
-        return java.util.Collections.unmodifiableList(asset_);
-      }
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public tools.elide.assets.AssetBundle.AssetContent.Builder addAssetBuilder() {
-      return getAssetFieldBuilder().addBuilder(
-          tools.elide.assets.AssetBundle.AssetContent.getDefaultInstance());
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public tools.elide.assets.AssetBundle.AssetContent.Builder addAssetBuilder(
-        int index) {
-      return getAssetFieldBuilder().addBuilder(
-          index, tools.elide.assets.AssetBundle.AssetContent.getDefaultInstance());
-    }
-    /**
-     * <pre>
-     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
-     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
-     * </pre>
-     *
-     * <code>repeated .assets.AssetBundle.AssetContent asset = 5;</code>
-     */
-    public java.util.List<tools.elide.assets.AssetBundle.AssetContent.Builder> 
-         getAssetBuilderList() {
-      return getAssetFieldBuilder().getBuilderList();
-    }
-    private com.google.protobuf.RepeatedFieldBuilderV3<
-        tools.elide.assets.AssetBundle.AssetContent, tools.elide.assets.AssetBundle.AssetContent.Builder, tools.elide.assets.AssetBundle.AssetContentOrBuilder> 
-        getAssetFieldBuilder() {
-      if (assetBuilder_ == null) {
-        assetBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-            tools.elide.assets.AssetBundle.AssetContent, tools.elide.assets.AssetBundle.AssetContent.Builder, tools.elide.assets.AssetBundle.AssetContentOrBuilder>(
-                asset_,
-                ((bitField0_ & 0x00000004) != 0),
-                getParentForChildren(),
-                isClean());
-        asset_ = null;
-      }
-      return assetBuilder_;
-    }
-
-    private com.google.protobuf.Timestamp generated_;
-    private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> generatedBuilder_;
-    /**
-     * <pre>
-     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-     * checking for updates to the asset bundle itself.
-     * </pre>
-     *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
-     * @return Whether the generated field is set.
-     */
-    public boolean hasGenerated() {
-      return generatedBuilder_ != null || generated_ != null;
-    }
-    /**
-     * <pre>
-     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-     * checking for updates to the asset bundle itself.
-     * </pre>
-     *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
-     * @return The generated.
-     */
-    public com.google.protobuf.Timestamp getGenerated() {
-      if (generatedBuilder_ == null) {
-        return generated_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : generated_;
-      } else {
-        return generatedBuilder_.getMessage();
-      }
-    }
-    /**
-     * <pre>
-     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-     * checking for updates to the asset bundle itself.
-     * </pre>
-     *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
-     */
-    public Builder setGenerated(com.google.protobuf.Timestamp value) {
-      if (generatedBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        generated_ = value;
-        onChanged();
-      } else {
-        generatedBuilder_.setMessage(value);
-      }
-
-      return this;
-    }
-    /**
-     * <pre>
-     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-     * checking for updates to the asset bundle itself.
-     * </pre>
-     *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
-     */
-    public Builder setGenerated(
-        com.google.protobuf.Timestamp.Builder builderForValue) {
-      if (generatedBuilder_ == null) {
-        generated_ = builderForValue.build();
-        onChanged();
-      } else {
-        generatedBuilder_.setMessage(builderForValue.build());
-      }
-
-      return this;
-    }
-    /**
-     * <pre>
-     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-     * checking for updates to the asset bundle itself.
-     * </pre>
-     *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
-     */
-    public Builder mergeGenerated(com.google.protobuf.Timestamp value) {
-      if (generatedBuilder_ == null) {
-        if (generated_ != null) {
-          generated_ =
-            com.google.protobuf.Timestamp.newBuilder(generated_).mergeFrom(value).buildPartial();
-        } else {
-          generated_ = value;
-        }
-        onChanged();
-      } else {
-        generatedBuilder_.mergeFrom(value);
-      }
-
-      return this;
-    }
-    /**
-     * <pre>
-     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-     * checking for updates to the asset bundle itself.
-     * </pre>
-     *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
-     */
-    public Builder clearGenerated() {
-      if (generatedBuilder_ == null) {
-        generated_ = null;
-        onChanged();
-      } else {
-        generated_ = null;
-        generatedBuilder_ = null;
-      }
-
-      return this;
-    }
-    /**
-     * <pre>
-     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-     * checking for updates to the asset bundle itself.
-     * </pre>
-     *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
-     */
-    public com.google.protobuf.Timestamp.Builder getGeneratedBuilder() {
-      
-      onChanged();
-      return getGeneratedFieldBuilder().getBuilder();
-    }
-    /**
-     * <pre>
-     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-     * checking for updates to the asset bundle itself.
-     * </pre>
-     *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
-     */
-    public com.google.protobuf.TimestampOrBuilder getGeneratedOrBuilder() {
-      if (generatedBuilder_ != null) {
-        return generatedBuilder_.getMessageOrBuilder();
-      } else {
-        return generated_ == null ?
-            com.google.protobuf.Timestamp.getDefaultInstance() : generated_;
-      }
-    }
-    /**
-     * <pre>
-     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
-     * checking for updates to the asset bundle itself.
-     * </pre>
-     *
-     * <code>.google.protobuf.Timestamp generated = 6;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
-        getGeneratedFieldBuilder() {
-      if (generatedBuilder_ == null) {
-        generatedBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder>(
-                getGenerated(),
-                getParentForChildren(),
-                isClean());
-        generated_ = null;
-      }
-      return generatedBuilder_;
-    }
-
-    private boolean rewrite_ ;
-    /**
-     * <pre>
-     * Whether style-rewriting is enabled or not, which should indicate the presence of generated style symbol maps, that
-     * must be loaded by the server for SSR.
-     * </pre>
-     *
-     * <code>bool rewrite = 7;</code>
-     * @return The rewrite.
-     */
-    @java.lang.Override
-    public boolean getRewrite() {
-      return rewrite_;
-    }
-    /**
-     * <pre>
-     * Whether style-rewriting is enabled or not, which should indicate the presence of generated style symbol maps, that
-     * must be loaded by the server for SSR.
-     * </pre>
-     *
-     * <code>bool rewrite = 7;</code>
-     * @param value The rewrite to set.
-     * @return This builder for chaining.
-     */
-    public Builder setRewrite(boolean value) {
-      
-      rewrite_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * Whether style-rewriting is enabled or not, which should indicate the presence of generated style symbol maps, that
-     * must be loaded by the server for SSR.
-     * </pre>
-     *
-     * <code>bool rewrite = 7;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearRewrite() {
-      
-      rewrite_ = false;
-      onChanged();
       return this;
     }
 
@@ -13714,7 +13262,7 @@ java.lang.String defaultValue);
      * Generic assets which are mapped within this bundle.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
      */
 
     @java.lang.Override
@@ -13736,7 +13284,7 @@ java.lang.String defaultValue);
      * Generic assets which are mapped within this bundle.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
      */
     @java.lang.Override
 
@@ -13748,7 +13296,7 @@ java.lang.String defaultValue);
      * Generic assets which are mapped within this bundle.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
      */
     @java.lang.Override
 
@@ -13765,7 +13313,7 @@ java.lang.String defaultValue);
      * Generic assets which are mapped within this bundle.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
      */
     @java.lang.Override
 
@@ -13790,7 +13338,7 @@ java.lang.String defaultValue);
      * Generic assets which are mapped within this bundle.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
      */
 
     public Builder removeGeneric(
@@ -13813,7 +13361,7 @@ java.lang.String defaultValue);
      * Generic assets which are mapped within this bundle.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
      */
     public Builder putGeneric(
         java.lang.String key,
@@ -13832,13 +13380,553 @@ java.lang.String defaultValue);
      * Generic assets which are mapped within this bundle.
      * </pre>
      *
-     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 8;</code>
+     * <code>map&lt;string, .assets.AssetBundle.GenericBundle&gt; generic = 6;</code>
      */
 
     public Builder putAllGeneric(
         java.util.Map<java.lang.String, tools.elide.assets.AssetBundle.GenericBundle> values) {
       internalGetMutableGeneric().getMutableMap()
           .putAll(values);
+      return this;
+    }
+
+    private java.util.List<tools.elide.assets.AssetBundle.AssetContent> asset_ =
+      java.util.Collections.emptyList();
+    private void ensureAssetIsMutable() {
+      if (!((bitField0_ & 0x00000008) != 0)) {
+        asset_ = new java.util.ArrayList<tools.elide.assets.AssetBundle.AssetContent>(asset_);
+        bitField0_ |= 0x00000008;
+       }
+    }
+
+    private com.google.protobuf.RepeatedFieldBuilderV3<
+        tools.elide.assets.AssetBundle.AssetContent, tools.elide.assets.AssetBundle.AssetContent.Builder, tools.elide.assets.AssetBundle.AssetContentOrBuilder> assetBuilder_;
+
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public java.util.List<tools.elide.assets.AssetBundle.AssetContent> getAssetList() {
+      if (assetBuilder_ == null) {
+        return java.util.Collections.unmodifiableList(asset_);
+      } else {
+        return assetBuilder_.getMessageList();
+      }
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public int getAssetCount() {
+      if (assetBuilder_ == null) {
+        return asset_.size();
+      } else {
+        return assetBuilder_.getCount();
+      }
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public tools.elide.assets.AssetBundle.AssetContent getAsset(int index) {
+      if (assetBuilder_ == null) {
+        return asset_.get(index);
+      } else {
+        return assetBuilder_.getMessage(index);
+      }
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public Builder setAsset(
+        int index, tools.elide.assets.AssetBundle.AssetContent value) {
+      if (assetBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureAssetIsMutable();
+        asset_.set(index, value);
+        onChanged();
+      } else {
+        assetBuilder_.setMessage(index, value);
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public Builder setAsset(
+        int index, tools.elide.assets.AssetBundle.AssetContent.Builder builderForValue) {
+      if (assetBuilder_ == null) {
+        ensureAssetIsMutable();
+        asset_.set(index, builderForValue.build());
+        onChanged();
+      } else {
+        assetBuilder_.setMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public Builder addAsset(tools.elide.assets.AssetBundle.AssetContent value) {
+      if (assetBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureAssetIsMutable();
+        asset_.add(value);
+        onChanged();
+      } else {
+        assetBuilder_.addMessage(value);
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public Builder addAsset(
+        int index, tools.elide.assets.AssetBundle.AssetContent value) {
+      if (assetBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureAssetIsMutable();
+        asset_.add(index, value);
+        onChanged();
+      } else {
+        assetBuilder_.addMessage(index, value);
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public Builder addAsset(
+        tools.elide.assets.AssetBundle.AssetContent.Builder builderForValue) {
+      if (assetBuilder_ == null) {
+        ensureAssetIsMutable();
+        asset_.add(builderForValue.build());
+        onChanged();
+      } else {
+        assetBuilder_.addMessage(builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public Builder addAsset(
+        int index, tools.elide.assets.AssetBundle.AssetContent.Builder builderForValue) {
+      if (assetBuilder_ == null) {
+        ensureAssetIsMutable();
+        asset_.add(index, builderForValue.build());
+        onChanged();
+      } else {
+        assetBuilder_.addMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public Builder addAllAsset(
+        java.lang.Iterable<? extends tools.elide.assets.AssetBundle.AssetContent> values) {
+      if (assetBuilder_ == null) {
+        ensureAssetIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, asset_);
+        onChanged();
+      } else {
+        assetBuilder_.addAllMessages(values);
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public Builder clearAsset() {
+      if (assetBuilder_ == null) {
+        asset_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000008);
+        onChanged();
+      } else {
+        assetBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public Builder removeAsset(int index) {
+      if (assetBuilder_ == null) {
+        ensureAssetIsMutable();
+        asset_.remove(index);
+        onChanged();
+      } else {
+        assetBuilder_.remove(index);
+      }
+      return this;
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public tools.elide.assets.AssetBundle.AssetContent.Builder getAssetBuilder(
+        int index) {
+      return getAssetFieldBuilder().getBuilder(index);
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public tools.elide.assets.AssetBundle.AssetContentOrBuilder getAssetOrBuilder(
+        int index) {
+      if (assetBuilder_ == null) {
+        return asset_.get(index);  } else {
+        return assetBuilder_.getMessageOrBuilder(index);
+      }
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public java.util.List<? extends tools.elide.assets.AssetBundle.AssetContentOrBuilder> 
+         getAssetOrBuilderList() {
+      if (assetBuilder_ != null) {
+        return assetBuilder_.getMessageOrBuilderList();
+      } else {
+        return java.util.Collections.unmodifiableList(asset_);
+      }
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public tools.elide.assets.AssetBundle.AssetContent.Builder addAssetBuilder() {
+      return getAssetFieldBuilder().addBuilder(
+          tools.elide.assets.AssetBundle.AssetContent.getDefaultInstance());
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public tools.elide.assets.AssetBundle.AssetContent.Builder addAssetBuilder(
+        int index) {
+      return getAssetFieldBuilder().addBuilder(
+          index, tools.elide.assets.AssetBundle.AssetContent.getDefaultInstance());
+    }
+    /**
+     * <pre>
+     * Inlined asset contents, which specify pre-compressed asset data corresponding to a given CSS or JavaScript code
+     * bundle. The server may choose to serve this content rather than performing compression on-the-fly.
+     * </pre>
+     *
+     * <code>repeated .assets.AssetBundle.AssetContent asset = 7;</code>
+     */
+    public java.util.List<tools.elide.assets.AssetBundle.AssetContent.Builder> 
+         getAssetBuilderList() {
+      return getAssetFieldBuilder().getBuilderList();
+    }
+    private com.google.protobuf.RepeatedFieldBuilderV3<
+        tools.elide.assets.AssetBundle.AssetContent, tools.elide.assets.AssetBundle.AssetContent.Builder, tools.elide.assets.AssetBundle.AssetContentOrBuilder> 
+        getAssetFieldBuilder() {
+      if (assetBuilder_ == null) {
+        assetBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+            tools.elide.assets.AssetBundle.AssetContent, tools.elide.assets.AssetBundle.AssetContent.Builder, tools.elide.assets.AssetBundle.AssetContentOrBuilder>(
+                asset_,
+                ((bitField0_ & 0x00000008) != 0),
+                getParentForChildren(),
+                isClean());
+        asset_ = null;
+      }
+      return assetBuilder_;
+    }
+
+    private com.google.protobuf.Timestamp generated_;
+    private com.google.protobuf.SingleFieldBuilderV3<
+        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> generatedBuilder_;
+    /**
+     * <pre>
+     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+     * checking for updates to the asset bundle itself.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
+     * @return Whether the generated field is set.
+     */
+    public boolean hasGenerated() {
+      return generatedBuilder_ != null || generated_ != null;
+    }
+    /**
+     * <pre>
+     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+     * checking for updates to the asset bundle itself.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
+     * @return The generated.
+     */
+    public com.google.protobuf.Timestamp getGenerated() {
+      if (generatedBuilder_ == null) {
+        return generated_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : generated_;
+      } else {
+        return generatedBuilder_.getMessage();
+      }
+    }
+    /**
+     * <pre>
+     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+     * checking for updates to the asset bundle itself.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
+     */
+    public Builder setGenerated(com.google.protobuf.Timestamp value) {
+      if (generatedBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        generated_ = value;
+        onChanged();
+      } else {
+        generatedBuilder_.setMessage(value);
+      }
+
+      return this;
+    }
+    /**
+     * <pre>
+     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+     * checking for updates to the asset bundle itself.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
+     */
+    public Builder setGenerated(
+        com.google.protobuf.Timestamp.Builder builderForValue) {
+      if (generatedBuilder_ == null) {
+        generated_ = builderForValue.build();
+        onChanged();
+      } else {
+        generatedBuilder_.setMessage(builderForValue.build());
+      }
+
+      return this;
+    }
+    /**
+     * <pre>
+     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+     * checking for updates to the asset bundle itself.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
+     */
+    public Builder mergeGenerated(com.google.protobuf.Timestamp value) {
+      if (generatedBuilder_ == null) {
+        if (generated_ != null) {
+          generated_ =
+            com.google.protobuf.Timestamp.newBuilder(generated_).mergeFrom(value).buildPartial();
+        } else {
+          generated_ = value;
+        }
+        onChanged();
+      } else {
+        generatedBuilder_.mergeFrom(value);
+      }
+
+      return this;
+    }
+    /**
+     * <pre>
+     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+     * checking for updates to the asset bundle itself.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
+     */
+    public Builder clearGenerated() {
+      if (generatedBuilder_ == null) {
+        generated_ = null;
+        onChanged();
+      } else {
+        generated_ = null;
+        generatedBuilder_ = null;
+      }
+
+      return this;
+    }
+    /**
+     * <pre>
+     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+     * checking for updates to the asset bundle itself.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
+     */
+    public com.google.protobuf.Timestamp.Builder getGeneratedBuilder() {
+      
+      onChanged();
+      return getGeneratedFieldBuilder().getBuilder();
+    }
+    /**
+     * <pre>
+     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+     * checking for updates to the asset bundle itself.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
+     */
+    public com.google.protobuf.TimestampOrBuilder getGeneratedOrBuilder() {
+      if (generatedBuilder_ != null) {
+        return generatedBuilder_.getMessageOrBuilder();
+      } else {
+        return generated_ == null ?
+            com.google.protobuf.Timestamp.getDefaultInstance() : generated_;
+      }
+    }
+    /**
+     * <pre>
+     * Timestamp indicating when this asset manifest was generated. This may be used when calculating `ETags` or when
+     * checking for updates to the asset bundle itself.
+     * </pre>
+     *
+     * <code>.google.protobuf.Timestamp generated = 8;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilderV3<
+        com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
+        getGeneratedFieldBuilder() {
+      if (generatedBuilder_ == null) {
+        generatedBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+            com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder>(
+                getGenerated(),
+                getParentForChildren(),
+                isClean());
+        generated_ = null;
+      }
+      return generatedBuilder_;
+    }
+
+    private boolean styleRewrite_ ;
+    /**
+     * <pre>
+     * Whether style-rewriting is enabled or not, which should indicate the presence of generated style symbol maps, that
+     * must be loaded by the server for SSR.
+     * </pre>
+     *
+     * <code>bool style_rewrite = 9;</code>
+     * @return The styleRewrite.
+     */
+    @java.lang.Override
+    public boolean getStyleRewrite() {
+      return styleRewrite_;
+    }
+    /**
+     * <pre>
+     * Whether style-rewriting is enabled or not, which should indicate the presence of generated style symbol maps, that
+     * must be loaded by the server for SSR.
+     * </pre>
+     *
+     * <code>bool style_rewrite = 9;</code>
+     * @param value The styleRewrite to set.
+     * @return This builder for chaining.
+     */
+    public Builder setStyleRewrite(boolean value) {
+      
+      styleRewrite_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     * Whether style-rewriting is enabled or not, which should indicate the presence of generated style symbol maps, that
+     * must be loaded by the server for SSR.
+     * </pre>
+     *
+     * <code>bool style_rewrite = 9;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearStyleRewrite() {
+      
+      styleRewrite_ = false;
+      onChanged();
       return this;
     }
     @java.lang.Override

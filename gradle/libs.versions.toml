@@ -18,6 +18,7 @@ gson = "2.9.0"
 checker_compat_qual = "2.5.3"
 npm_esbuild = "0.14.47"
 npm_prepack = "0.2.54"
+commons_compress = "1.21"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt"}
@@ -47,3 +48,4 @@ brotli = { group = "com.nixxcode.jvmbrotli", name = "jvmbrotli", version.ref="jv
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 gson_parent = { group = "com.google.code.gson", name = "gson-parent", version.ref = "gson" }
 checker = { group = "org.checkerframework", name = "checker-compat-qual", version.ref = "checker_compat_qual" }
+commons_compress = { group = "org.apache.commons", name = "commons-compress", version.ref = "commons_compress" }

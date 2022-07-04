@@ -27,7 +27,7 @@ esbuild.build(
 ).then(() => {
     if ({{PREPACK}}) {
         const Prepack = require('prepack');
-        console.info("ESBuild bundle step compiled. Packing SSR bundle with Prepack...");
+        console.info("Bundle step completed. Packing SSR bundle with Prepack...");
         const prepacked = Prepack.prepackFileSync([
             '{{OUTFILE}}'
         ], {
@@ -41,8 +41,8 @@ esbuild.build(
         fs.writeFileSync('{{PREPACK_OUTFILE}}', prepacked.code, {
             encoding: 'utf8'
         });
-        console.info("Prepack step complete: pre-compiled SSR bundle ready (mode: {{MODE}}).")
+        console.info("Pre-compile step complete: SSR bundle ready (mode: {{MODE}}).")
     } else {
-        console.info("ESBuild bundle step compiled: embedded SSR bundle ready (mode: {{MODE}}).");
+        console.info("Bundle step completed: embedded SSR bundle ready (mode: {{MODE}}).");
     }
 }, () => process.exit(1));

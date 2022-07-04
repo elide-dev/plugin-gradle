@@ -1,17 +1,40 @@
 package dev.elide.buildtools.gradle.plugin.tasks
 
-import org.gradle.api.DefaultTask
+import com.google.protobuf.Timestamp
+import dev.elide.buildtools.gradle.plugin.ElideExtension
+import dev.elide.buildtools.gradle.plugin.ElidePlugin
+import org.gradle.api.Project
 import org.gradle.api.plugins.BasePlugin
-import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
-import tools.elide.bundler.AssetBundler
+import tools.elide.assets.AssetBundle
+import tools.elide.assets.assetBundle
+import java.time.Instant
 
 /** Task which creates Elide asset specifications for embedding in app JARs. */
-abstract class BundleAssetsBuildTask : DefaultTask() {
-    /** Asset bundler tool. */
-    private val bundler: AssetBundler = AssetBundler.create()
+abstract class BundleAssetsBuildTask : BundleSpecTask<AssetBundle, AssetBundleSpec>() {
+    companion object {
+        const val TASK_NAME = "bundleAssets"
+
+        @JvmStatic public fun isEligible(project: Project): Boolean {
+            return project.plugins.hasPlugin("org.jetbrains.kotlin.jvm")
+        }
+
+        @JvmStatic public fun install(extension: ElideExtension, project: Project) {
+            project.plugins.withId("org.jetbrains.kotlin.jvm") {
+                // we're applying to a JVM Kotlin target. in this case, we're consuming static assets from other
+                // modules  or from within the resource section of this module.
+                val processResources = project.tasks.named(
+                    "processResources",
+                )
+
+                // register task to build embedded asset spec
+                project.tasks.register(TASK_NAME, BundleAssetsBuildTask::class.java) {
+                    it.dependsOn(processResources)
+                }
+            }
+        }
+    }
 
     init {
         description = "Configures an application target for use with ESBuild or Webpack"
@@ -19,17 +42,32 @@ abstract class BundleAssetsBuildTask : DefaultTask() {
 
         // set defaults
         with(project) {
-            // nothing yet
+            // setup asset spec
+            outputSpecName.set(
+                StaticValues.defaultEncoding.fileNamed("app")
+            )
+            bundleEncoding.set(
+                StaticValues.defaultEncoding
+            )
         }
     }
 
-    /** Folder in which to put built bundle targets. */
-    @get:Input
-    @get:Option(
-        option = "outputBundleFolder",
-        description = "Where to put compiled asset catalogs on the filesystem. Typically managed by the plugin.",
-    )
-    abstract val outputBundleFolder: Property<String>
+    /** @inheritDoc */
+    override fun buildAssetCatalog(builderOp: AssetBundleSpec.() -> Unit): AssetBundle {
+        val bundle = assetBundle(builderOp).toBuilder().apply {
+            version = StaticValues.currentVersion
+            generated = Timestamp.newBuilder().setSeconds(Instant.now().epochSecond).build()
+        }.build()
+
+        val digest = fingerprintMessage(
+            bundle,
+        )
+        return if (digest != null) {
+            bundle.toBuilder().setDigest(digest).build()
+        } else {
+            bundle
+        }
+    }
 
     /** Whether to compress assets. */
     @get:Input
@@ -39,7 +77,22 @@ abstract class BundleAssetsBuildTask : DefaultTask() {
     )
     var compress: Boolean = true
 
-    @TaskAction fun buildWriteCatalog() {
-        // Nothing yet.
+    /** Whether to inline assets. */
+    @get:Input
+    @get:Option(
+        option = "inline",
+        description = "Whether to inline assets directly into the catalog, or instead prefer multi-file loading.",
+    )
+    var inline: Boolean = true
+
+    /** @inheritDoc */
+    override fun assetCatalog(): AssetBundleSpec.() -> Unit = {
+        // nothing yet
+    }
+
+    /** @inheritDoc */
+    override fun runAction() {
+        // we only support inline assets at this time
+        if (!inline) throw NotImplementedError("Multi-file asset loading is not yet implemented.")
     }
 }
