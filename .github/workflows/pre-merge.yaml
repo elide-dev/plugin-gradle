@@ -83,6 +83,15 @@ jobs:
             --scan
             --continue
 
+      ## CI: Build
+      - name: "Failure reports"
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: failure-reports
+          path: |
+            build/reports/**/*.*
+
       ## Job: Verify plugin output
       - name: Verify the plugin output
         if: success()

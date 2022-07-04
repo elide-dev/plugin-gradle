@@ -6,9 +6,9 @@
       <key-servers enabled="false"/>
       <trusted-artifacts>
          <trust group="gradle" name="gradle"/>
+         <trust group="info.picocli"/>
          <trust group="org.checkerframework" name="checker-compat-qual"/>
          <trust group="org.codehaus.groovy"/>
-         <trust group="info.picocli" />
          <trust file=".*-javadoc[.]jar" regex="true"/>
          <trust file=".*-sources[.]jar" regex="true"/>
       </trusted-artifacts>
