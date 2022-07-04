@@ -27,7 +27,7 @@ abstract class ElidePlugin : Plugin<Project> {
         }
 
         // if the server-side JVM plugin can be applied (asset context) then do that
-        if (BundleAssetsBuildTask.isEligible(project)) {
+        if (BundleAssetsBuildTask.isEligible(elide, project)) {
             kotlinPluginFound = true
             BundleAssetsBuildTask.install(
                 elide,

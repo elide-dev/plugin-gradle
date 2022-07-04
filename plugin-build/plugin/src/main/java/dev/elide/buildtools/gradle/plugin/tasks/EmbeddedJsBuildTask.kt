@@ -247,6 +247,12 @@ abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBund
                             it.outputs.files.files.single()
                         },
                     )
+                    add(
+                        mainDist.name,
+                        project.tasks.named(genSpecTaskName).map {
+                            it.outputs.files.files.single()
+                        },
+                    )
                 }
 
                 project.tasks.create(TASK_NAME) {
