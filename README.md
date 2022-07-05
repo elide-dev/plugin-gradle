@@ -20,21 +20,22 @@ In particular, this plugin is responsible for configuring and running [`esbuild`
 ### Installing the plugin
 
 It's a standard Gradle plugin, so you should be able to check the latest version at the
-[Gradle Plugins Portal](https://plugins.gradle.org). See below for specific installation instructions.
+[Gradle Plugin Portal](https://plugins.gradle.org/plugin/dev.elide.buildtools.plugin). See below for specific
+installation instructions.
 
 #### From a single-module Gradle project
 
 **Kotlin DSL**
 ```kotlin
 plugins {
-  id("dev.elide.buildtools.plugin") version "(latest version here)"
+  id("dev.elide.buildtools.plugin") version "1.0.0-alpha4"
 }
 ```
 
 **Groovy DSL**
 ```groovy
 plugins {
-    id "dev.elide.buildtools.plugin" version "(latest version here)"
+    id "dev.elide.buildtools.plugin" version "1.0.0-alpha4"
 }
 ```
 
@@ -47,7 +48,7 @@ repositories {
 }
 
 dependencies {
-  implementation("dev.elide.buildtools:elide-gradle-plugin:(latest version here)")
+  implementation("dev.elide.buildtools:elide-gradle-plugin:1.0.0-alpha4")
 }
 ```
 
@@ -58,21 +59,21 @@ repositories {
 }
 
 dependencies {
-  implementation "dev.elide.buildtools:elide-gradle-plugin:(latest version here)"
+  implementation "dev.elide.buildtools:elide-gradle-plugin:1.0.0-alpha4"
 }
 ```
 
 **Kotlin DSL** (via root `build.gradle.kts`)
 ```kotlin
 dependencies {
-  classpath("dev.elide.buildtools:elide-gradle-plugin:(latest version here)")
+  classpath("dev.elide.buildtools:elide-gradle-plugin:1.0.0-alpha4")
 }
 ```
 
 **Groovy DSL** (via root `build.gradle`)
 ```groovy
 dependencies {
-  classpath "dev.elide.buildtools:elide-gradle-plugin:(latest version here)"
+  classpath "dev.elide.buildtools:elide-gradle-plugin:1.0.0-alpha4"
 }
 ```
 
