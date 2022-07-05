@@ -54,6 +54,18 @@ sourceSets.getByName("main").java {
     srcDir("src/model/kotlin")
 }
 
+detekt {
+    source = files(
+        "src/main/java",
+    )
+}
+
+ktlint {
+    filter {
+        exclude("**/model/**")
+    }
+}
+
 gradlePlugin {
     plugins {
         create(PluginCoordinates.ID) {
