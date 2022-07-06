@@ -23,8 +23,8 @@ open class ElideAssetsHandler @Inject constructor(
     private val objects: ObjectFactory
 ) {
     companion object {
-        val defaultManifestFormat = ManifestFormat.TEXT
-        val defaultHashAlgorithm = HashAlgorithm.SHA256
+        val defaultManifestFormat = StaticValues.defaultEncoding
+        val defaultHashAlgorithm = StaticValues.assetHashAlgo
         const val defaultMinimumUncompressedSize: Int = 400
     }
 

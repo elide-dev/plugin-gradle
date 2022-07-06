@@ -5,6 +5,7 @@ import com.google.protobuf.Timestamp
 import dev.elide.buildtools.gradle.plugin.BuildMode
 import dev.elide.buildtools.gradle.plugin.ElideExtension
 import dev.elide.buildtools.gradle.plugin.cfg.ElideJsHandler
+import dev.elide.buildtools.gradle.plugin.cfg.StaticValues
 import dev.elide.buildtools.gradle.plugin.js.BundleTarget
 import dev.elide.buildtools.gradle.plugin.js.BundleTool
 import dev.elide.buildtools.gradle.plugin.js.BundleType

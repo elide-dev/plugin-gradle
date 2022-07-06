@@ -2,6 +2,7 @@ package dev.elide.buildtools.gradle.plugin.tasks
 
 import dev.elide.buildtools.gradle.plugin.ElideExtension
 import dev.elide.buildtools.gradle.plugin.cfg.AssetInfo
+import dev.elide.buildtools.gradle.plugin.cfg.StaticValues
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
