@@ -38,7 +38,6 @@ allprojects {
         outputToConsole.set(true)
         ignoreFailures.set(false)
         enableExperimentalRules.set(true)
-        version.set("0.46.1")
         filter {
             exclude("**/generated/**")
             include("**/kotlin/**")
