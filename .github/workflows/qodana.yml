@@ -23,17 +23,17 @@ jobs:
     timeout-minutes: 30
     steps:
       ## Setup: Checkout Code
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
         with:
           fetch-depth: 0
 
       ## Run Qodana
       - name: 'Qodana Scan'
-        uses: JetBrains/qodana-action@v5.1.0
+        uses: JetBrains/qodana-action@b06a3f2289e63df0b6746cfd80f5af9fb6a6c65a # tag=v5.1.0
 
       ## Upload SARIF
       - name: 'Upload SARIF Report'
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@3f62b754e23e0dd60f91b744033e1dc1654c0ec6 # tag=v2
         with:
           sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
           category: qodana
