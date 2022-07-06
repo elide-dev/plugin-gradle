@@ -215,7 +215,7 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
                 it.outputBundleFolder.set(project.file(
                     "${project.buildDir}/$ASSETS_INTERMEDIATE_FOLDER/main/bundle"
                 ).absolutePath)
-                it.manifestName.set("assets")
+                it.manifestName.set("app")
                 it.manifestFile.set(project.file(
                     // `{outputBundleFolder}/{outputManifestName}.{ext = .pb.*}`
                     "${it.outputBundleFolder.get()}/${it.bundleEncoding.get().fileNamed(it.manifestName.get())}"
