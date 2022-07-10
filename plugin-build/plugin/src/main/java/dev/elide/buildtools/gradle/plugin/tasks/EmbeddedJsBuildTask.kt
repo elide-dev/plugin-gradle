@@ -186,7 +186,8 @@ abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBund
 
         // Setup build tasks for the provided project.
         @Suppress("LongParameterList")
-        @JvmStatic fun setup(
+        @JvmStatic
+        fun setup(
             project: Project,
             fetchSources: Copy,
             kotlinJsLink: Task,
