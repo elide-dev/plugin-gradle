@@ -9,7 +9,6 @@ import dev.elide.buildtools.gradle.plugin.BuildMode
 import tools.elide.assets.EmbeddedScriptLanguage
 import tools.elide.assets.ManifestFormat
 import tools.elide.crypto.HashAlgorithm
-import tools.elide.data.CompressionMode
 
 plugins {
     kotlin("jvm")
@@ -33,9 +32,7 @@ elide {
                 }
 
                 compression {
-                    modes(CompressionMode.GZIP)
-                    minimumSizeBytes(400)
-                    keepAllVariants()
+                    minimumSizeBytes(1)
                     forceVariants()
                 }
             }

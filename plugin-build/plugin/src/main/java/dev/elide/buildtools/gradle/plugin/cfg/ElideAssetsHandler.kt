@@ -213,7 +213,7 @@ open class ElideAssetsHandler @Inject constructor(
     open class CompressionHandler {
         internal val enableCompression: AtomicBoolean = AtomicBoolean(true)
         internal val minimumUncompressedSize: AtomicInteger = AtomicInteger(defaultMinimumUncompressedSize)
-        internal val keepOnlyBest: AtomicBoolean = AtomicBoolean(true)
+        internal val keepOnlyBest: AtomicBoolean = AtomicBoolean(false)
         internal val forceKeepAll: AtomicBoolean = AtomicBoolean(false)
         internal val compressionAlgorithms: AtomicReference<EnumSet<CompressionMode>> = AtomicReference(EnumSet.of(
             // `IDENTITY` is implied
