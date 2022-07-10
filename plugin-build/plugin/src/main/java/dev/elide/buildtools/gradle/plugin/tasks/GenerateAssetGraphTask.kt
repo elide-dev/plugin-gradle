@@ -67,7 +67,7 @@ abstract class GenerateAssetGraphTask @Inject constructor(
             tagConfig: AssetTagConfig,
             digest: ByteArray,
         ): String {
-            val (algorithm, tailSize, rounds) = tagConfig
+            val (algorithm, _, rounds) = tagConfig
             val algo = if (algorithm == HashAlgorithm.IDENTITY) {
                 HashAlgorithm.SHA256
             } else {
@@ -92,7 +92,7 @@ abstract class GenerateAssetGraphTask @Inject constructor(
                     digestTarget = digester.digest(digestTarget)
                 }
             }
-            return digest.takeLast(tailSize).joinToString("") {
+            return digest.joinToString("") {
                 java.lang.Byte.toUnsignedInt(it).toString(radix = 16).padStart(2, '0')
             }
         }
