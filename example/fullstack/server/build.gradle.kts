@@ -53,6 +53,10 @@ elide {
                 sourceFile("src/main/assets/some-script.js")
             }
 
+            script("main.ui") {
+                from(project(":example:fullstack:browser"))
+            }
+
             // text: `util.humans`
             text("util.humans") {
                 sourceFile("src/main/assets/humans.txt")

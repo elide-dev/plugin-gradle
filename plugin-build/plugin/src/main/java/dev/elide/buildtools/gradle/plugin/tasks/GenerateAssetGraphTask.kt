@@ -49,6 +49,7 @@ import java.util.concurrent.ConcurrentSkipListMap
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.stream.Collectors
 import java.util.stream.IntStream
+import java.util.stream.Stream
 import java.util.zip.GZIPOutputStream
 import javax.inject.Inject
 import kotlin.streams.toList
@@ -59,6 +60,8 @@ abstract class GenerateAssetGraphTask @Inject constructor(
     objects: ObjectFactory,
 ) : BundleBaseTask() {
     companion object {
+        private const val BROWSER_DIST_DEFAULT = "assetDist"
+
         /** Generate a trimmed digest which should be used as an asset's "tag". */
         @JvmStatic
         @VisibleForTesting
@@ -326,7 +329,40 @@ abstract class GenerateAssetGraphTask @Inject constructor(
             val moduleId = entry.key
             val assetInfo = entry.value
             val paths = assetInfo.paths
-            val files = paths.stream().parallel().map {
+            val depPaths = assetInfo.projectDeps
+
+            // resolve files for each project dependency
+            val resolvedProjectDeps = depPaths.map {
+                it.projectPath.get() to (it.sourceConfiguration.get() ?: BROWSER_DIST_DEFAULT)
+            }.mapNotNull {
+                val (projectTarget, configSource) = it
+                if (projectTarget == null) {
+                    null
+                } else {
+                    val project = project.findProject(projectTarget)
+                    if (project == null) {
+                        null
+                    } else {
+                        project to configSource
+                    }
+                }
+            }.mapNotNull {
+                val (_, sourceConfig) = it
+                project.configurations.findByName(sourceConfig)
+            }.flatMap {
+                it.resolve()
+            }.flatMap {
+                require(it.exists()) {
+                    "Project dependency mapping '${it.path}' (for module '$moduleId') does not exist"
+                }
+                if (it.isDirectory) {
+                    it.listFiles()?.toList() ?: emptyList()
+                } else {
+                    listOf(it)
+                }
+            }
+
+            val staticFiles = paths.stream().parallel().map {
                 val file = project.file(it)
                 require(file.exists()) {
                     "Failed to resolve bundled asset file: '$it'"
@@ -334,6 +370,13 @@ abstract class GenerateAssetGraphTask @Inject constructor(
                 project.logger.debug(
                     "Processing asset for module ID '$moduleId': ${file.path}"
                 )
+                file
+            }
+            val allFiles = Stream.concat(
+                staticFiles,
+                resolvedProjectDeps.stream(),
+            )
+            val allResolvedFiles = allFiles.parallel().map { file ->
                 val fileBytes = file.inputStream().buffered().use { buf ->
                     buf.readAllBytes()
                 }
@@ -361,7 +404,7 @@ abstract class GenerateAssetGraphTask @Inject constructor(
             )
             AssetContent(
                 assetInfo = assetInfo,
-                assets = files,
+                assets = allResolvedFiles,
             )
         }.sorted { left, right ->
             left.assetInfo.module.compareTo(
@@ -548,6 +591,10 @@ abstract class GenerateAssetGraphTask @Inject constructor(
             // compression is disabled
             builder
         } else {
+            require(builder.assetCount > 0) {
+                "Cannot build descriptor with no asset payloads"
+            }
+
             // for each indexed asset in the set, split off a job which then splits off for each configured compression
             // mode. each job generates its own variant from the read-only `IDENTITY` data already present.
             IntStream.of(builder.assetCount - 1).parallel().mapToObj { idx ->

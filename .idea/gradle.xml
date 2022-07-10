@@ -26,6 +26,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/example" />
             <option value="$PROJECT_DIR$/example/fullstack" />
+            <option value="$PROJECT_DIR$/example/fullstack/browser" />
             <option value="$PROJECT_DIR$/example/fullstack/node" />
             <option value="$PROJECT_DIR$/example/fullstack/server" />
             <option value="$PROJECT_DIR$/example/mixed" />

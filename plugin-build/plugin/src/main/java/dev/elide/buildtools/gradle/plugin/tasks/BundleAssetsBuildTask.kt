@@ -13,6 +13,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.options.Option
 import org.gradle.language.jvm.tasks.ProcessResources
+import java.util.TreeMap
 import java.util.TreeSet
 import java.util.concurrent.ConcurrentSkipListMap
 import java.util.stream.Collectors
@@ -23,6 +24,7 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
     companion object {
         private const val TASK_NAME = "bundleAssets"
         private const val ASSETS_INTERMEDIATE_FOLDER = "serverAssets"
+        private const val BROWSER_DIST_DEFAULT = "assetDist"
 
         @JvmStatic fun isEligible(extension: ElideExtension, project: Project): Boolean {
             return (
@@ -42,6 +44,23 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
         @JvmStatic fun install(extension: ElideExtension, project: Project) {
             applyPlugins(project) {
                 project.afterEvaluate {
+                    if (extension.server.assets.hasAnyProjectDeps()) {
+                        extension.server.assets.getAllProjectDeps().forEach {
+                            val (projectPath, _) = it
+                            project.evaluationDependsOn(
+                                projectPath,
+                            )
+                        }
+                    }
+                    if (extension.server.hasSsrBundle()) {
+                        val target = extension.server.ssrConfig.targetProject.get()
+                        if (target != null && target.isNotBlank()) {
+                            project.evaluationDependsOn(
+                                target
+                            )
+                        }
+                    }
+
                     installTasks(
                         extension,
                         project,
@@ -95,9 +114,9 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
             val targetProject = extension.server.ssrConfig.targetProject.get()
             val targetConfig = extension.server.ssrConfig.targetConfiguration.get()
             if (targetProject?.isNotBlank() != true || targetConfig?.isNotBlank() != true) {
-                throw IllegalStateException(
+                error(
                     "Failed to resolve target project or configuration for SSR bundle. " +
-                        "This is an internal error; please report it to the Elide build-tools authors."
+                    "This is an internal error; please report it to the Elide build-tools authors."
                 )
             }
 
@@ -135,7 +154,7 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
         // If the user has configured served assets, this method is called to configure a set of tasks which process and
         // package those assets, in addition to generating metadata files which describe them to the server at runtime.
         @JvmStatic
-        @Suppress("SpreadOperator")
+        @Suppress("SpreadOperator", "ComplexMethod", "LongMethod")
         fun buildAssetTasks(extension: ElideExtension, project: Project): List<TaskProvider<out Task>> {
             val allTasks = ArrayList<TaskProvider<out Task>>()
             val assetConfigs = extension.server.assets.assets
@@ -156,7 +175,9 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
                     }
                 }
                 val targetPaths = assetConfig.filePaths.get()
-                if (targetPaths == null || targetPaths.isEmpty()) error(
+                val projectDeps = assetConfig.projectDeps.get()
+
+                if ((targetPaths == null || targetPaths.isEmpty()) && projectDeps.isEmpty()) error(
                     "Empty source set for module '$moduleId': please remove it or add sources"
                 )
                 AssetInfo(
@@ -165,17 +186,105 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
                     directDeps = assetDeps,
                     copySpec = targetCopySpec,
                     paths = targetPaths,
+                    projectDeps = projectDeps,
                 )
             }.sorted { left, right ->
                 left.module.compareTo(right.module)
             }.collect(Collectors.toMap({ it.module }, { it }, { left, _ ->
-                throw IllegalStateException(
+                error(
                     "Duplicate asset module ID '${left.module}': " +
                     "please remove one of the duplicate entries from the configuration"
                 )
             }, {
                 ConcurrentSkipListMap()
             }))
+
+            // build a set of project dependencies to affix. these need to be dependencies of the `assetsCopy` step, if
+            // they exist, to make Gradle build targets which are used as assets.
+            val projectDeps = allSpecs.values.stream().flatMap { assetInfo ->
+                assetInfo.projectDeps.stream().map {
+                    assetInfo.module to it
+                }
+            }.map {
+                // resolve target project
+                val (moduleId, bundle) = it
+                val projectName = bundle.projectPath.get()
+                require(projectName != null && projectName.isNotBlank()) {
+                    "Failed to resolve `null` dependency for project '${project.path}'"
+                }
+                val targetProject = project.findProject(projectName)
+                require(targetProject != null) {
+                    "Failed to resolve project dependency '$projectName' for asset module '$moduleId'"
+                }
+                // calculate the target configuration name
+                val configurationName = bundle.targetConfiguration.get() ?: BROWSER_DIST_DEFAULT
+                val fullpath = targetProject.path + ":" + configurationName
+
+                // resolve the configuration on the target side
+                val targetConfig = targetProject.configurations.findByName(
+                    configurationName
+                )
+                require(targetConfig != null) {
+                    "Failed to resolve project configuration '$projectName'/'$configurationName' for asset " +
+                    "module '$moduleId'"
+                }
+
+                // resolve the configuration on the consumer side
+                if (bundle.managedConfiguration.get()) {
+                    // the developer has asked us to create a consumer-side configuration on their behalf, so one does
+                    // not yet exist.
+                    val consumer = project.configurations.findByName(
+                        BROWSER_DIST_DEFAULT
+                    )
+                    // spawn the configuration
+                    val consumingConfig = consumer ?: project.configurations.create(BROWSER_DIST_DEFAULT) { config ->
+                        config.isCanBeResolved = true
+                        config.isCanBeConsumed = false
+                    }
+                    fullpath to (
+                        targetProject to (targetConfig to consumingConfig)
+                    )
+                } else {
+                    val consumerConfigName = bundle.sourceConfiguration.get()
+                    require(consumerConfigName != null) {
+                        "Failed to resolve source configuration name for asset module '$moduleId'"
+                    }
+                    val consumerConfig = project.configurations.findByName(
+                        consumerConfigName,
+                    )
+                    require(consumerConfig != null) {
+                        "Failed to resolve source configuration '$consumerConfigName' for asset module '$moduleId'"
+                    }
+
+                    fullpath to (
+                        targetProject to (targetConfig to consumerConfig)
+                    )
+                }
+            }.collect(
+                Collectors.toMap(
+                    { it.first },
+                    { it.second },
+                    { left, _, -> left },
+                    { TreeMap() }
+                )
+            )
+
+            // if our project dependency calculations resulted in dependencies, we should assign them to the project
+            // level dependencies before proceeding.
+            if (projectDeps.isNotEmpty()) {
+                project.dependencies.apply {
+                    projectDeps.values.forEach { entry ->
+                        val (targetProject, configurations) = entry
+                        val (source, target) = configurations
+                        add(source.name, project(
+                            mapOf(
+                                "path" to targetProject.path,
+                                "configuration" to target.name,
+                            )
+                        ))
+                    }
+                }
+            }
 
             // build a map of source files => owning modules, so we can enforce the rule that only one module owns each
             // source file. this is later passed on, so it can be expressed to the server, and also used to compute the
@@ -185,7 +294,7 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
                     path to asset.module
                 }
             }.collect(Collectors.toMap({ it.first }, { it.second }, { left, _ ->
-                throw IllegalStateException(
+                error(
                     "Duplicate source path '$left': mapped for more than one asset module"
                 )
             }, {
@@ -197,7 +306,22 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
 
             // set up a copy job to copy all assets into the asset root.
             val assetsCopy = project.tasks.register("copyServerAssets", Copy::class.java) { copy ->
+                // copy from source-file-based tasks
                 copy.from(*(allFiles.toTypedArray()))
+
+                // copy from declared project dependencies
+                if (projectDeps.isNotEmpty()) {
+                    projectDeps.values.forEach { spec ->
+                        val (_, configurations) = spec
+                        val (_, consumerConfig) = configurations
+
+                        copy.from(consumerConfig) { copySpec ->
+                            copySpec.include("**/*")
+                        }
+                    }
+                }
+
+                // copy all into main assets directory
                 copy.into(
                     "${project.buildDir}/$ASSETS_INTERMEDIATE_FOLDER/main/assets"
                 )
