@@ -59,9 +59,7 @@ abstract class GenerateAssetGraphTask @Inject constructor(
     objects: ObjectFactory,
 ) : BundleBaseTask() {
     companion object {
-        /**
-         * Generate a trimmed digest which should be used as an asset's "tag".
-         */
+        /** Generate a trimmed digest which should be used as an asset's "tag". */
         @JvmStatic
         @VisibleForTesting
         internal fun generateAssetToken(
@@ -268,7 +266,7 @@ abstract class GenerateAssetGraphTask @Inject constructor(
                     bundle,
                     encoding,
                 )
-                else -> throw IllegalStateException(
+                else -> error(
                     "Unrecognized bundle encoding: $${encoding.name}"
                 )
             }
@@ -330,10 +328,8 @@ abstract class GenerateAssetGraphTask @Inject constructor(
             val paths = assetInfo.paths
             val files = paths.stream().parallel().map {
                 val file = project.file(it)
-                if (!file.exists()) {
-                    throw IllegalStateException(
-                        "Failed to resolve bundled asset file: '$it'"
-                    )
+                require(file.exists()) {
+                    "Failed to resolve bundled asset file: '$it'"
                 }
                 project.logger.debug(
                     "Processing asset for module ID '$moduleId': ${file.path}"
@@ -358,9 +354,11 @@ abstract class GenerateAssetGraphTask @Inject constructor(
                     content = fileBytes,
                     file = file,
                 )
-            }.collect(Collectors.toCollection {
-                ConcurrentLinkedQueue()
-            })
+            }.collect(
+                Collectors.toCollection {
+                    ConcurrentLinkedQueue()
+                }
+            )
             AssetContent(
                 assetInfo = assetInfo,
                 assets = files,
@@ -369,13 +367,14 @@ abstract class GenerateAssetGraphTask @Inject constructor(
             left.assetInfo.module.compareTo(
                 right.assetInfo.module
             )
-        }.collect(Collectors.toMap({ it.assetInfo.module }, { it }, { _, _ ->
-            throw IllegalStateException("Duplicate module ID")
-        }, {
-            ConcurrentSkipListMap()
-        }))
+        }.collect(
+            Collectors.toMap({ it.assetInfo.module }, { it }, { _, _ ->
+                error("Duplicate module ID")
+            }, { ConcurrentSkipListMap() })
+        )
     }
 
+    @Suppress("LongMethod")
     private fun buildDependencySortedAssetBundle(
         dependencyGraph: ImmutableNetwork<AssetModuleId, AssetDependency>,
         assetSpecs: Map<AssetModuleId, AssetContent>,
@@ -383,7 +382,7 @@ abstract class GenerateAssetGraphTask @Inject constructor(
     ): List<Pair<AssetBundle.Builder, AssetContent>> {
         return TopologicalGraphIterator.map(dependencyGraph.asGraph()) { moduleId ->
             // resolve module content
-            val moduleContent = assetSpecs[moduleId] ?: throw IllegalStateException(
+            val moduleContent = assetSpecs[moduleId] ?: error(
                 "Failed to resolve known-good module at ID '$moduleId'"
             )
 
@@ -415,13 +414,15 @@ abstract class GenerateAssetGraphTask @Inject constructor(
                                 token,
                             )
                             partial.addAsset(content)
-                            asset.add(scriptAsset {
-                                this.filename = content.filename
-                                this.token = token
-                                this.script = javaScript {
-                                    // @TODO(sgammon): script injection customization from build script or server?
+                            asset.add(
+                                scriptAsset {
+                                    this.filename = content.filename
+                                    this.token = token
+                                    this.script = javaScript {
+                                        // @TODO(sgammon): script injection customization from build script or server?
+                                    }
                                 }
-                            })
+                            )
                         }
                         dependencies = assetDependencies {
                             direct.addAll(directDeps)
@@ -449,13 +450,15 @@ abstract class GenerateAssetGraphTask @Inject constructor(
                                 token,
                             )
                             partial.addAsset(content)
-                            asset.add(styleAsset {
-                                this.filename = content.filename
-                                this.token = token
-                                this.stylesheet = stylesheet {
-                                    // @TODO(sgammon): sheet injection customization from build script or server?
+                            asset.add(
+                                styleAsset {
+                                    this.filename = content.filename
+                                    this.token = token
+                                    this.stylesheet = stylesheet {
+                                        // @TODO(sgammon): sheet injection customization from build script or server?
+                                    }
                                 }
-                            })
+                            )
                         }
                         dependencies = assetDependencies {
                             direct.addAll(directDeps)
@@ -531,7 +534,7 @@ abstract class GenerateAssetGraphTask @Inject constructor(
         ).build()
     }
 
-    @Suppress("UNUSED_PARAMETER")
+    @Suppress("UNUSED_PARAMETER", "LongMethod", "ComplexMethod")
     private fun buildDescriptorVariants(
         hashAlgorithm: HashAlgorithm,
         builder: AssetBundle.Builder,
@@ -590,10 +593,12 @@ abstract class GenerateAssetGraphTask @Inject constructor(
                 }
 
                 // compress the data using the specified compression mode.
-                assetIdx to (mode to compressAssetData(
-                    mode,
-                    rawContent,
-                ))
+                assetIdx to (
+                    mode to compressAssetData(
+                        mode,
+                        rawContent,
+                    )
+                )
             }.filter {
                 // if the compressed output data is null, it means the compression mode in question is not supported or
                 // could not be loaded; that condition logs its own warning.
@@ -619,10 +624,12 @@ abstract class GenerateAssetGraphTask @Inject constructor(
                     data = dataContainer {
                         raw = ByteString.copyFrom(compressed)
                     }
-                    integrity.add(dataFingerprint {
-                        hash = hashAlgorithm
-                        fingerprint = ByteString.copyFrom(digest)
-                    })
+                    integrity.add(
+                        dataFingerprint {
+                            hash = hashAlgorithm
+                            fingerprint = ByteString.copyFrom(digest)
+                        }
+                    )
                 }
             }.collect(Collectors.toMap({ it.first }, {
                 // sort inner set by compression mode to make sure the output of this method remains deterministic.
@@ -730,7 +737,7 @@ abstract class GenerateAssetGraphTask @Inject constructor(
         // resolve it here safely.
         return (assetData.variantList.find { candidate ->
             candidate.compression == CompressionMode.IDENTITY
-        } ?: throw IllegalStateException(
+        } ?: error(
             "Failed to resolve payload of type `IDENTITY`."
         )).data.raw.toByteArray()
     }

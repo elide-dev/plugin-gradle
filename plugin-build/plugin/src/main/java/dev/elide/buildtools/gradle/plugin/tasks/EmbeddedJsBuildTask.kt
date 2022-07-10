@@ -185,6 +185,7 @@ abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBund
         }
 
         // Setup build tasks for the provided project.
+        @Suppress("LongParameterList")
         @JvmStatic fun setup(
             project: Project,
             fetchSources: Copy,
@@ -221,7 +222,7 @@ abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBund
                         jsExtension,
                     )
                 }
-            } else throw IllegalArgumentException(
+            } else error(
                 "Unsupported bundle tool/target combination: $tool/$target"
             )
         }
@@ -267,7 +268,9 @@ abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBund
             }
         }
 
-        @JvmStatic fun setupEmbeddedEsbuildTask(
+        @Suppress("LongParameterList", "LongMethod")
+        @JvmStatic
+        fun setupEmbeddedEsbuildTask(
             mode: BuildMode,
             project: Project,
             fetchSources: Copy,
@@ -393,7 +396,7 @@ abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBund
             )
         }
 
-        @Suppress("UNUSED_PARAMETER")
+        @Suppress("UNUSED_PARAMETER", "LongParameterList")
         @JvmStatic
         fun setupBrowserWebpackBuildTask(
             mode: BuildMode,

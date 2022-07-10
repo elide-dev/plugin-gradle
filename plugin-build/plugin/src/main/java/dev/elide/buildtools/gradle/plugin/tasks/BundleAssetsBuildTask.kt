@@ -156,7 +156,7 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
                     }
                 }
                 val targetPaths = assetConfig.filePaths.get()
-                if (targetPaths == null || targetPaths.isEmpty()) throw IllegalStateException(
+                if (targetPaths == null || targetPaths.isEmpty()) error(
                     "Empty source set for module '$moduleId': please remove it or add sources"
                 )
                 AssetInfo(
