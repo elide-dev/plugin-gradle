@@ -1,8 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="browser">
     <output-path>$PROJECT_DIR$/example/fullstack/browser/build/libs</output-path>
-    <root id="archive" name="browser.jar">
-      <element id="module-output" name="elide-gradle-plugin.example.fullstack.browser.main" />
-    </root>
+    <root id="archive" name="browser.jar" />
   </artifact>
 </component>

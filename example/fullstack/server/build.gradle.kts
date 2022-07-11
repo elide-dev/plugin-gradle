@@ -24,7 +24,7 @@ elide {
         }
         assets {
             bundler {
-                format(ManifestFormat.TEXT)
+                format(ManifestFormat.BINARY)
                 digestAlgorithm(HashAlgorithm.SHA256)
 
                 tagGenerator {
