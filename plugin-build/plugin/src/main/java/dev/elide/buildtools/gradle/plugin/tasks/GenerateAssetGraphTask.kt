@@ -707,11 +707,7 @@ abstract class GenerateAssetGraphTask @Inject constructor(
                 // by compression mode -- unless we expect to make decisions based on the size of each compressed data
                 // variant, in which case it is ordered by size.
                 val wrapset = ConcurrentSkipListSet<CompressedData> { left, right ->
-                    if (resolvedConfig.keepBest) {
-                        left.size.compareTo(right.size)
-                    } else {
-                        left.compression.compareTo(right.compression)
-                    }
+                    left.size.compareTo(right.size)
                 }
                 wrapset.addAll(leftSet)
                 wrapset.addAll(rightSet)
