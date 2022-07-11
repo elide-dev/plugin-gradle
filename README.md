@@ -1,7 +1,7 @@
 
 # Elide Plugin for Gradle
 
-![alpha](https://img.shields.io/badge/status-alpha-yellow.svg)
+![beta](https://img.shields.io/badge/status-beta-blue.svg)
 [![CI](https://github.com/elide-dev/buildtools/actions/workflows/pre-merge.yaml/badge.svg)](https://github.com/elide-dev/buildtools/actions/workflows/pre-merge.yaml)
 [![Kotlin](https://img.shields.io/badge/kotlin-1.7.10-blue.svg?logo=kotlin)](http://kotlinlang.org)
 [![Gradle](https://img.shields.io/badge/gradle-7.x-blue.svg?logo=gradle)](http://gradle.org)
@@ -31,20 +31,20 @@ below for specific installation and use instructions.
 **Kotlin DSL**
 ```kotlin
 plugins {
-  id("dev.elide.buildtools.plugin") version "1.0.0-beta2"
+  id("dev.elide.buildtools.plugin") version "1.0.0-beta3"
 }
 ```
 
 **Groovy DSL**
 ```groovy
 plugins {
-    id "dev.elide.buildtools.plugin" version "1.0.0-beta2"
+    id "dev.elide.buildtools.plugin" version "1.0.0-beta3"
 }
 ```
 
 #### Plugin coordinates
 
-- **Version:** `1.0.0-beta2`
+- **Version:** `1.0.0-beta3`
 - **Plugin ID:** `dev.elide.buildtools.plugin`
 - **Classpath Coordinate:** `dev.elide.buildtools:plugin`
 
