@@ -263,7 +263,7 @@ abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, EmbeddedBund
                     it.dependsOn(targetBundleTask)
                     it.dependsOn(targetEmbeddedTask)
                 }
-                project.tasks.named("build") {
+                project.tasks.named("assemble") {
                     it.dependsOn(TASK_NAME)
                 }
             }
