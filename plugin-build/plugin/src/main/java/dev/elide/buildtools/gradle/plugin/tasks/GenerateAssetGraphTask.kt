@@ -2,6 +2,8 @@
 
 package dev.elide.buildtools.gradle.plugin.tasks
 
+import com.aayushatharva.brotli4j.Brotli4jLoader
+import com.aayushatharva.brotli4j.encoder.Encoder
 import com.google.common.annotations.VisibleForTesting
 import com.google.common.graph.ElementOrder
 import com.google.common.graph.ImmutableNetwork
@@ -31,38 +33,48 @@ import tools.elide.assets.AssetBundleKt.styleBundle
 import tools.elide.assets.ManifestFormat
 import tools.elide.assets.assetBundle
 import tools.elide.crypto.HashAlgorithm
-import tools.elide.data.CompressedData
-import tools.elide.data.CompressionMode
-import tools.elide.data.compressedData
-import tools.elide.data.dataContainer
-import tools.elide.data.dataFingerprint
+import tools.elide.data.*
 import tools.elide.page.ContextKt.ScriptsKt.javaScript
 import tools.elide.page.ContextKt.StylesKt.stylesheet
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.IOException
 import java.io.OutputStream
 import java.nio.charset.StandardCharsets
 import java.time.Instant
-import java.util.Base64
+import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.ConcurrentSkipListMap
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 import java.util.stream.Stream
+import java.util.zip.CRC32
 import java.util.zip.Deflater
+import java.util.zip.DeflaterOutputStream
 import javax.inject.Inject
-import kotlin.math.roundToInt
 import kotlin.streams.toList
 
 /** Task to interpret server-side asset configuration and content into a compiled asset bundle. */
-@Suppress("UnstableApiUsage", "SameParameterValue")
+@Suppress("UnstableApiUsage", "SameParameterValue", "LargeClass")
 abstract class GenerateAssetGraphTask @Inject constructor(
     objects: ObjectFactory,
 ) : BundleBaseTask() {
     companion object {
         private const val BROWSER_DIST_DEFAULT = "assetDist"
-        private const val DEFAULT_COMPRESSION_BUFFER_MULTIPLE = 1.5
+        private const val GZIP_BUFFER_SIZE = 1024
+        private const val BROTLI_LEVEL = 11
+        private const val BROTLI_WINDOW = 24
+
+        // Indicate whether Brotli can be loaded and used in this environment.
+        @Suppress("TooGenericExceptionCaught", "SwallowedException")
+        private fun brotliSupported(): Boolean {
+            return try {
+                Brotli4jLoader.isAvailable()
+            } catch (thr: Throwable) {
+                false
+            }
+        }
 
         /** Generate a trimmed digest which should be used as an asset's "tag". */
         @JvmStatic
@@ -323,6 +335,7 @@ abstract class GenerateAssetGraphTask @Inject constructor(
         return this.assetGraphBuilder.build()
     }
 
+    @Suppress("LongMethod")
     private fun buildAssetSpecMap(
         assetModules: Map<AssetModuleId, AssetInfo>,
         hashAlgorithm: HashAlgorithm,
@@ -792,21 +805,37 @@ abstract class GenerateAssetGraphTask @Inject constructor(
         )).data.raw.toByteArray()
     }
 
-    private fun compressAssetData(mode: CompressionMode, data: ByteArray): Pair<Int, ByteArray>? = when (mode) {
+    private fun compressAssetData(mode: CompressionMode, data: ByteArray): Pair<Int, ByteArray>? = when {
         // `IDENTITY` mode uses no compression.
-        CompressionMode.IDENTITY -> data.size to data
+        mode == CompressionMode.IDENTITY -> data.size to data
 
-        CompressionMode.GZIP -> {
-            val deflater = Deflater(Deflater.BEST_COMPRESSION)
-            deflater.setInput(data)
-            deflater.finish()
-            val outbuf = ByteArray((data.size * DEFAULT_COMPRESSION_BUFFER_MULTIPLE).roundToInt())
-            val length = deflater.deflate(outbuf)
-
-            // resize to actually-written bytes
-            length to ByteArray(length) {
-                outbuf[it]
+        mode == CompressionMode.GZIP -> {
+            val baos = ByteArrayOutputStream()
+            val gzipOut = OptimizedGzipOutputStream(baos)
+            gzipOut.use { compressor ->
+                compressor.write(data)
             }
+            val compressed = baos.toByteArray()
+            compressed.size to compressed
+        }
+
+        mode == CompressionMode.DEFLATE -> {
+            val baos = ByteArrayOutputStream()
+            val deflater = Deflater(Deflater.BEST_COMPRESSION)
+            val gzipOut = DeflaterOutputStream(baos, deflater, GZIP_BUFFER_SIZE)
+            gzipOut.use { compressor ->
+                compressor.write(data)
+            }
+            val compressed = baos.toByteArray()
+            compressed.size to compressed
+        }
+
+        brotliSupported() && mode == CompressionMode.BROTLI -> {
+            val encoderParams = Encoder.Parameters()
+            encoderParams.setQuality(BROTLI_LEVEL)
+            encoderParams.setWindow(BROTLI_WINDOW)
+            val compressed = Encoder.compress(data, encoderParams)
+            compressed.size to compressed
         }
 
         else -> {
@@ -814,6 +843,130 @@ abstract class GenerateAssetGraphTask @Inject constructor(
                 "Compression mode is not supported yet: '${mode.name}'. Skipping variant."
             )
             null
+        }
+    }
+
+    @Suppress("MagicNumber")
+    class OptimizedGzipOutputStream(delegate: OutputStream) : DeflaterOutputStream(
+        delegate,
+        Deflater(Deflater.BEST_COMPRESSION, true),
+        GZIP_BUFFER_SIZE,
+        true,
+    ) {
+        companion object {
+            /*
+             * GZIP header magic number.
+             */
+            private const val GZIP_MAGIC = 0x8b1f
+
+            /*
+             * Trailer size in bytes.
+             *
+             */
+            private const val TRAILER_SIZE = 8
+        }
+
+        /**
+         * CRC-32 of uncompressed data.
+         */
+        private var crc = CRC32()
+
+        init {
+            writeHeader()
+            crc.reset()
+        }
+
+        /** Writes GZIP member header. */
+        @Throws(IOException::class)
+        private fun writeHeader() {
+            out.write(
+                byteArrayOf(
+                    GZIP_MAGIC.toByte(),
+                    (GZIP_MAGIC shr 8).toByte(), // Magic number (short)
+                    Deflater.DEFLATED.toByte(), // Compression method (CM)
+                    0, // Flags (FLG)
+                    0, // Modification time MTIME (int)
+                    0, // Modification time MTIME (int)
+                    0, // Modification time MTIME (int)
+                    0, // Modification time MTIME (int)
+                    0, // Extra flags
+                    0 // Operating system (OS)
+                )
+            )
+        }
+
+        /*
+         * Writes GZIP member trailer to a byte array, starting at a given
+         * offset.
+         */
+        @Throws(IOException::class)
+        private fun writeTrailer(buf: ByteArray, offset: Int) {
+            writeInt(crc.value.toInt(), buf, offset) // CRC-32 of uncompressed data
+            writeInt(def.totalIn, buf, offset + 4) // Number of uncompressed bytes
+        }
+
+        /*
+         * Writes integer in Intel byte order to a byte array, starting at a
+         * given offset.
+         */
+        @Throws(IOException::class)
+        private fun writeInt(i: Int, buf: ByteArray, offset: Int) {
+            writeShort(i and 0xffff, buf, offset)
+            writeShort(i shr 16 and 0xffff, buf, offset + 2)
+        }
+
+        /*
+         * Writes short integer in Intel byte order to a byte array, starting
+         * at a given offset
+         */
+        @Throws(IOException::class)
+        private fun writeShort(s: Int, buf: ByteArray, offset: Int) {
+            buf[offset] = (s and 0xff).toByte()
+            buf[offset + 1] = (s shr 8 and 0xff).toByte()
+        }
+
+        /**
+         * Writes array of bytes to the compressed output stream. This method
+         * will block until all the bytes are written.
+         * @param buf the data to be written
+         * @param off the start offset of the data
+         * @param len the length of the data
+         * @exception IOException If an I/O error has occurred.
+         */
+        @Synchronized
+        @Throws(IOException::class)
+        override fun write(buf: ByteArray, off: Int, len: Int) {
+            super.write(buf, off, len)
+            crc.update(buf, off, len)
+        }
+
+        /**
+         * Finishes writing compressed data to the output stream without closing
+         * the underlying stream. Use this method when applying multiple filters
+         * in succession to the same output stream.
+         * @exception IOException if an I/O error has occurred
+         */
+        @Throws(IOException::class)
+        override fun finish() {
+            if (!def.finished()) {
+                def.finish()
+                while (!def.finished()) {
+                    var len = def.deflate(buf, 0, buf.size)
+                    if (def.finished() && len <= buf.size - TRAILER_SIZE) {
+                        // last deflater buffer. Fit trailer at the end
+                        writeTrailer(buf, len)
+                        len += TRAILER_SIZE
+                        out.write(buf, 0, len)
+                        return
+                    }
+                    if (len > 0) out.write(buf, 0, len)
+                }
+                // if we can't fit the trailer at the end of the last
+                // deflater buffer, we write it separately
+                val trailer = ByteArray(TRAILER_SIZE)
+                writeTrailer(trailer, 0)
+                out.write(trailer)
+            }
         }
     }
 }

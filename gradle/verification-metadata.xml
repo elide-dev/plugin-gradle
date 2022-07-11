@@ -6,6 +6,7 @@
       <key-servers enabled="false"/>
       <trusted-artifacts>
          <trust group="gradle" name="gradle"/>
+         <trust group="com.aayushatharva.brotli4j"/>
          <trust group="info.picocli"/>
          <trust group="org.checkerframework" name="checker-compat-qual"/>
          <trust group="org.codehaus.groovy"/>
@@ -74,6 +75,7 @@
          <trusted-key id="55e770230e69cc6de143fb5b62c82e50836eb3ee" group="com.github.gundy" name="semver4j" version="0.16.4"/>
          <trusted-key id="57b8b76a967c5c26bbcf9cc7348a1b6e762c08a0" group="com.google.template" name="soy" version="2022-03-07"/>
          <trusted-key id="59a8e169739301fd48139ca00e325becb6962a24" group="jakarta.annotation" name="jakarta.annotation-api" version="2.0.0"/>
+         <trusted-key id="5b51871ea3910573dcd83a1b0af99366b4d6de14" group="com.aayushatharva.brotli4j"/>
          <trusted-key id="5f6c2148ad4911fe308110e5f0d0ae433308b042" group="io.gitlab.arturbosch.detekt"/>
          <trusted-key id="5fa41c402006eac55d72aafd99ce9d9f22dc5c99" group="org.json" name="json" version="20160212"/>
          <trusted-key id="600ea202b1ec682f4a788e5aac7a514bc9f9bb70" group="io.opencensus"/>

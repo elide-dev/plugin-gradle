@@ -23,6 +23,9 @@ dependencies {
     implementation(libs.soy)
     implementation(libs.slf4j)
     implementation(libs.brotli)
+    implementation(libs.brotli.native.osx)
+    implementation(libs.brotli.native.linux)
+    implementation(libs.brotli.native.windows)
     implementation(libs.picocli)
     implementation(libs.picocli.codegen)
 

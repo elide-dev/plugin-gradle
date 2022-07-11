@@ -403,6 +403,8 @@ open class ElideAssetsHandler @Inject constructor(
         internal val compressionAlgorithms: AtomicReference<EnumSet<CompressionMode>> = AtomicReference(EnumSet.of(
             // `IDENTITY` is implied
             CompressionMode.GZIP,
+            CompressionMode.DEFLATE,
+            CompressionMode.BROTLI,
         ))
 
         /** @return Packaged compression config, based on the contents of this handler. */
