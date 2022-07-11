@@ -50,8 +50,9 @@ import java.util.concurrent.ConcurrentSkipListSet
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 import java.util.stream.Stream
-import java.util.zip.GZIPOutputStream
+import java.util.zip.Deflater
 import javax.inject.Inject
+import kotlin.math.roundToInt
 import kotlin.streams.toList
 
 /** Task to interpret server-side asset configuration and content into a compiled asset bundle. */
@@ -61,6 +62,7 @@ abstract class GenerateAssetGraphTask @Inject constructor(
 ) : BundleBaseTask() {
     companion object {
         private const val BROWSER_DIST_DEFAULT = "assetDist"
+        private const val DEFAULT_COMPRESSION_BUFFER_MULTIPLE = 1.5
 
         /** Generate a trimmed digest which should be used as an asset's "tag". */
         @JvmStatic
@@ -649,16 +651,17 @@ abstract class GenerateAssetGraphTask @Inject constructor(
             }.filter {
                 // if the compressed output data is null, it means the compression mode in question is not supported or
                 // could not be loaded; that condition logs its own warning.
-                it.second.second != null
+                it.second.second?.second != null
             }.map {
                 val (assetIdx, compressedPayload) = it
                 val (mode, compressed) = compressedPayload
+                val (compressedLength, compressedData) = compressed!!
 
                 // build a digest of the compressed data, which we also include with the variant payload. the digest and
                 // size can be checked at runtime to enforce data integrity guarantees.
                 val digester = hashAlgorithm.digester()
                 val digest = if (digester != null) {
-                    digester.digest(compressed)
+                    digester.digest(compressedData)
                 } else {
                     ByteArray(0)
                 }
@@ -667,9 +670,9 @@ abstract class GenerateAssetGraphTask @Inject constructor(
                 // with the has algorithm that produced it.
                 assetIdx to compressedData {
                     compression = mode
-                    size = compressed!!.size.toLong()
+                    size = compressedLength.toLong()
                     data = dataContainer {
-                        raw = ByteString.copyFrom(compressed)
+                        raw = ByteString.copyFrom(compressedData)
                     }
                     integrity.add(
                         dataFingerprint {
@@ -789,16 +792,21 @@ abstract class GenerateAssetGraphTask @Inject constructor(
         )).data.raw.toByteArray()
     }
 
-    private fun compressAssetData(mode: CompressionMode, data: ByteArray): ByteArray? = when (mode) {
+    private fun compressAssetData(mode: CompressionMode, data: ByteArray): Pair<Int, ByteArray>? = when (mode) {
         // `IDENTITY` mode uses no compression.
-        CompressionMode.IDENTITY -> data
+        CompressionMode.IDENTITY -> data.size to data
 
         CompressionMode.GZIP -> {
-            val target = ByteArrayOutputStream()
-            GZIPOutputStream(target).use { compressor ->
-                compressor.write(data)
+            val deflater = Deflater(Deflater.BEST_COMPRESSION)
+            deflater.setInput(data)
+            deflater.finish()
+            val outbuf = ByteArray((data.size * DEFAULT_COMPRESSION_BUFFER_MULTIPLE).roundToInt())
+            val length = deflater.deflate(outbuf)
+
+            // resize to actually-written bytes
+            length to ByteArray(length) {
+                outbuf[it]
             }
-            target.toByteArray()
         }
 
         else -> {
