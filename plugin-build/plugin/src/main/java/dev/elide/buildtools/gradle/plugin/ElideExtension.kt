@@ -1,5 +1,6 @@
 package dev.elide.buildtools.gradle.plugin
 
+import dev.elide.buildtools.bundler.BuildMode
 import dev.elide.buildtools.gradle.plugin.cfg.ElideJsHandler
 import dev.elide.buildtools.gradle.plugin.cfg.ElideServerHandler
 import org.gradle.api.Action

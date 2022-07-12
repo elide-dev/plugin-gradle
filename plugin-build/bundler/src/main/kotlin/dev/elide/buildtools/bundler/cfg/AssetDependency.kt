@@ -1,4 +1,4 @@
-package dev.elide.buildtools.gradle.plugin.cfg
+package dev.elide.buildtools.bundler.cfg
 
 /** Models an asset dependency. */
 data class AssetDependency(

@@ -11,7 +11,7 @@ indent_style = space
 indent_size = 2
 
 [*.{kt,kts}]
-disabled_rules = indent,experimental:argument-list-wrapping,no-wildcard-imports
+disabled_rules = indent,experimental:argument-list-wrapping,no-wildcard-imports,import-ordering
 
-[plugin-build/plugin/src/model/**/*.*]
-disabled_rules = indent,experimental:spacing-between-declarations-with-annotations,parameter-list-wrapping,no-wildcard-imports,experimental:spacing-between-declarations-with-comments,experimental:argument-list-wrapping,comment-spacing,no-semi,no-consecutive-blank-lines,no-blank-line-before-rbrace,curly-spacing
+[plugin-build/model/**/*.*]
+disabled_rules = indent,experimental:spacing-between-declarations-with-annotations,parameter-list-wrapping,no-wildcard-imports,experimental:spacing-between-declarations-with-comments,experimental:argument-list-wrapping,comment-spacing,no-semi,no-consecutive-blank-lines,no-blank-line-before-rbrace,curly-spacing,experimental:annotation

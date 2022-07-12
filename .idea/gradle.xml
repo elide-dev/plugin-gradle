@@ -10,6 +10,8 @@
               <build path="$PROJECT_DIR$/plugin-build" name="dev.elide.buildtools.gradle">
                 <projects>
                   <project path="$PROJECT_DIR$/plugin-build" />
+                  <project path="$PROJECT_DIR$/plugin-build/bundler" />
+                  <project path="$PROJECT_DIR$/plugin-build/model" />
                   <project path="$PROJECT_DIR$/plugin-build/plugin" />
                 </projects>
               </build>
@@ -32,6 +34,8 @@
             <option value="$PROJECT_DIR$/example/mixed" />
             <option value="$PROJECT_DIR$/plugin-build" />
             <option value="$PROJECT_DIR$/plugin-build/buildSrc" />
+            <option value="$PROJECT_DIR$/plugin-build/bundler" />
+            <option value="$PROJECT_DIR$/plugin-build/model" />
             <option value="$PROJECT_DIR$/plugin-build/plugin" />
           </set>
         </option>

@@ -1,4 +1,4 @@
-package dev.elide.buildtools.gradle.plugin.tasks
+package dev.elide.buildtools.bundler.util
 
 import com.google.common.base.Preconditions.checkState
 import com.google.common.collect.AbstractIterator
@@ -11,7 +11,7 @@ import java.util.stream.Stream
 
 // Implementation of topological sort on top of a Guava graph.
 @Suppress("UnstableApiUsage")
-internal class TopologicalGraphIterator<N> constructor (private val graph: Graph<N>) : AbstractIterator<N>() {
+public class TopologicalGraphIterator<N> constructor (private val graph: Graph<N>) : AbstractIterator<N>() {
     private val roots: Queue<N> = graph
         .nodes()
         .stream()

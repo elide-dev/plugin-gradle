@@ -1,8 +1,8 @@
-package dev.elide.buildtools.gradle.plugin
+package dev.elide.buildtools.bundler
 
 /** Describes production and development build modes. */
 @Suppress("unused")
-enum class BuildMode(internal val minify: Boolean, internal val prepack: Boolean) {
+public enum class BuildMode(public val minify: Boolean, public val prepack: Boolean) {
     /** Built for production, with minification turned on. */
     PRODUCTION(minify = true, prepack = true),
 
@@ -10,7 +10,7 @@ enum class BuildMode(internal val minify: Boolean, internal val prepack: Boolean
     DEVELOPMENT(minify = false, prepack = false);
 
     companion object {
-        const val PRODUCTION_NAME = "PRODUCTION"
-        const val DEVELOPMENT_NAME = "DEVELOPMENT"
+        public const val PRODUCTION_NAME = "PRODUCTION"
+        public const val DEVELOPMENT_NAME = "DEVELOPMENT"
     }
 }

@@ -1,4 +1,4 @@
-package dev.elide.buildtools.gradle.plugin.cfg
+package dev.elide.buildtools.bundler.cfg
 
 /** Enumerates types of assets which can be embedded for server use. */
 @Suppress("unused", "MemberVisibilityCanBePrivate", "RedundantVisibilityModifier")

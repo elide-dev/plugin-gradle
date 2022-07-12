@@ -1,4 +1,4 @@
-package dev.elide.buildtools.gradle.plugin.js
+package dev.elide.buildtools.bundler.js
 
 /** Enumerates tools which may be used to perform JS bundling. */
 @Suppress("unused")

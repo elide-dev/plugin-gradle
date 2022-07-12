@@ -1,4 +1,4 @@
-package dev.elide.buildtools.gradle.plugin.js
+package dev.elide.buildtools.bundler.js
 
 /**
  * Enumerates the types of bundle targets supported by the plugin; besides granting symbols to these names, this enum
@@ -9,10 +9,10 @@ package dev.elide.buildtools.gradle.plugin.js
  * @param bundleTool Default tool to use for this bundle target type.
  */
 @Suppress("unused")
-enum class BundleTarget(
-    internal val platform: String,
-    internal val bundleType: BundleType,
-    internal val bundleTool: BundleTool,
+public enum class BundleTarget(
+    public val platform: String,
+    public val bundleType: BundleType,
+    public val bundleTool: BundleTool,
 ) {
     /** The bundle is being assembled for use in an embedded (VM) context. */
     EMBEDDED("neutral", BundleType.IIFE, BundleTool.ESBUILD),
@@ -24,8 +24,8 @@ enum class BundleTarget(
     WEB("browser", BundleType.IIFE, BundleTool.WEBPACK);
 
     companion object {
-        internal const val EMBEDDED_NAME = "EMBEDDED"
-        internal const val NODE_NAME = "NODE"
-        internal const val WEB_NAME = "WEB"
+        public const val EMBEDDED_NAME = "EMBEDDED"
+        public const val NODE_NAME = "NODE"
+        public const val WEB_NAME = "WEB"
     }
 }

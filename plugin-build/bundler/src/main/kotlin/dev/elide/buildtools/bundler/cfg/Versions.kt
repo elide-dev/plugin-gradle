@@ -1,4 +1,4 @@
-package dev.elide.buildtools.gradle.plugin.tasks
+package dev.elide.buildtools.bundler.cfg
 
 /** Versions of build tools depended on by the embedded JS build task. */
 object Versions {

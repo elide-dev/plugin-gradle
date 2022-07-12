@@ -10,6 +10,8 @@ import com.google.common.graph.ImmutableNetwork
 import com.google.common.graph.NetworkBuilder
 import com.google.protobuf.ByteString
 import com.google.protobuf.Timestamp
+import dev.elide.buildtools.bundler.cfg.*
+import dev.elide.buildtools.bundler.util.TopologicalGraphIterator
 import dev.elide.buildtools.gradle.plugin.ElideExtension
 import dev.elide.buildtools.gradle.plugin.cfg.*
 import org.gradle.api.file.FileCollection
@@ -348,7 +350,8 @@ abstract class GenerateAssetGraphTask @Inject constructor(
 
             // resolve files for each project dependency
             val resolvedProjectDeps = depPaths.map {
-                it.projectPath.get() to (it.sourceConfiguration.get() ?: BROWSER_DIST_DEFAULT)
+                val dep = it as ElideAssetsHandler.InterProjectAssetHandler
+                dep.projectPath.get() to (dep.sourceConfiguration.get() ?: BROWSER_DIST_DEFAULT)
             }.mapNotNull {
                 val (projectTarget, configSource) = it
                 if (projectTarget == null) {

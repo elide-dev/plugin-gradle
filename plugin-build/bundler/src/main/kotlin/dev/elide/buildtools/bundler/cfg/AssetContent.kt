@@ -1,4 +1,4 @@
-package dev.elide.buildtools.gradle.plugin.cfg
+package dev.elide.buildtools.bundler.cfg
 
 import com.google.protobuf.ByteString
 import tools.elide.assets.AssetBundle
