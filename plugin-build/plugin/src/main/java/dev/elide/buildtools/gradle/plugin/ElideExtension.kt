@@ -12,10 +12,10 @@ public open class ElideExtension @Inject constructor(project: Project) {
     private val objects = project.objects
 
     /** Configuration for JS runtime settings. */
-    internal val js: ElideJsHandler = objects.newInstance(ElideJsHandler::class.java)
+    public val js: ElideJsHandler = objects.newInstance(ElideJsHandler::class.java)
 
     /** Configuration for server targets. */
-    internal val server: ElideServerHandler = objects.newInstance(ElideServerHandler::class.java)
+    public val server: ElideServerHandler = objects.newInstance(ElideServerHandler::class.java)
 
     companion object {
         fun Project.elide(): ElideExtension {

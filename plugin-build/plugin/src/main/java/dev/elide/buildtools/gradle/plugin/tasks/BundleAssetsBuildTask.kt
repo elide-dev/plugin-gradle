@@ -53,7 +53,7 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
                         }
                     }
                     if (extension.server.hasSsrBundle()) {
-                        val target = extension.server.ssrConfig.targetProject.get()
+                        val target = extension.server.ssr.targetProject.get()
                         if (target != null && target.isNotBlank()) {
                             project.evaluationDependsOn(
                                 target
@@ -111,8 +111,8 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
             }
 
             // make sure we have a valid, non-empty project and configuration
-            val targetProject = extension.server.ssrConfig.targetProject.get()
-            val targetConfig = extension.server.ssrConfig.targetConfiguration.get()
+            val targetProject = extension.server.ssr.targetProject.get()
+            val targetConfig = extension.server.ssr.targetConfiguration.get()
             if (targetProject?.isNotBlank() != true || targetConfig?.isNotBlank() != true) {
                 error(
                     "Failed to resolve target project or configuration for SSR bundle. " +
@@ -124,8 +124,8 @@ abstract class BundleAssetsBuildTask : BundleBaseTask() {
             project.dependencies.apply {
                 add(ssrDist.name, project(
                     mapOf(
-                        "path" to extension.server.ssrConfig.targetProject.get(),
-                        "configuration" to extension.server.ssrConfig.targetConfiguration.get(),
+                        "path" to extension.server.ssr.targetProject.get(),
+                        "configuration" to extension.server.ssr.targetConfiguration.get(),
                     )
                 ))
             }

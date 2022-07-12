@@ -835,8 +835,8 @@ abstract class GenerateAssetGraphTask @Inject constructor(
         }
 
         else -> {
-            project.logger.warn(
-                "Compression mode is not supported yet: '${mode.name}'. Skipping variant."
+            project.logger.debug(
+                "Compression mode is not supported in this environment: '${mode.name}'. Skipping variant."
             )
             null
         }
