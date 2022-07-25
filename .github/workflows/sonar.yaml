@@ -55,7 +55,7 @@ jobs:
 
       ## Run Sonar
       - name: "Run Sonar"
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1 # tag=v2
+        uses: gradle/gradle-build-action@cd3cedc781988c804f626f4cd2dc51d0bdf02a12 # tag=v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
