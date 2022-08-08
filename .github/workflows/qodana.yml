@@ -29,7 +29,7 @@ jobs:
 
       ## Run Qodana
       - name: 'Qodana Scan'
-        uses: JetBrains/qodana-action@102d021fe8a24d8af48a38a35f96b8ba100baa20 # tag=v5.1.0
+        uses: JetBrains/qodana-action@ab695492d98902c49b33382782175107ec63ca28 # tag=v5.1.0
 
       ## Upload SARIF
       - name: 'Upload SARIF Report'
