@@ -1,8 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="node">
     <output-path>$PROJECT_DIR$/example/fullstack/node/build/libs</output-path>
-    <root id="archive" name="node.jar">
-      <element id="module-output" name="elide-gradle-plugin.example.fullstack.node.main" />
-    </root>
+    <root id="archive" name="node.jar" />
   </artifact>
 </component>
