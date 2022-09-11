@@ -5,6 +5,12 @@
       <module name="com.ncorti.kotlin.gradle.template.plugin" target="1.8" />
       <module name="com.ncorti.kotlin.gradle.template.plugin.main" target="1.8" />
       <module name="com.ncorti.kotlin.gradle.template.plugin.test" target="1.8" />
+      <module name="dev.elide.buildtools.gradle.bundler" target="1.9" />
+      <module name="dev.elide.buildtools.gradle.bundler.main" target="1.9" />
+      <module name="dev.elide.buildtools.gradle.bundler.test" target="1.9" />
+      <module name="dev.elide.buildtools.gradle.model" target="1.9" />
+      <module name="dev.elide.buildtools.gradle.model.main" target="1.9" />
+      <module name="dev.elide.buildtools.gradle.model.test" target="1.9" />
       <module name="elide-gradle-plugin.example.main" target="17" />
       <module name="elide-gradle-plugin.example.test" target="17" />
     </bytecodeTargetLevel>

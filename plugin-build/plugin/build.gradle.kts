@@ -14,7 +14,10 @@ dependencies {
     implementation(kotlin("stdlib-jdk7"))
     implementation(gradleApi())
     implementation("com.github.node-gradle:gradle-node-plugin:3.4.0")
-    implementation("org.gradle.kotlin:gradle-kotlin-dsl-plugins:2.4.0")
+    implementation("org.gradle.kotlin:gradle-kotlin-dsl-plugins:3.1.0") {
+        exclude("org.jetbrains.kotlin", "kotlin-sam-with-receiver")
+    }
+    implementation("org.jetbrains.kotlin:kotlin-sam-with-receiver:${libs.versions.kotlin.get()}")
 
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
