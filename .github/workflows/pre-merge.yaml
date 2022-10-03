@@ -45,7 +45,7 @@ jobs:
 
       ## Setup: Gradle Caches
       - name: Cache Gradle Caches
-        uses: gradle/gradle-build-action@356abb47e7664b5505e25d7997a5a522a17c62d9 # tag=v2
+        uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971 # tag=v2
 
       ## Prep: Download Caches
       - name: Cache build
@@ -62,7 +62,7 @@ jobs:
 
       ## Job: Run build
       - name: Run Gradle build
-        uses: gradle/gradle-build-action@356abb47e7664b5505e25d7997a5a522a17c62d9 # tag=v2
+        uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971 # tag=v2
         with:
           arguments: |
             preMerge
@@ -72,7 +72,7 @@ jobs:
 
       ## Job: Run plugin
       - name: Run the plugin
-        uses: gradle/gradle-build-action@356abb47e7664b5505e25d7997a5a522a17c62d9 # tag=v2
+        uses: gradle/gradle-build-action@fd32ae908111fe31afa48827bd1ee909540aa971 # tag=v2
         if: success()
         with:
           arguments: |
