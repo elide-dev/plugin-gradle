@@ -33,7 +33,7 @@ jobs:
 
       ## Upload SARIF
       - name: 'Upload SARIF Report'
-        uses: github/codeql-action/upload-sarif@b398f525a5587552e573b247ac661067fafa920b # tag=v2
+        uses: github/codeql-action/upload-sarif@e0e5ded33cabb451ae0a9768fc7b0410bad9ad44 # tag=v2
         with:
           sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
           category: qodana
