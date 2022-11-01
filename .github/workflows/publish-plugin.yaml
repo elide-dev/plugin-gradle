@@ -16,7 +16,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
       - name: Cache Gradle Caches
-        uses: gradle/gradle-build-action@356abb47e7664b5505e25d7997a5a522a17c62d9 # tag=v2
+        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
       - name: Run Gradle tasks
         run: ./gradlew preMerge --continue
       - name: Publish on Plugin Portal
