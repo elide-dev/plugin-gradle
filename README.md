@@ -20,7 +20,6 @@ In particular, this plugin is responsible for configuring and running [`esbuild`
 ### Features
 - [x] **Embedded SSR:** Build JS apps, including Kotlin JS, into optimized embedded SSR bundles
 - [x] **Asset compiler:** Optimize and compile frontend assets, and package them for use in Elide
-- [x] **Tool agnostic:** Build your frontend with any tool (Kotlin/JS, Node, Bazel, etc)
 
 ### Installing the plugin
 
@@ -31,20 +30,20 @@ below for specific installation and use instructions.
 **Kotlin DSL**
 ```kotlin
 plugins {
-  id("dev.elide.buildtools.plugin") version "1.0.0-beta6"
+  id("dev.elide.buildtools.plugin") version "1.0.0-beta7"
 }
 ```
 
 **Groovy DSL**
 ```groovy
 plugins {
-    id "dev.elide.buildtools.plugin" version "1.0.0-beta6"
+    id "dev.elide.buildtools.plugin" version "1.0.0-beta7"
 }
 ```
 
 #### Plugin coordinates
 
-- **Version:** `1.0.0-beta6`
+- **Version:** `1.0.0-beta7`
 - **Plugin ID:** `dev.elide.buildtools.plugin`
 - **Classpath Coordinate:** `dev.elide.buildtools:plugin`
 
