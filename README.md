@@ -30,20 +30,20 @@ below for specific installation and use instructions.
 **Kotlin DSL**
 ```kotlin
 plugins {
-  id("dev.elide.buildtools.plugin") version "1.0.0-beta8"
+  id("dev.elide.buildtools.plugin") version "1.0.0-beta9"
 }
 ```
 
 **Groovy DSL**
 ```groovy
 plugins {
-    id "dev.elide.buildtools.plugin" version "1.0.0-beta8"
+    id "dev.elide.buildtools.plugin" version "1.0.0-beta9"
 }
 ```
 
 #### Plugin coordinates
 
-- **Version:** `1.0.0-beta7`
+- **Version:** `1.0.0-beta9`
 - **Plugin ID:** `dev.elide.buildtools.plugin`
 - **Classpath Coordinate:** `dev.elide.buildtools:plugin`
 
