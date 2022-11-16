@@ -50,7 +50,6 @@ dependencies {
     embedded(libs.elide.base)
     embedded(libs.elide.ssg)
     embedded(libs.elide.proto)
-    embedded(libs.elide.bom)
 
     // Embedded Tools
     embedded(libs.closure.templates)
