@@ -14,9 +14,7 @@ repositories {
     mavenCentral()
 }
 
-val embedded by configurations.creating {
-
-}
+val embedded by configurations.creating
 
 configurations {
     compileClasspath.extendsFrom(embedded)
