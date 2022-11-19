@@ -1,3 +1,8 @@
+@file:Suppress(
+    "DSL_SCOPE_VIOLATION",
+    "UnstableApiUsage",
+)
+
 plugins {
     kotlin("jvm")
     kotlin("plugin.noarg")
@@ -14,15 +19,18 @@ repositories {
     mavenCentral()
 }
 
-val embedded by configurations.creating
+val embedded: Configuration by configurations.creating
 
 configurations {
-    compileClasspath.extendsFrom(embedded)
-    runtimeClasspath.extendsFrom(embedded)
+    compileClasspath.get().extendsFrom(embedded)
+    runtimeClasspath.get().extendsFrom(embedded)
 }
 
 dependencies {
     api(kotlin("gradle-plugin"))
+    api(libs.elide.base)
+    api(libs.elide.ssg)
+
     implementation(kotlin("stdlib-jdk7"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(gradleApi())
@@ -136,9 +144,9 @@ pluginBundle {
 
 tasks {
     shadowJar {
-//        configurations = listOf(
-//            embedded,
-//        )
+        configurations = listOf(
+            embedded,
+        )
     }
 }
 

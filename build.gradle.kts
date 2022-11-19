@@ -1,7 +1,6 @@
 @file:Suppress(
     "UnstableApiUsage",
     "unused",
-    "UNUSED_VARIABLE",
     "DSL_SCOPE_VIOLATION",
 )
 
@@ -90,6 +89,12 @@ subprojects {
         }
     }
 
+    configurations.all {
+        if (!name.contains("detached")) {
+            resolutionStrategy.activateDependencyLocking()
+        }
+    }
+
     detekt {
         config = rootProject.files("config/detekt/detekt.yml")
     }
@@ -128,6 +133,13 @@ tasks.register("preMerge") {
 
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
+}
+
+tasks.register("resolveAndLockAll") {
+    doFirst {
+        require(gradle.startParameter.isWriteDependencyLocks)
+    }
+    dependsOn("resolveAllDependencies")
 }
 
 if (tasks.findByName("resolveAllDependencies") == null) {
