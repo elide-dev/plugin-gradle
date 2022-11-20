@@ -10,6 +10,7 @@ import java.util.Properties
 
 plugins {
     java
+    alias(libs.plugins.ksp) apply false
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)

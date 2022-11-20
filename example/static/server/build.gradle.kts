@@ -1,7 +1,6 @@
 @file:Suppress(
     "UnstableApiUsage",
     "unused",
-    "UNUSED_VARIABLE",
     "DSL_SCOPE_VIOLATION",
 )
 
@@ -12,7 +11,12 @@ import tools.elide.crypto.HashAlgorithm
 
 plugins {
     kotlin("jvm")
+    id("com.google.devtools.ksp")
     id("dev.elide.buildtools.plugin")
+}
+
+dependencies {
+    ksp(libs.elide.tools.processor)
 }
 
 elide {

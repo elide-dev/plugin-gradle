@@ -43,17 +43,16 @@ abstract class ElidePlugin : Plugin<Project> {
             kotlinPluginFound = true
             elide.multiplatform.set(true)
             project.logger.warn(
-                "Elide doesn't support JS targets in Kotlin MPP modules. Build plugin will have no effect."
+                "Elide support for multiplatform modules is experimental. Proceed with caution."
             )
         }
 
-        // if the SSG compiler is enabled, we should add a task for it
-        if (elide.server.hasSsgConfig()) {
-            GenerateStaticSiteTask.install(
-                elide,
-                project,
-            )
-        }
+        // we un-conditionally call `install` on this task because it will detect on its own if the project is eligible
+        // to be built with the SSG compiler.
+        if (kotlinPluginFound) GenerateStaticSiteTask.install(
+            elide,
+            project,
+        )
         if (!kotlinPluginFound) project.logger.warn(
             "Please apply a Kotlin plugin to use the Elide plugin (`js` or `jvm`)."
         )

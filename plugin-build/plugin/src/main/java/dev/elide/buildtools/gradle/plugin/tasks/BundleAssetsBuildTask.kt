@@ -22,7 +22,7 @@ import java.util.stream.Collectors
 @Suppress("UnusedPrivateMember", "UnstableApiUsage")
 abstract class BundleAssetsBuildTask : BundleBaseTask() {
     companion object {
-        private const val TASK_NAME = "bundleAssets"
+        internal const val TASK_NAME = "bundleAssets"
         private const val ASSETS_INTERMEDIATE_FOLDER = "serverAssets"
         private const val BROWSER_DIST_DEFAULT = "assetDist"
 
