@@ -164,11 +164,6 @@ tasks.withType<KotlinCompile>().configureEach {
     }
 }
 
-sourceSets.getByName("main").java {
-    srcDir("src/model/java")
-    srcDir("src/model/kotlin")
-}
-
 detekt {
     source = files(
         "src/main/java"
