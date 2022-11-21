@@ -1,6 +1,7 @@
 package dev.elide.buildtools.gradle.plugin
 
 import dev.elide.buildtools.gradle.plugin.cfg.ElideJsHandler
+import dev.elide.buildtools.gradle.plugin.cfg.ElideKotlinPluginsHandler
 import dev.elide.buildtools.gradle.plugin.cfg.ElideServerHandler
 import org.gradle.api.Action
 import org.gradle.api.Project
@@ -22,6 +23,11 @@ public open class ElideExtension @Inject constructor(project: Project) {
 
     /** Configuration for server targets. */
     public val server: ElideServerHandler = objects.newInstance(ElideServerHandler::class.java)
+
+    /** Configuration for Kotlin plugins. */
+    public val kotlinPluginOptions: ElideKotlinPluginsHandler = objects.newInstance(
+        ElideKotlinPluginsHandler::class.java
+    )
 
     companion object {
         fun Project.elide(): ElideExtension {
@@ -49,6 +55,11 @@ public open class ElideExtension @Inject constructor(project: Project) {
     fun server(action: Action<ElideServerHandler>) {
         server.active.set(true)
         action.execute(server)
+    }
+
+    /** Closure to configure [ElideKotlinPluginsHandler] settings. */
+    fun kotlinPlugins(action: Action<ElideKotlinPluginsHandler>) {
+        action.execute(kotlinPluginOptions)
     }
 
     /** Operating build mode for a given plugin run. */
