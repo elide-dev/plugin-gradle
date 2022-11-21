@@ -6,17 +6,17 @@ import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
 /** Handles configuration of Kotlin plugins provided by Elide. */
-open class ElideKotlinPluginsHandler @Inject constructor(objects: ObjectFactory) {
+public open class ElideKotlinPluginsHandler @Inject constructor(objects: ObjectFactory) {
     /** Configuration for the Redakt plugin for Kotlin. */
     public val redaktOptions: PluginHandler.RedaktHandler = objects.newInstance(PluginHandler.RedaktHandler::class.java)
 
     /** Configuration block for the Redakt plugin. */
-    fun redakt(action: PluginHandler.RedaktHandler.() -> Unit) {
+    public fun redakt(action: PluginHandler.RedaktHandler.() -> Unit) {
         action(redaktOptions)
     }
 
     /** Abstract base for plugin configuration blocks. */
-    sealed class PluginHandler constructor (
+    public sealed class PluginHandler constructor (
         /** Plugin name. */
         internal val name: String
     ) {
@@ -34,7 +34,7 @@ open class ElideKotlinPluginsHandler @Inject constructor(objects: ObjectFactory)
         }
 
         /** Configuration for the Redakt plugin. */
-        open class RedaktHandler : PluginHandler(name = "redakt") {
+        public open class RedaktHandler : PluginHandler(name = "redakt") {
             // Mask parameter for the Redakt plugin.
             internal val mask: AtomicReference<String> = AtomicReference(null)
 

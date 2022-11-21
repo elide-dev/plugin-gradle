@@ -53,133 +53,15 @@ public abstract class dev/elide/buildtools/gradle/plugin/ElideServerExtension {
 public final class dev/elide/buildtools/gradle/plugin/ElideServerExtension$Companion {
 }
 
-public final class dev/elide/buildtools/gradle/plugin/cfg/AssetCompressionConfig : java/io/Serializable {
-	public fun <init> (ZLjava/util/EnumSet;IZZ)V
-	public final fun component1 ()Z
-	public final fun component2 ()Ljava/util/EnumSet;
-	public final fun component3 ()I
-	public final fun component4 ()Z
-	public final fun component5 ()Z
-	public final fun copy (ZLjava/util/EnumSet;IZZ)Ldev/elide/buildtools/gradle/plugin/cfg/AssetCompressionConfig;
-	public static synthetic fun copy$default (Ldev/elide/buildtools/gradle/plugin/cfg/AssetCompressionConfig;ZLjava/util/EnumSet;IZZILjava/lang/Object;)Ldev/elide/buildtools/gradle/plugin/cfg/AssetCompressionConfig;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getEnabled ()Z
-	public final fun getForce ()Z
-	public final fun getKeepBest ()Z
-	public final fun getMinimumSize ()I
-	public final fun getModes ()Ljava/util/EnumSet;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class dev/elide/buildtools/gradle/plugin/cfg/AssetContent : java/io/Serializable {
-	public fun <init> (Ldev/elide/buildtools/gradle/plugin/cfg/AssetInfo;Ljava/util/concurrent/ConcurrentLinkedQueue;)V
-	public final fun component1 ()Ldev/elide/buildtools/gradle/plugin/cfg/AssetInfo;
-	public final fun component2 ()Ljava/util/concurrent/ConcurrentLinkedQueue;
-	public final fun copy (Ldev/elide/buildtools/gradle/plugin/cfg/AssetInfo;Ljava/util/concurrent/ConcurrentLinkedQueue;)Ldev/elide/buildtools/gradle/plugin/cfg/AssetContent;
-	public static synthetic fun copy$default (Ldev/elide/buildtools/gradle/plugin/cfg/AssetContent;Ldev/elide/buildtools/gradle/plugin/cfg/AssetInfo;Ljava/util/concurrent/ConcurrentLinkedQueue;ILjava/lang/Object;)Ldev/elide/buildtools/gradle/plugin/cfg/AssetContent;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getAssetInfo ()Ldev/elide/buildtools/gradle/plugin/cfg/AssetInfo;
-	public final fun getAssets ()Ljava/util/concurrent/ConcurrentLinkedQueue;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class dev/elide/buildtools/gradle/plugin/cfg/AssetContent$AssetFile {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;JLtools/elide/crypto/HashAlgorithm;[B[BLjava/io/File;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()J
-	public final fun component4 ()Ltools/elide/crypto/HashAlgorithm;
-	public final fun component5 ()[B
-	public final fun component6 ()[B
-	public final fun component7 ()Ljava/io/File;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;JLtools/elide/crypto/HashAlgorithm;[B[BLjava/io/File;)Ldev/elide/buildtools/gradle/plugin/cfg/AssetContent$AssetFile;
-	public static synthetic fun copy$default (Ldev/elide/buildtools/gradle/plugin/cfg/AssetContent$AssetFile;Ljava/lang/String;Ljava/lang/String;JLtools/elide/crypto/HashAlgorithm;[B[BLjava/io/File;ILjava/lang/Object;)Ldev/elide/buildtools/gradle/plugin/cfg/AssetContent$AssetFile;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getBase ()Ljava/lang/String;
-	public final fun getContent ()[B
-	public final fun getDigest ()[B
-	public final fun getDigestAlgorithm ()Ltools/elide/crypto/HashAlgorithm;
-	public final fun getFile ()Ljava/io/File;
-	public final fun getFilename ()Ljava/lang/String;
-	public final fun getSize ()J
-	public fun hashCode ()I
-	public final fun toProto (Ljava/lang/String;Ljava/lang/String;)Ltools/elide/assets/AssetBundle$AssetContent;
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class dev/elide/buildtools/gradle/plugin/cfg/AssetDependency {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;ZZZ)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ZZZILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Z
-	public final fun component4 ()Z
-	public final fun component5 ()Z
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;ZZZ)Ldev/elide/buildtools/gradle/plugin/cfg/AssetDependency;
-	public static synthetic fun copy$default (Ldev/elide/buildtools/gradle/plugin/cfg/AssetDependency;Ljava/lang/String;Ljava/lang/String;ZZZILjava/lang/Object;)Ldev/elide/buildtools/gradle/plugin/cfg/AssetDependency;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getDependee ()Ljava/lang/String;
-	public final fun getDependent ()Ljava/lang/String;
-	public final fun getDevOnly ()Z
-	public final fun getDirect ()Z
-	public final fun getTestOnly ()Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class dev/elide/buildtools/gradle/plugin/cfg/AssetInfo : java/io/Serializable {
-	public fun <init> (Ljava/lang/String;Ldev/elide/buildtools/gradle/plugin/cfg/AssetType;Ljava/util/SortedSet;Ljava/util/SortedSet;Ljava/util/List;Lorg/gradle/api/file/CopySpec;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ldev/elide/buildtools/gradle/plugin/cfg/AssetType;
-	public final fun component3 ()Ljava/util/SortedSet;
-	public final fun component4 ()Ljava/util/SortedSet;
-	public final fun component5 ()Ljava/util/List;
-	public final fun component6 ()Lorg/gradle/api/file/CopySpec;
-	public final fun copy (Ljava/lang/String;Ldev/elide/buildtools/gradle/plugin/cfg/AssetType;Ljava/util/SortedSet;Ljava/util/SortedSet;Ljava/util/List;Lorg/gradle/api/file/CopySpec;)Ldev/elide/buildtools/gradle/plugin/cfg/AssetInfo;
-	public static synthetic fun copy$default (Ldev/elide/buildtools/gradle/plugin/cfg/AssetInfo;Ljava/lang/String;Ldev/elide/buildtools/gradle/plugin/cfg/AssetType;Ljava/util/SortedSet;Ljava/util/SortedSet;Ljava/util/List;Lorg/gradle/api/file/CopySpec;ILjava/lang/Object;)Ldev/elide/buildtools/gradle/plugin/cfg/AssetInfo;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getCopySpec ()Lorg/gradle/api/file/CopySpec;
-	public final fun getDirectDeps ()Ljava/util/SortedSet;
-	public final fun getModule ()Ljava/lang/String;
-	public final fun getPaths ()Ljava/util/SortedSet;
-	public final fun getProjectDeps ()Ljava/util/List;
-	public final fun getType ()Ldev/elide/buildtools/gradle/plugin/cfg/AssetType;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class dev/elide/buildtools/gradle/plugin/cfg/AssetTagConfig : java/io/Serializable {
-	public fun <init> (Ltools/elide/crypto/HashAlgorithm;II)V
-	public final fun component1 ()Ltools/elide/crypto/HashAlgorithm;
-	public final fun component2 ()I
-	public final fun component3 ()I
-	public final fun copy (Ltools/elide/crypto/HashAlgorithm;II)Ldev/elide/buildtools/gradle/plugin/cfg/AssetTagConfig;
-	public static synthetic fun copy$default (Ldev/elide/buildtools/gradle/plugin/cfg/AssetTagConfig;Ltools/elide/crypto/HashAlgorithm;IIILjava/lang/Object;)Ldev/elide/buildtools/gradle/plugin/cfg/AssetTagConfig;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getHashAlgorithm ()Ltools/elide/crypto/HashAlgorithm;
-	public final fun getRounds ()I
-	public final fun getTailSize ()I
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
 public final class dev/elide/buildtools/gradle/plugin/cfg/AssetType : java/lang/Enum {
 	public static final field SCRIPT Ldev/elide/buildtools/gradle/plugin/cfg/AssetType;
 	public static final field STYLESHEET Ldev/elide/buildtools/gradle/plugin/cfg/AssetType;
 	public static final field TEXT Ldev/elide/buildtools/gradle/plugin/cfg/AssetType;
-	public final fun getContentType ()Ljava/lang/String;
-	public final fun getDefaultInclude ()Ljava/lang/String;
-	public final fun getExtension ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Ldev/elide/buildtools/gradle/plugin/cfg/AssetType;
 	public static fun values ()[Ldev/elide/buildtools/gradle/plugin/cfg/AssetType;
 }
 
 public class dev/elide/buildtools/gradle/plugin/cfg/ElideAssetsHandler {
-	public static final field BROWSER_DIST_TARGET Ljava/lang/String;
-	public static final field Companion Ldev/elide/buildtools/gradle/plugin/cfg/ElideAssetsHandler$Companion;
-	public static final field defaultMinimumUncompressedSize I
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
 	public final fun asset (Ldev/elide/buildtools/gradle/plugin/cfg/AssetType;Ljava/lang/String;Lorg/gradle/api/Action;)V
 	public final fun bundler (Lorg/gradle/api/Action;)V
@@ -193,10 +75,8 @@ public class dev/elide/buildtools/gradle/plugin/cfg/ElideAssetsHandler {
 public class dev/elide/buildtools/gradle/plugin/cfg/ElideAssetsHandler$AssetBundlerConfig {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
 	public final fun compression (Lorg/gradle/api/Action;)V
-	public final fun compressionConfig ()Ldev/elide/buildtools/gradle/plugin/cfg/AssetCompressionConfig;
 	public final fun digestAlgorithm (Ltools/elide/crypto/HashAlgorithm;)V
 	public final fun format (Ltools/elide/assets/ManifestFormat;)V
-	public final fun tagGenConfig ()Ldev/elide/buildtools/gradle/plugin/cfg/AssetTagConfig;
 	public final fun tagGenerator (Lorg/gradle/api/Action;)V
 }
 
@@ -283,11 +163,6 @@ public class dev/elide/buildtools/gradle/plugin/cfg/ElideAssetsHandler$AssetTagH
 	public final fun tailSize (I)V
 }
 
-public final class dev/elide/buildtools/gradle/plugin/cfg/ElideAssetsHandler$Companion {
-	public final fun getDefaultHashAlgorithm ()Ltools/elide/crypto/HashAlgorithm;
-	public final fun getDefaultManifestFormat ()Ltools/elide/assets/ManifestFormat;
-}
-
 public class dev/elide/buildtools/gradle/plugin/cfg/ElideAssetsHandler$CompressionHandler {
 	public fun <init> ()V
 	public final fun disable ()V
@@ -371,12 +246,13 @@ public final class dev/elide/buildtools/gradle/plugin/cfg/ElidePluginConfig {
 }
 
 public class dev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler {
-	public static final field Companion Ldev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler$Companion;
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
 	public final fun assets (Lorg/gradle/api/Action;)V
+	public final fun getActive ()Ljava/util/concurrent/atomic/AtomicBoolean;
 	public final fun getAssets ()Ldev/elide/buildtools/gradle/plugin/cfg/ElideAssetsHandler;
 	public final fun getSsg ()Ldev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler$StaticSiteHandler;
 	public final fun getSsr ()Ldev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler$ServerSSRHandler;
+	public final fun getSsrRuntime ()Ljava/util/concurrent/atomic/AtomicReference;
 	public final fun hasAssets ()Z
 	public final fun hasSsgConfig ()Z
 	public final fun hasSsrBundle ()Z
@@ -384,20 +260,10 @@ public class dev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler {
 	public static synthetic fun ssr$default (Ldev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler;Ltools/elide/assets/EmbeddedScriptLanguage;Lorg/gradle/api/Action;ILjava/lang/Object;)V
 }
 
-public final class dev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler$Companion {
-}
-
 public class dev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler$ServerSSRHandler {
-	public static final field Companion Ldev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler$ServerSSRHandler$Companion;
-	public static final field defaultSsrConfiguration Ljava/lang/String;
 	public fun <init> ()V
 	public final fun bundle (Lorg/gradle/api/Project;Ljava/lang/String;)V
 	public static synthetic fun bundle$default (Ldev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler$ServerSSRHandler;Lorg/gradle/api/Project;Ljava/lang/String;ILjava/lang/Object;)V
-	public final fun getTargetConfiguration ()Ljava/util/concurrent/atomic/AtomicReference;
-	public final fun getTargetProject ()Ljava/util/concurrent/atomic/AtomicReference;
-}
-
-public final class dev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler$ServerSSRHandler$Companion {
 }
 
 public class dev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler$StaticSiteHandler {
@@ -406,25 +272,12 @@ public class dev/elide/buildtools/gradle/plugin/cfg/ElideServerHandler$StaticSit
 	public final fun enable ()V
 }
 
-public final class dev/elide/buildtools/gradle/plugin/cfg/StaticValues {
-	public static final field INSTANCE Ldev/elide/buildtools/gradle/plugin/cfg/StaticValues;
-	public static final field currentVersion I
-	public static final field defaultHashRounds I
-	public static final field defaultTailSize I
-	public final fun getAssetHashAlgo ()Ltools/elide/crypto/HashAlgorithm;
-	public final fun getDefaultEncoding ()Ltools/elide/assets/ManifestFormat;
-}
-
 public final class dev/elide/buildtools/gradle/plugin/js/BundleTarget : java/lang/Enum {
-	public static final field Companion Ldev/elide/buildtools/gradle/plugin/js/BundleTarget$Companion;
 	public static final field EMBEDDED Ldev/elide/buildtools/gradle/plugin/js/BundleTarget;
 	public static final field NODE Ldev/elide/buildtools/gradle/plugin/js/BundleTarget;
 	public static final field WEB Ldev/elide/buildtools/gradle/plugin/js/BundleTarget;
 	public static fun valueOf (Ljava/lang/String;)Ldev/elide/buildtools/gradle/plugin/js/BundleTarget;
 	public static fun values ()[Ldev/elide/buildtools/gradle/plugin/js/BundleTarget;
-}
-
-public final class dev/elide/buildtools/gradle/plugin/js/BundleTarget$Companion {
 }
 
 public final class dev/elide/buildtools/gradle/plugin/js/BundleTool : java/lang/Enum {
@@ -452,17 +305,27 @@ public final class dev/elide/buildtools/gradle/plugin/js/BundleType : java/lang/
 public final class dev/elide/buildtools/gradle/plugin/js/BundleType$Companion {
 }
 
+public abstract class dev/elide/buildtools/gradle/plugin/kotlin/AbstractCompilerPluginHost : org/jetbrains/kotlin/gradle/plugin/KotlinCompilerPluginSupportPlugin {
+	protected fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+	public fun applyToCompilation (Lorg/jetbrains/kotlin/gradle/plugin/KotlinCompilation;)Lorg/gradle/api/provider/Provider;
+	public fun getCompilerPluginId ()Ljava/lang/String;
+	public fun getPluginArtifact ()Lorg/jetbrains/kotlin/gradle/plugin/SubpluginArtifact;
+	public fun getPluginArtifactForNative ()Lorg/jetbrains/kotlin/gradle/plugin/SubpluginArtifact;
+	public fun isApplicable (Lorg/jetbrains/kotlin/gradle/plugin/KotlinCompilation;)Z
+}
+
 public abstract class dev/elide/buildtools/gradle/plugin/tasks/BundleAssetsBuildTask : dev/elide/buildtools/gradle/plugin/tasks/BundleBaseTask {
 	public static final field Companion Ldev/elide/buildtools/gradle/plugin/tasks/BundleAssetsBuildTask$Companion;
 	public fun <init> ()V
 	public static final fun applyPlugins (Lorg/gradle/api/Project;Lkotlin/jvm/functions/Function0;)V
 	public static final fun buildAssetTasks (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)Ljava/util/List;
 	public static final fun buildSsrConsumeTask (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)Ljava/util/List;
-	public abstract fun getAssets ()Lorg/gradle/api/provider/ListProperty;
 	public static final fun install (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)V
 	public static final fun installTasks (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)V
 	public static final fun isEligible (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)Z
-	public fun runAction ()V
 }
 
 public final class dev/elide/buildtools/gradle/plugin/tasks/BundleAssetsBuildTask$Companion {
@@ -482,16 +345,12 @@ public abstract class dev/elide/buildtools/gradle/plugin/tasks/BundleBaseTask : 
 	public fun <init> ()V
 	public static final fun applyPlugin (Lorg/gradle/api/Project;Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V
 	public static final fun digester$plugin (Ltools/elide/crypto/HashAlgorithm;)Ljava/security/MessageDigest;
-	public final fun execTask ()V
 	public static final fun fileNamed$plugin (Ltools/elide/assets/ManifestFormat;Ljava/lang/String;)Ljava/lang/String;
 	protected static final fun fingerprintMessage (Lcom/google/protobuf/Message;)Lcom/google/protobuf/ByteString;
-	public abstract fun getBundleEncoding ()Lorg/gradle/api/provider/Property;
-	public abstract fun getOutputBundleFolder ()Lorg/gradle/api/provider/Property;
 	protected fun postAction ()V
 	protected fun preAction ()V
 	protected static final fun resolveInflateRuntimeTask (Lorg/gradle/api/Project;Ldev/elide/buildtools/gradle/plugin/ElideExtension;)Ldev/elide/buildtools/gradle/plugin/tasks/InflateRuntimeTask;
 	public static final fun resolveJsIrLinkTask$plugin (Lorg/gradle/api/Project;)Lorg/jetbrains/kotlin/gradle/targets/js/ir/KotlinJsIrLink;
-	public abstract fun runAction ()V
 }
 
 public final class dev/elide/buildtools/gradle/plugin/tasks/BundleBaseTask$Companion {
@@ -501,9 +360,7 @@ public final class dev/elide/buildtools/gradle/plugin/tasks/BundleBaseTask$Compa
 public abstract class dev/elide/buildtools/gradle/plugin/tasks/BundleSpecTask : dev/elide/buildtools/gradle/plugin/tasks/BundleBaseTask {
 	public static final field Companion Ldev/elide/buildtools/gradle/plugin/tasks/BundleSpecTask$Companion;
 	public fun <init> ()V
-	public abstract fun assetCatalog ()Lkotlin/jvm/functions/Function1;
 	protected abstract fun buildAssetCatalog (Lkotlin/jvm/functions/Function1;)Lcom/google/protobuf/Message;
-	public abstract fun getOutputSpecName ()Lorg/gradle/api/provider/Property;
 	protected static final fun installCatalogTask (Ljava/lang/String;Ldev/elide/buildtools/gradle/plugin/BuildMode;Lorg/gradle/api/Project;Ljava/util/List;)Ldev/elide/buildtools/gradle/plugin/tasks/BundleWriteTask;
 	protected fun postAction ()V
 }
@@ -513,57 +370,20 @@ public final class dev/elide/buildtools/gradle/plugin/tasks/BundleSpecTask$Compa
 
 public abstract class dev/elide/buildtools/gradle/plugin/tasks/BundleWriteTask : dev/elide/buildtools/gradle/plugin/tasks/BundleBaseTask {
 	public fun <init> ()V
-	public abstract fun getOutputSpecName ()Lorg/gradle/api/provider/Property;
-	public abstract fun getSourceTaskName ()Lorg/gradle/api/provider/Property;
-	public fun runAction ()V
 }
 
 public abstract class dev/elide/buildtools/gradle/plugin/tasks/EmbeddedJsBuildTask : dev/elide/buildtools/gradle/plugin/tasks/BundleSpecTask {
 	public static final field Companion Ldev/elide/buildtools/gradle/plugin/tasks/EmbeddedJsBuildTask$Companion;
-	public static final field esbuildConfigTemplatePath Ljava/lang/String;
-	public static final field processShimTemplatePath Ljava/lang/String;
 	public fun <init> ()V
 	public static final fun applyPlugins (ZLorg/gradle/api/Project;Lkotlin/jvm/functions/Function0;)V
-	public fun assetCatalog ()Lkotlin/jvm/functions/Function1;
 	public synthetic fun buildAssetCatalog (Lkotlin/jvm/functions/Function1;)Lcom/google/protobuf/Message;
 	protected fun buildAssetCatalog (Lkotlin/jvm/functions/Function1;)Ltools/elide/assets/EmbeddedScript;
-	public final fun getBundle ()Z
-	public final fun getConfigTemplate ()Ljava/lang/String;
-	public final fun getEcma ()Ljava/lang/String;
-	public final fun getEnableReact ()Z
-	public abstract fun getEntryFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public final fun getEntryFileName ()Ljava/lang/String;
-	public final fun getFormat ()Ldev/elide/buildtools/gradle/plugin/js/BundleType;
-	public final fun getLibraryName ()Ljava/lang/String;
-	public final fun getMinify ()Z
-	public final fun getMode ()Ldev/elide/buildtools/gradle/plugin/BuildMode;
-	public abstract fun getModulesFolders ()Lorg/gradle/api/provider/ListProperty;
-	public abstract fun getOutputBundleName ()Lorg/gradle/api/provider/Property;
-	public abstract fun getOutputConfig ()Lorg/gradle/api/provider/Property;
-	public abstract fun getOutputOptimizedName ()Lorg/gradle/api/provider/Property;
-	public final fun getPlatform ()Ljava/lang/String;
-	public final fun getPrepack ()Z
-	public abstract fun getProcessShim ()Lorg/gradle/api/provider/Property;
-	public final fun getProcessShimTemplate ()Ljava/lang/String;
-	public final fun getTarget ()Ldev/elide/buildtools/gradle/plugin/js/BundleTarget;
-	public final fun getTool ()Ldev/elide/buildtools/gradle/plugin/js/BundleTool;
-	public static final fun injectDeps (Lorg/gradle/api/Project;)V
+	public static final fun injectDeps$plugin (Lorg/gradle/api/Project;)V
 	public static final fun install (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)V
 	public static final fun installTasks (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)V
 	public static final fun isEligible (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)Z
-	public fun runAction ()V
-	public final fun setBundle (Z)V
-	public final fun setEcma (Ljava/lang/String;)V
-	public final fun setEnableReact (Z)V
 	public final fun setEntryFileName (Ljava/lang/String;)V
-	public final fun setFormat (Ldev/elide/buildtools/gradle/plugin/js/BundleType;)V
-	public final fun setLibraryName (Ljava/lang/String;)V
-	public final fun setMinify (Z)V
-	public final fun setMode (Ldev/elide/buildtools/gradle/plugin/BuildMode;)V
-	public final fun setPlatform (Ljava/lang/String;)V
-	public final fun setPrepack (Z)V
-	public final fun setTarget (Ldev/elide/buildtools/gradle/plugin/js/BundleTarget;)V
-	public final fun setTool (Ldev/elide/buildtools/gradle/plugin/js/BundleTool;)V
 	public static final fun setup (Lorg/gradle/api/Project;Lorg/gradle/api/tasks/Copy;Lorg/gradle/api/Task;Ldev/elide/buildtools/gradle/plugin/js/BundleTool;Ldev/elide/buildtools/gradle/plugin/js/BundleTarget;Ldev/elide/buildtools/gradle/plugin/ElideExtension;Ldev/elide/buildtools/gradle/plugin/cfg/ElideJsHandler;Ldev/elide/buildtools/gradle/plugin/tasks/InflateRuntimeTask;)V
 	public static final fun setupBrowserWebpackBuildTask (Ldev/elide/buildtools/gradle/plugin/BuildMode;Lorg/gradle/api/Project;Lorg/gradle/api/tasks/Copy;Lorg/gradle/api/Task;Ldev/elide/buildtools/gradle/plugin/ElideExtension;Ldev/elide/buildtools/gradle/plugin/cfg/ElideJsHandler;)V
 	public static final fun setupEmbeddedEsbuildTask (Ldev/elide/buildtools/gradle/plugin/BuildMode;Lorg/gradle/api/Project;Lorg/gradle/api/tasks/Copy;Lorg/gradle/api/Task;Ldev/elide/buildtools/gradle/plugin/cfg/ElideJsHandler;Ldev/elide/buildtools/gradle/plugin/tasks/InflateRuntimeTask;)V
@@ -572,7 +392,6 @@ public abstract class dev/elide/buildtools/gradle/plugin/tasks/EmbeddedJsBuildTa
 
 public final class dev/elide/buildtools/gradle/plugin/tasks/EmbeddedJsBuildTask$Companion {
 	public final fun applyPlugins (ZLorg/gradle/api/Project;Lkotlin/jvm/functions/Function0;)V
-	public final fun injectDeps (Lorg/gradle/api/Project;)V
 	public final fun install (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)V
 	public final fun installTasks (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)V
 	public final fun isEligible (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)Z
@@ -586,27 +405,9 @@ public abstract class dev/elide/buildtools/gradle/plugin/tasks/GenerateAssetGrap
 	public static final field Companion Ldev/elide/buildtools/gradle/plugin/tasks/GenerateAssetGraphTask$Companion;
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
 	public static final fun generateAssetToken$plugin (Ldev/elide/buildtools/gradle/plugin/cfg/AssetInfo;Ldev/elide/buildtools/gradle/plugin/cfg/AssetTagConfig;[B)Ljava/lang/String;
-	public final fun getAssetModuleMap ()Lorg/gradle/api/provider/MapProperty;
-	public final fun getAssetModules ()Lorg/gradle/api/provider/MapProperty;
-	public abstract fun getCompressionConfig ()Lorg/gradle/api/provider/Property;
-	public abstract fun getDigestAlgorithm ()Lorg/gradle/api/provider/Property;
-	public abstract fun getInputFiles ()Lorg/gradle/api/provider/Property;
-	public abstract fun getManifestFile ()Lorg/gradle/api/provider/Property;
-	public abstract fun getManifestName ()Lorg/gradle/api/provider/Property;
-	public fun runAction ()V
 }
 
 public final class dev/elide/buildtools/gradle/plugin/tasks/GenerateAssetGraphTask$Companion {
-}
-
-public final class dev/elide/buildtools/gradle/plugin/tasks/GenerateAssetGraphTask$OptimizedGzipOutputStream : java/util/zip/DeflaterOutputStream {
-	public static final field Companion Ldev/elide/buildtools/gradle/plugin/tasks/GenerateAssetGraphTask$OptimizedGzipOutputStream$Companion;
-	public fun <init> (Ljava/io/OutputStream;)V
-	public fun finish ()V
-	public fun write ([BII)V
-}
-
-public final class dev/elide/buildtools/gradle/plugin/tasks/GenerateAssetGraphTask$OptimizedGzipOutputStream$Companion {
 }
 
 public abstract class dev/elide/buildtools/gradle/plugin/tasks/GenerateStaticSiteTask : org/gradle/api/DefaultTask {
@@ -624,10 +425,6 @@ public abstract class dev/elide/buildtools/gradle/plugin/tasks/InflateRuntimeTas
 	public static final field Companion Ldev/elide/buildtools/gradle/plugin/tasks/InflateRuntimeTask$Companion;
 	public static final field TASK_NAME Ljava/lang/String;
 	public fun <init> ()V
-	public abstract fun getDestinationDirectory ()Lorg/gradle/api/file/DirectoryProperty;
-	public abstract fun getEnableRuntime ()Lorg/gradle/api/provider/Property;
-	public abstract fun getModulesPath ()Lorg/gradle/api/provider/Property;
-	public abstract fun getRuntimePackage ()Lorg/gradle/api/provider/Property;
 	public final fun inflateRuntime ()V
 	public static final fun install (Ldev/elide/buildtools/gradle/plugin/ElideExtension;Lorg/gradle/api/Project;)Ldev/elide/buildtools/gradle/plugin/tasks/InflateRuntimeTask;
 }

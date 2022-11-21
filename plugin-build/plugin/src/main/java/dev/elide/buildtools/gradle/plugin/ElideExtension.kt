@@ -29,8 +29,10 @@ public open class ElideExtension @Inject constructor(project: Project) {
         ElideKotlinPluginsHandler::class.java
     )
 
-    companion object {
-        fun Project.elide(): ElideExtension {
+    /** Static methods provided by the Elide extension. */
+    public companion object {
+        /** Configure the Elide plugin for the receiver [Project]. */
+        public fun Project.elide(): ElideExtension {
             return extensions.create("elide", ElideExtension::class.java)
         }
     }
@@ -46,19 +48,19 @@ public open class ElideExtension @Inject constructor(project: Project) {
     }
 
     /** Closure to configure [ElideJsHandler] settings. */
-    fun js(action: Action<ElideJsHandler>) {
+    public fun js(action: Action<ElideJsHandler>) {
         js.active.set(true)
         action.execute(js)
     }
 
     /** Closure to configure [ElideServerHandler] settings. */
-    fun server(action: Action<ElideServerHandler>) {
+    public fun server(action: Action<ElideServerHandler>) {
         server.active.set(true)
         action.execute(server)
     }
 
     /** Closure to configure [ElideKotlinPluginsHandler] settings. */
-    fun kotlinPlugins(action: Action<ElideKotlinPluginsHandler>) {
+    public fun kotlinPlugins(action: Action<ElideKotlinPluginsHandler>) {
         action.execute(kotlinPluginOptions)
     }
 
