@@ -36,10 +36,10 @@ public open class ElideKotlinPluginsHandler @Inject constructor(objects: ObjectF
         /** Configuration for the Redakt plugin. */
         public open class RedaktHandler : PluginHandler(name = "redakt") {
             // Mask parameter for the Redakt plugin.
-            internal val mask: AtomicReference<String> = AtomicReference(null)
+            internal val mask: AtomicReference<String?> = AtomicReference(null)
 
             // Annotation parameter for the Redakt plugin.
-            internal val annotation: AtomicReference<String> = AtomicReference(null)
+            internal val annotation: AtomicReference<String?> = AtomicReference(null)
 
             /** Set the mask [value] to use when redacting data. */
             public fun mask(value: String) {
