@@ -450,8 +450,9 @@ internal object ElideDependencies {
      * @param spec Specification for the dependency to install.
      */
     private fun Project.installDependency(spec: DependencySpec) {
-        if (logger.isDebugEnabled)
+        if (logger.isDebugEnabled) {
             logger.debug("[Elide]: Dependency '${spec.groupId}:${spec.artifactId}' requested")
+        }
         val extension = extensions.getByType(ElideExtension::class.java)
         val configuration: Configuration = resolveConfigurationForSpec(spec)
 
@@ -468,9 +469,8 @@ internal object ElideDependencies {
             configuration.dependencies.add(
                 dependencies.create(extension, spec)
             )
-        } else {
-            if (logger.isDebugEnabled)
-                logger.debug("[Elide]: Dependency '${spec.groupId}:${spec.artifactId}' already provided")
+        } else if (logger.isDebugEnabled) {
+            logger.debug("[Elide]: Dependency '${spec.groupId}:${spec.artifactId}' already provided")
         }
     }
 
@@ -494,12 +494,12 @@ internal object ElideDependencies {
      * @receiver Project to which the KSP plugin should be applied.
      * @return Current project, for chaining.
      */
-    public fun Project.installApplyKSP(): Project {
-//        if (!pluginManager.hasPlugin(ThirdParty.Plugins.KSP.pluginId) &&
-//            plugins.findPlugin(ThirdParty.Plugins.KSP.pluginId) == null) {
+    fun Project.installApplyKSP(): Project {
+        if (!pluginManager.hasPlugin(ThirdParty.Plugins.KSP.pluginId) &&
+            plugins.findPlugin(ThirdParty.Plugins.KSP.pluginId) == null) {
             // KSP needs to be resolved and by version, and then applied to the project.
-//            pluginManager.apply(ThirdParty.Plugins.KSP.pluginId)
-//        }
+            pluginManager.apply(ThirdParty.Plugins.KSP.pluginId)
+        }
         return project
     }
 
@@ -581,9 +581,9 @@ internal object ElideDependencies {
      * @return KSP execution task, or `null` if one could not be located.
      */
     internal fun Project.installElideProcessor() {
-//        /*installApplyKSP().*/installCommonLibs().install(
+        installApplyKSP().installCommonLibs().install(
             // KSP processor (to produce app manifests)
-//            Tools.PROCESSOR,
-//        )
+            Tools.PROCESSOR,
+        )
     }
 }
