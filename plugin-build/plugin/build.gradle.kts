@@ -95,6 +95,9 @@ repositories {
     mavenCentral()
 }
 
+val minimumMicronaut = "3.6.3"
+val preferredMicronaut = "3.6.5"
+
 val embedded: Configuration by configurations.creating
 
 configurations {
@@ -116,6 +119,13 @@ dependencies {
         exclude("org.jetbrains.kotlin", "kotlin-sam-with-receiver")
     }
     implementation(libs.kotlin.samWithReceiver)
+
+    api("io.micronaut.gradle:micronaut-gradle-plugin") {
+        version {
+            strictly("[$minimumMicronaut, $preferredMicronaut]")
+            prefer(preferredMicronaut)
+        }
+    }
 
     // KotlinX
     api(libs.kotlinx.coroutines.core)
