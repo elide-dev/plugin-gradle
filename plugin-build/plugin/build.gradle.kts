@@ -20,6 +20,8 @@ plugins {
 val defaultJavaVersion = "11"
 val defaultKotlinVersion = "1.7"
 
+val defaultElideGroup = "dev.elide"
+val elideToolsGroup = "dev.elide.tools"
 val javaLanguageVersion = project.properties["versions.java.language"] as? String ?: defaultJavaVersion
 val kotlinLanguageVersion = project.properties["versions.kotlin.language"] as? String ?: defaultKotlinVersion
 
@@ -38,7 +40,34 @@ buildConfig {
     packageName("dev.elide.buildtools.gradle.plugin.cfg")
     useKotlinOutput()
 
+    // default version constant
     buildConfigField("String", "ELIDE_LIB_VERSION", "\"${libs.versions.elide.get()}\"")
+
+    // artifact dependency config
+    fun dependencyConfig(name: String, artifact: String, group: String = defaultElideGroup) {
+        buildConfigField(
+            "String",
+            "DEPENDENCY_$name",
+            "\"$group:$artifact\"",
+        )
+    }
+
+    dependencyConfig("BASE", "base")
+    dependencyConfig("PROTO", "proto")
+    dependencyConfig("SERVER", "server")
+    dependencyConfig("SSG", "ssg")
+    dependencyConfig("MODEL", "model")
+    dependencyConfig("TEST", "test")
+    dependencyConfig("FRONTEND", "frontend")
+    dependencyConfig("GRAALVM", "graalvm")
+    dependencyConfig("GRAALVM_JS", "graalvm-js")
+    dependencyConfig("GRAALVM_REACT", "graalvm-react")
+
+    dependencyConfig("PLATFORM", "bom-platform", elideToolsGroup)
+    dependencyConfig("CATALOG", "bom-catalog", elideToolsGroup)
+    dependencyConfig("PROCESSOR", "processor", elideToolsGroup)
+    dependencyConfig("SUBSTRATE", "elide-substrate", elideToolsGroup)
+    dependencyConfig("CONVENTION", "elide-convention-plugins", elideToolsGroup)
 }
 
 // Configuration Block for the Plugin Marker artifact on Plugin Central
@@ -75,6 +104,7 @@ configurations {
 
 dependencies {
     api(kotlin("gradle-plugin"))
+    api(libs.elide.tools.processor)
     implementation(libs.elide.base)
     implementation(libs.elide.ssg)
 
