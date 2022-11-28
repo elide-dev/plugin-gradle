@@ -75,8 +75,8 @@ configurations {
 
 dependencies {
     api(kotlin("gradle-plugin"))
-    api(libs.elide.base)
-    api(libs.elide.ssg)
+    implementation(libs.elide.base)
+    implementation(libs.elide.ssg)
 
     implementation(kotlin("stdlib-jdk7"))
     implementation(kotlin("stdlib-jdk8"))
