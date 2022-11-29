@@ -37,7 +37,6 @@ gradlePlugin {
     }
 }
 
-
 sonarqube {
     properties {
         property("sonar.projectKey", "elide-dev_buildtools")
