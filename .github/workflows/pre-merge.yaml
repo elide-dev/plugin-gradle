@@ -88,6 +88,11 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           arguments: |
+            check
+            test
+            preMerge
+            :plugin-build:plugin:test
+            :plugin-build:plugin:check
             :plugin-build:plugin:sonar
             -Pelide.ci=true
             --scan
