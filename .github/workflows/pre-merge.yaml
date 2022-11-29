@@ -90,7 +90,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           arguments: |
-            sonar
+            :plugin-build:plugin:sonar
             -Pelide.ci=true
             --scan
             --continue
