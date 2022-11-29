@@ -142,12 +142,14 @@ tasks.register("reformatAll") {
 tasks.register("preMerge") {
     description = "Runs all the tests/verification tasks on both top level and included build."
 
-    dependsOn("check")
-    dependsOn("koverMergedXmlReport")
+    dependsOn("build", "test", "check")
+    dependsOn("koverReport", "koverVerify", "koverMergedXmlReport")
     dependsOn(":example:fullstack:node:check")
     dependsOn(":example:fullstack:server:check")
     dependsOn(gradle.includedBuild("plugin-build").task(":plugin:check"))
     dependsOn(gradle.includedBuild("plugin-build").task(":plugin:validatePlugins"))
+    dependsOn(gradle.includedBuild("plugin-build").task(":plugin:koverReport"))
+    dependsOn(gradle.includedBuild("plugin-build").task(":plugin:koverVerify"))
 }
 
 tasks.wrapper {

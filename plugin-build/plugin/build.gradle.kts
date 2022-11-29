@@ -91,11 +91,6 @@ pluginBundle {
     }
 }
 
-repositories {
-    google()
-    mavenCentral()
-}
-
 val minimumMicronaut = "3.6.3"
 val preferredMicronaut = "3.6.5"
 
