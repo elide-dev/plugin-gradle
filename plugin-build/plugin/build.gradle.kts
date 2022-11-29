@@ -63,9 +63,9 @@ buildConfig {
     dependencyConfig("GRAALVM", "graalvm")
     dependencyConfig("GRAALVM_JS", "graalvm-js")
     dependencyConfig("GRAALVM_REACT", "graalvm-react")
+    dependencyConfig("PLATFORM", "platform")
+    dependencyConfig("CATALOG", "bom")
 
-    dependencyConfig("PLATFORM", "bom-platform", elideToolsGroup)
-    dependencyConfig("CATALOG", "bom-catalog", elideToolsGroup)
     dependencyConfig("PROCESSOR", "processor", elideToolsGroup)
     dependencyConfig("SUBSTRATE", "elide-substrate", elideToolsGroup)
     dependencyConfig("CONVENTION", "elide-convention-plugins", elideToolsGroup)

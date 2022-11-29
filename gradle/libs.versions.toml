@@ -123,12 +123,11 @@ elide_base = { group = "dev.elide", name = "base", version.ref = "elide" }
 elide_ssg = { group = "dev.elide", name = "ssg", version.ref = "elide" }
 elide_server = { group = "dev.elide", name = "server", version.ref = "elide" }
 elide_proto = { group = "dev.elide", name = "proto", version.ref = "elide" }
-elide_bom = { group = "dev.elide", name = "bom", version.ref = "elide" }
 elide_tools_processor = { group = "dev.elide.tools", name = "processor", version.ref = "elide" }
 elide_tools_conventions = { group = "dev.elide.tools", name = "elide-convention-plugins", version.ref = "elide" }
 elide_tools_substrate = { group = "dev.elide.tools", name = "elide-substrate", version.ref = "elide" }
-elide_bom_catalog = { group = "dev.elide", name = "bom-catalog", version.ref = "elide" }
-elide_bom_platform = { group = "dev.elide", name = "bom-platform", version.ref = "elide" }
+elide_bom_catalog = { group = "dev.elide", name = "bom", version.ref = "elide" }
+elide_bom_platform = { group = "dev.elide", name = "platform", version.ref = "elide" }
 elide_kotlin_plugin_injekt = { group = "dev.elide.tools.kotlin.plugin", name = "injekt-plugin", version.ref = "elide" }
 elide_kotlin_plugin_interakt = { group = "dev.elide.tools.kotlin.plugin", name = "interakt-plugin", version.ref = "elide" }
 elide_kotlin_plugin_redakt = { group = "dev.elide.tools.kotlin.plugin", name = "redakt-plugin", version.ref = "elide" }
