@@ -50,7 +50,7 @@ jobs:
           arch: "amd64"
 
       ## Setup: Gradle Caches
-      - name: Cache Gradle Caches
+      - name: Prime Gradle Caches
         uses: gradle/gradle-build-action@v2.3.3
 
       ## Setup: Checkout Code
@@ -60,19 +60,6 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-
-      ## Prep: Download Caches
-      - name: Cache build
-        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # tag=v3
-        with:
-          path: |
-            ./build
-            ./*/build
-            ./*/*/build
-          key: elide-${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            elide-gradle-${{ runner.os }}
-            elide-gradle-
 
       ## Job: Run build
       - name: Run Gradle build
