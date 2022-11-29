@@ -14,6 +14,7 @@ plugins {
 
     id("java-gradle-plugin")
     id("org.sonarqube")
+    id("com.adarshr.test-logger")
     id("com.gradle.plugin-publish")
     id("com.github.gmazzo.buildconfig")
     alias(libs.plugins.shadow)
@@ -35,6 +36,17 @@ gradlePlugin {
             version = PluginCoordinates.VERSION
         }
     }
+}
+
+testlogger {
+    theme = com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA_PARALLEL
+    showExceptions = true
+    showFailed = true
+    showPassed = true
+    showSkipped = true
+    showFailedStandardStreams = true
+    showFullStackTraces = true
+    slowThreshold = 30000L
 }
 
 sonarqube {
