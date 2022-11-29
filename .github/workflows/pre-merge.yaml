@@ -16,6 +16,8 @@ jobs:
         uses: actions/checkout@v3
       - name: "Check: Dependency Review"
         uses: actions/dependency-review-action@v3
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@55e685c48d84285a5b0418cd094606e199cca3b6 # tag=v1
 
   gradle:
     strategy:
@@ -51,6 +53,14 @@ jobs:
       - name: Cache Gradle Caches
         uses: gradle/gradle-build-action@v2.3.3
 
+      ## Setup: Checkout Code
+      - name: Cache SonarCloud packages
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # tag=v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
       ## Prep: Download Caches
       - name: Cache build
         uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7 # tag=v3
@@ -67,9 +77,13 @@ jobs:
       ## Job: Run build
       - name: Run Gradle build
         uses: gradle/gradle-build-action@v2.3.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           arguments: |
             preMerge
+            sonar
             -Pelide.ci=true
             --scan
             --continue
