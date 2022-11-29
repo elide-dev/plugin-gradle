@@ -10,6 +10,7 @@ plugins {
     kotlin("plugin.noarg")
     kotlin("plugin.allopen")
     kotlin("plugin.serialization")
+    id("org.jetbrains.kotlinx.kover")
 
     id("java-gradle-plugin")
     id("com.gradle.plugin-publish")
