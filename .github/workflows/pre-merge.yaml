@@ -8,6 +8,11 @@ on:
     branches:
       - "*"
 
+env:
+  GRADLE_CACHE_USERNAME: ${{ secrets.GRADLE_CACHE_USERNAME }}
+  GRADLE_CACHE_PASSWORD: ${{ secrets.GRADLE_CACHE_PASSWORD }}
+  GRADLE_CACHE_REMOTE: "true"
+
 jobs:
   preflight-checks:
     runs-on: ubuntu-latest
@@ -67,6 +72,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GRADLE_CACHE_PUSH: "true"
         with:
           arguments: |
             preMerge
