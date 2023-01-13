@@ -239,7 +239,7 @@ public abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, Embed
                 val targetEmbeddedTask = "${activeMode.name.lowercase()}EmbeddedExecutable"
 
                 // create a synthesized distribution as an output
-                val mainDist = project.configurations.create("nodeSsrDist") {
+                val mainDist = project.configurations.create("elideSsrDist") {
                     it.isCanBeConsumed = true
                     it.isCanBeResolved = false
                 }
@@ -381,7 +381,7 @@ public abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, Embed
             )
 
             // create a distribution for the bundle
-            val nodeDist = project.configurations.create("nodeSsrDist${mode.name.lowercase().capitalized()}") {
+            val nodeDist = project.configurations.create("elideSsrDist${mode.name.lowercase().capitalized()}") {
                 it.isCanBeConsumed = true
                 it.isCanBeResolved = false
             }
