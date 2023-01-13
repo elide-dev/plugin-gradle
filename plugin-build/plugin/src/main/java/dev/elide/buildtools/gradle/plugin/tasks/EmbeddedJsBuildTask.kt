@@ -47,7 +47,7 @@ public abstract class EmbeddedJsBuildTask : BundleSpecTask<EmbeddedScript, Embed
         private val defaultTargetType: BundleTarget = BundleTarget.EMBEDDED
         private const val defaultTargetTypeName: String = BundleTarget.EMBEDDED_NAME
 
-        private const val defaultEcmaVersion: String = "2020"
+        private const val defaultEcmaVersion: String = "2022"
         private const val defaultLibraryName: String = "embedded"
         private const val defaultEntrypointName: String = "main.js"
         private const val defaultOutputConfig: String = "embedded-js/compile.js"
