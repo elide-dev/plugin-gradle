@@ -1,10 +1,13 @@
 name: CI
 
 on:
+  workflow_dispatch: {}
   push:
     branches:
       - main
+      - gh-readonly-queue/main/*
   pull_request:
+    types: [opened, reopened, synchronize]
     branches:
       - "*"
 
