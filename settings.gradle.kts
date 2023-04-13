@@ -20,7 +20,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "elide-gradle-plugin"
 
-include(
+val buildExamples: String? by settings
+if (buildExamples == "true") include(
     ":example:fullstack:browser",
     ":example:fullstack:node",
     ":example:fullstack:server",
