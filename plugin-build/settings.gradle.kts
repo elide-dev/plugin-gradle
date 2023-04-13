@@ -1,5 +1,9 @@
 @file:Suppress("UnstableApiUsage")
 
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version("0.4.0")
+}
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
