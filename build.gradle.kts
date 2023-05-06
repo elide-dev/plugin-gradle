@@ -34,8 +34,8 @@ version = if (project.hasProperty("elide.stamp") && project.properties["elide.st
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 val props = Properties()
@@ -127,7 +127,7 @@ subprojects {
 rootProject.plugins.withType(NodeJsRootPlugin::class.java) {
     // 16+ required for Apple Silicon support
     // https://youtrack.jetbrains.com/issue/KT-49109#focus=Comments-27-5259190.0-0
-    rootProject.the<NodeJsRootExtension>().download = false
+    rootProject.the<NodeJsRootExtension>().download = true
     rootProject.the<NodeJsRootExtension>().nodeVersion = "18.11.0"
 }
 
