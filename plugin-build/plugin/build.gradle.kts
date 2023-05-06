@@ -40,6 +40,12 @@ gradlePlugin {
     }
 }
 
+repositories {
+    maven("https://maven.pkg.st/")
+    maven("https://elide.pkg.st/")
+    maven("https://gradle.pkg.st/")
+}
+
 testlogger {
     theme = com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA_PARALLEL
     showExceptions = true

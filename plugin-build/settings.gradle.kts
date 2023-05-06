@@ -14,7 +14,7 @@ plugins {
 
 dependencyResolutionManagement {
     repositoriesMode.set(
-        RepositoriesMode.FAIL_ON_PROJECT_REPOS
+        RepositoriesMode.PREFER_SETTINGS
     )
     repositories {
         maven("https://maven.pkg.st/")
