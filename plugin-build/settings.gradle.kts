@@ -9,17 +9,18 @@ pluginManagement {
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version("0.4.0")
+    id("org.gradle.toolchains.foojay-resolver-convention") version("0.5.0")
 }
 
 dependencyResolutionManagement {
     repositoriesMode.set(
-        RepositoriesMode.PREFER_SETTINGS
+        RepositoriesMode.PREFER_PROJECT
     )
     repositories {
         maven("https://maven.pkg.st/")
         maven("https://gradle.pkg.st/")
         maven("https://elide.pkg.st/")
+        maven("https://elide-snapshots.storage-download.googleapis.com/repository/v3/")
     }
     versionCatalogs {
         create("libs") {

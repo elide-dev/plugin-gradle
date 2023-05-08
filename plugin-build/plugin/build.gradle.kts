@@ -26,7 +26,7 @@ val defaultJavaVersion = "17"
 val defaultKotlinVersion = "1.8"
 
 val defaultElideGroup = "dev.elide"
-val elideToolsGroup = "dev.elide.tools"
+val elideToolsGroup = "dev.elide"
 val javaLanguageVersion = project.properties["versions.java.target"] as? String ?: defaultJavaVersion
 val kotlinLanguageVersion = project.properties["versions.kotlin.language"] as? String ?: defaultKotlinVersion
 
@@ -40,12 +40,6 @@ gradlePlugin {
     }
 }
 
-repositories {
-    maven("https://maven.pkg.st/")
-    maven("https://elide.pkg.st/")
-    maven("https://gradle.pkg.st/")
-}
-
 testlogger {
     theme = com.adarshr.gradle.testlogger.theme.ThemeType.MOCHA_PARALLEL
     showExceptions = true
@@ -55,6 +49,13 @@ testlogger {
     showFailedStandardStreams = true
     showFullStackTraces = true
     slowThreshold = 30000L
+}
+
+repositories {
+    maven("https://maven.pkg.st/")
+    maven("https://elide.pkg.st/")
+    maven("https://gradle.pkg.st/")
+    maven("https://elide-snapshots.storage-download.googleapis.com/repository/v3/")
 }
 
 sonarqube {
@@ -88,20 +89,23 @@ buildConfig {
         )
     }
 
-    dependencyConfig("BASE", "base")
-    dependencyConfig("PROTO", "proto")
-    dependencyConfig("SERVER", "server")
-    dependencyConfig("SSG", "ssg")
-    dependencyConfig("MODEL", "model")
-    dependencyConfig("TEST", "test")
-    dependencyConfig("FRONTEND", "frontend")
-    dependencyConfig("GRAALVM", "graalvm")
-    dependencyConfig("GRAALVM_JS", "graalvm-js")
-    dependencyConfig("GRAALVM_REACT", "graalvm-react")
-    dependencyConfig("PLATFORM", "platform")
-    dependencyConfig("CATALOG", "bom")
+    dependencyConfig("BASE", "elide-base")
+    dependencyConfig("PROTO", "elide-proto-core")
+    dependencyConfig("PROTO_PROTOBUF", "elide-proto-protobuf")
+    dependencyConfig("PROTO_FLATBUFFERS", "elide-proto-flatbuffers")
+    dependencyConfig("PROTO_KOTLINX", "elide-proto-kotlinx")
+    dependencyConfig("SERVER", "elide-server")
+    dependencyConfig("SSG", "elide-ssg")
+    dependencyConfig("MODEL", "elide-model")
+    dependencyConfig("TEST", "elide-test")
+    dependencyConfig("FRONTEND", "elide-frontend")
+    dependencyConfig("GRAALVM", "elide-graalvm")
+    dependencyConfig("GRAALVM_JS", "elide-graalvm-js")
+    dependencyConfig("GRAALVM_REACT", "elide-graalvm-react")
+    dependencyConfig("PLATFORM", "elide-platform")
+    dependencyConfig("CATALOG", "elide-bom")
 
-    dependencyConfig("PROCESSOR", "processor", elideToolsGroup)
+    dependencyConfig("PROCESSOR", "elide-ksp-processor", elideToolsGroup)
     dependencyConfig("SUBSTRATE", "elide-substrate", elideToolsGroup)
     dependencyConfig("CONVENTION", "elide-convention-plugins", elideToolsGroup)
 }
