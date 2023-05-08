@@ -15,7 +15,7 @@ env:
   GRADLE_CACHE_USERNAME: apikey
   GRADLE_CACHE_PASSWORD: ${{ secrets.BUILDLESS_APIKEY }}
   GRADLE_CACHE_REMOTE: "true"
-  GRADLE_CACHE_LOCAL: false
+  GRADLE_CACHE_LOCAL: true
   CACHE_ENDPOINT: "https://azr.less.build/cache/generic/"
   GRADLE_OPTS: "-Xmx6g -XX:MaxMetaspaceSize=1024m -XX:+UseParallelGC"
 
