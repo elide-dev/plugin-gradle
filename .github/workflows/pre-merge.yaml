@@ -12,8 +12,8 @@ on:
       - "*"
 
 env:
-  GRADLE_CACHE_USERNAME: ${{ secrets.GRADLE_CACHE_USERNAME }}
-  GRADLE_CACHE_PASSWORD: ${{ secrets.GRADLE_CACHE_PASSWORD }}
+  GRADLE_CACHE_USERNAME: apikey
+  GRADLE_CACHE_PASSWORD: ${{ secrets.BUILDLESS_APIKEY }}
   GRADLE_CACHE_REMOTE: "true"
   GRADLE_CACHE_LOCAL: false
   CACHE_ENDPOINT: "https://gradle.less.build/cache/generic/"
