@@ -22,7 +22,7 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
-val defaultJavaVersion = "17"
+val defaultJavaVersion = "11"
 val defaultKotlinVersion = "1.8"
 
 val defaultElideGroup = "dev.elide"
@@ -134,7 +134,7 @@ pluginBundle {
 val micronautPlugin = "3.7.9"
 val minimumMicronaut = "3.8.8"
 val preferredMicronaut = "3.9.1"
-val defaultJavaMin = "17"
+val defaultJavaMin = "11"
 val defaultJavaMax = "19"
 
 val baseJavaMin: Int = (
