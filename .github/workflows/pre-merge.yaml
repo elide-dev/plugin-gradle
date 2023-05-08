@@ -175,10 +175,10 @@ jobs:
         if: success()
         run: |
           file ./example/fullstack/server/build/resources/main/embedded/embedded.assets*
-          file ./example/fullstack/server/build/resources/main/embedded/*.js
+          file ./example/fullstack/server/build/resources/main/embedded/*.*js
           file ./example/fullstack/server/build/resources/main/assets/*.txt
           file ./example/fullstack/server/build/resources/main/assets/*.css
-          file ./example/fullstack/server/build/resources/main/assets/*.js
+          file ./example/fullstack/server/build/resources/main/assets/*.*js
 
       ## Job: Report Code Coverage
       - name: "Report: Codecov"
