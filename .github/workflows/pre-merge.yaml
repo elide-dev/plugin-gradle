@@ -66,7 +66,7 @@ jobs:
         with:
           components: "native-image,js"
           version: ${{ vars.GVM_VERSION }}
-          java-version: ${{ vars.JVM_VERSION }}
+          java-version: 11
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       ## Setup: Gradle Caches
