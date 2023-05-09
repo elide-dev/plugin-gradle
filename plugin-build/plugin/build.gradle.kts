@@ -180,6 +180,10 @@ sourceSets {
     }
 }
 
+koverReport {
+    // Nothing.
+}
+
 val embedded: Configuration by configurations.creating
 val implementation: Configuration by configurations.getting
 
@@ -266,6 +270,7 @@ java {
 
 kotlin {
     explicitApi()
+    jvmToolchain(11)
 
     sourceSets.all {
         languageSettings.apply {
@@ -278,13 +283,21 @@ kotlin {
 
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
-        apiVersion = Elide.kotlinLanguage
-        languageVersion = Elide.kotlinLanguage
-        jvmTarget = baseJavaMin.toString()
+        apiVersion = "1.8"
+        languageVersion = "1.8"
+        jvmTarget = "11"
         javaParameters = true
-        freeCompilerArgs = Elide.kaptCompilerArgs
         allWarningsAsErrors = true
         incremental = true
+        freeCompilerArgs = listOf(
+            "-progressive",
+            "-Xcontext-receivers",
+            "-no-stdlib",
+            "-Xallow-unstable-dependencies",
+            "-Xemit-jvm-type-annotations",
+            "-Xjvm-default=all",
+            "-Xjsr305=strict",
+        )
     }
 }
 
@@ -390,7 +403,7 @@ tasks.named("check").configure {
     dependsOn("test")
     dependsOn("detekt")
     dependsOn("ktlintCheck")
-    dependsOn("koverReport")
+//    dependsOn("koverReportXml")
     dependsOn("koverVerify")
 }
 
