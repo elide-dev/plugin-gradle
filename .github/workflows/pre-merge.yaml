@@ -62,7 +62,7 @@ jobs:
 
       ## Setup: GraalVM
       - name: "Setup: GraalVM"
-        uses: graalvm/setup-graalvm@b53bc17dd7dc3052d7c6751f6a5c34abdbf928b3 # v1
+        uses: graalvm/setup-graalvm@91fd4d0716bb64c2586c24e71ca0f1aec93e3839 # v1
         with:
           components: "native-image,js"
           version: ${{ vars.GVM_VERSION }}
