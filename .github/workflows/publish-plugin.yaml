@@ -22,7 +22,7 @@ jobs:
       - name: "Setup: Yarn"
         run: npm install -g yarn@1.22.19 && yarn
       - name: Cache Gradle Caches
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # tag=v2
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # tag=v2
       - name: "Setup: Signing Keys"
         run: |
           cat <(echo -e "${{ secrets.SIGNING_KEY }}") | base64 -d | gpg --batch --import

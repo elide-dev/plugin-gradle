@@ -71,7 +71,7 @@ jobs:
 
       ## Setup: Gradle Caches
       - name: Prime Gradle Caches
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
 
       ## Setup: Signing Keys
       - name: "Setup: Signing Keys"
@@ -92,7 +92,7 @@ jobs:
 
       ## Job: Run build
       - name: Run Gradle build
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -108,7 +108,7 @@ jobs:
 
       ## Job: Reports
       - name: Pre-merge checks
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
         if: ${{ matrix.os == 'ubuntu' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -127,7 +127,7 @@ jobs:
 
       ## Job: Sonar Scan
       - name: Sonar
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
         if: ${{ matrix.os == 'ubuntu' }}
         continue-on-error: true
         env:
@@ -142,7 +142,7 @@ jobs:
 
       ## Job: Run plugin
       - name: Run the plugin
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef # v2.3.3
+        uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
         if: success()
         with:
           arguments: |
