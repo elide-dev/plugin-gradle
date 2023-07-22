@@ -25,8 +25,16 @@ apiValidation {
     )
 }
 
-dependencies {
-    kover(project(":plugin"))
+koverMerged {
+    enable()
+
+    xmlReport {
+        onCheck.set(isCI)
+    }
+
+    htmlReport {
+        onCheck.set(isCI)
+    }
 }
 
 allprojects {

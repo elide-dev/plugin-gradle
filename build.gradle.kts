@@ -64,8 +64,16 @@ sonarqube {
     }
 }
 
-koverReport {
-    // nothing
+koverMerged {
+    enable()
+
+    xmlReport {
+        onCheck.set(isCI)
+    }
+
+    htmlReport {
+        onCheck.set(isCI)
+    }
 }
 
 subprojects {
@@ -155,7 +163,7 @@ tasks.register("preMerge") {
     description = "Runs all the tests/verification tasks on both top level and included build."
 
     dependsOn("build", "test", "check")
-    dependsOn("koverVerify", "koverXmlReport")
+    dependsOn("koverReport", "koverVerify", "koverMergedXmlReport")
 
     if ((properties["buildExamples"] as? String) == "true") {
         dependsOn(":example:fullstack:node:check")
@@ -163,7 +171,7 @@ tasks.register("preMerge") {
     }
     dependsOn(gradle.includedBuild("plugin-build").task(":plugin:check"))
     dependsOn(gradle.includedBuild("plugin-build").task(":plugin:validatePlugins"))
-    dependsOn(gradle.includedBuild("plugin-build").task(":plugin:koverXmlReport"))
+    dependsOn(gradle.includedBuild("plugin-build").task(":plugin:koverReport"))
     dependsOn(gradle.includedBuild("plugin-build").task(":plugin:koverVerify"))
 }
 

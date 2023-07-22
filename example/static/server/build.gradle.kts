@@ -36,7 +36,7 @@ dependencies {
 }
 
 micronaut {
-    version.set("3.9.1")
+    version.set("3.9.4")
 }
 
 elide {
@@ -104,5 +104,5 @@ tasks.named<org.gradle.api.tasks.bundling.Zip>("optimizedDistZip").configure {
 
 tasks.withType<Detekt>().configureEach {
     // Target version of the generated JVM bytecode. It is used for type resolution.
-    jvmTarget = "17"
+    jvmTarget = "11"
 }

@@ -26,7 +26,7 @@ val defaultJavaVersion = "11"
 val defaultKotlinVersion = "1.8"
 
 val defaultElideGroup = "dev.elide"
-val elideToolsGroup = "dev.elide"
+val elideToolsGroup = "dev.elide.tools"
 val javaLanguageVersion = project.properties["versions.java.target"] as? String ?: defaultJavaVersion
 val kotlinLanguageVersion = project.properties["versions.kotlin.language"] as? String ?: defaultKotlinVersion
 
@@ -49,12 +49,6 @@ testlogger {
     showFailedStandardStreams = true
     showFullStackTraces = true
     slowThreshold = 30000L
-}
-
-repositories {
-    mavenCentral()
-    gradlePluginPortal()
-    maven("https://elide-snapshots.storage-download.googleapis.com/repository/v3/")
 }
 
 sonarqube {
@@ -88,23 +82,20 @@ buildConfig {
         )
     }
 
-    dependencyConfig("BASE", "elide-base")
-    dependencyConfig("PROTO", "elide-proto-core")
-    dependencyConfig("PROTO_PROTOBUF", "elide-proto-protobuf")
-    dependencyConfig("PROTO_FLATBUFFERS", "elide-proto-flatbuffers")
-    dependencyConfig("PROTO_KOTLINX", "elide-proto-kotlinx")
-    dependencyConfig("SERVER", "elide-server")
-    dependencyConfig("SSG", "elide-ssg")
-    dependencyConfig("MODEL", "elide-model")
-    dependencyConfig("TEST", "elide-test")
-    dependencyConfig("FRONTEND", "elide-frontend")
-    dependencyConfig("GRAALVM", "elide-graalvm")
-    dependencyConfig("GRAALVM_JS", "elide-graalvm-js")
-    dependencyConfig("GRAALVM_REACT", "elide-graalvm-react")
-    dependencyConfig("PLATFORM", "elide-platform")
-    dependencyConfig("CATALOG", "elide-bom")
+    dependencyConfig("BASE", "base")
+    dependencyConfig("PROTO", "proto")
+    dependencyConfig("SERVER", "server")
+    dependencyConfig("SSG", "ssg")
+    dependencyConfig("MODEL", "model")
+    dependencyConfig("TEST", "test")
+    dependencyConfig("FRONTEND", "frontend")
+    dependencyConfig("GRAALVM", "graalvm")
+    dependencyConfig("GRAALVM_JS", "graalvm-js")
+    dependencyConfig("GRAALVM_REACT", "graalvm-react")
+    dependencyConfig("PLATFORM", "platform")
+    dependencyConfig("CATALOG", "bom")
 
-    dependencyConfig("PROCESSOR", "elide-ksp-processor", elideToolsGroup)
+    dependencyConfig("PROCESSOR", "processor", elideToolsGroup)
     dependencyConfig("SUBSTRATE", "elide-substrate", elideToolsGroup)
     dependencyConfig("CONVENTION", "elide-convention-plugins", elideToolsGroup)
 }
@@ -131,20 +122,11 @@ pluginBundle {
     }
 }
 
-val micronautPlugin = "3.7.9"
-val minimumMicronaut = "3.8.8"
-val preferredMicronaut = "3.9.1"
+val minimumMicronaut = "3.7.8"
+val preferredMicronaut = "3.9.4"
 val defaultJavaMin = "11"
 val defaultJavaMax = "19"
-
-val baseJavaMin: Int = (
-    if (project.hasProperty("versions.java.minimum")) {
-        project.properties["versions.java.minimum"] as? String ?: defaultJavaMin
-    } else {
-        defaultJavaMin
-    }
-).toInt()
-
+val baseJavaMin: Int = (defaultJavaMin).toInt()
 val skipVersions = sortedSetOf(
     12,
     13,
@@ -180,10 +162,6 @@ sourceSets {
     }
 }
 
-koverReport {
-    // Nothing.
-}
-
 val embedded: Configuration by configurations.creating
 val implementation: Configuration by configurations.getting
 
@@ -197,7 +175,8 @@ dependencies {
     api(libs.elide.tools.processor)
     implementation(libs.elide.base)
     implementation(libs.elide.ssg)
-    implementation(libs.elide.proto.legacy)
+    implementation(libs.elide.proto.core)
+    implementation(libs.elide.proto.protobuf)
 
     implementation(kotlin("stdlib-jdk7"))
     implementation(kotlin("stdlib-jdk8"))
@@ -210,8 +189,8 @@ dependencies {
 
     api("io.micronaut.gradle:micronaut-gradle-plugin") {
         version {
-            strictly("[$micronautPlugin, $micronautPlugin]")
-            prefer(micronautPlugin)
+            strictly("[$minimumMicronaut, $preferredMicronaut]")
+            prefer(preferredMicronaut)
         }
     }
 
@@ -270,7 +249,6 @@ java {
 
 kotlin {
     explicitApi()
-    jvmToolchain(11)
 
     sourceSets.all {
         languageSettings.apply {
@@ -281,23 +259,39 @@ kotlin {
     }
 }
 
-tasks.withType<KotlinCompile>().configureEach {
+tasks.compileKotlin.configure {
     kotlinOptions {
-        apiVersion = "1.8"
-        languageVersion = "1.8"
-        jvmTarget = "11"
+        apiVersion = Elide.kotlinLanguage
+        languageVersion = Elide.kotlinLanguage
+        jvmTarget = baseJavaMin.toString()
         javaParameters = true
+        freeCompilerArgs = Elide.kaptCompilerArgs
         allWarningsAsErrors = true
         incremental = true
-        freeCompilerArgs = listOf(
-            "-progressive",
-            "-Xcontext-receivers",
-            "-no-stdlib",
-            "-Xallow-unstable-dependencies",
-            "-Xemit-jvm-type-annotations",
-            "-Xjvm-default=all",
-            "-Xjsr305=strict",
-        )
+    }
+}
+
+tasks.compileTestKotlin.configure {
+    kotlinOptions {
+        apiVersion = Elide.kotlinLanguage
+        languageVersion = Elide.kotlinLanguage
+        jvmTarget = baseJavaMin.toString()
+        javaParameters = true
+        freeCompilerArgs = Elide.kaptCompilerArgs
+        allWarningsAsErrors = true
+        incremental = true
+    }
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        apiVersion = Elide.kotlinLanguage
+        languageVersion = Elide.kotlinLanguage
+        jvmTarget = baseJavaMin.toString()
+        javaParameters = true
+        freeCompilerArgs = Elide.kaptCompilerArgs
+        allWarningsAsErrors = true
+        incremental = true
     }
 }
 
@@ -403,7 +397,7 @@ tasks.named("check").configure {
     dependsOn("test")
     dependsOn("detekt")
     dependsOn("ktlintCheck")
-//    dependsOn("koverReportXml")
+    dependsOn("koverReport")
     dependsOn("koverVerify")
 }
 
