@@ -32,3 +32,5 @@ dependencyResolutionManagement {
         }
     }
 }
+
+rootProject.name = ("elideGradlePluginBuild")

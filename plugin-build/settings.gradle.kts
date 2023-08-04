@@ -42,7 +42,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = ("dev.elide.buildtools.gradle")
+rootProject.name = ("elideGradlePlugin")
 
 include(
     ":plugin"

@@ -21,6 +21,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.sonar)
+    alias(libs.plugins.dependencyAnalysis)
     alias(libs.plugins.versionCheck)
 }
 
@@ -110,13 +111,17 @@ subprojects {
         }
     }
 
-    configurations.all {
-        resolutionStrategy.activateDependencyLocking()
-    }
-
     detekt {
         config.from(rootProject.files("config/detekt/detekt.yml"))
     }
+}
+
+dependencyLocking {
+    lockMode = LockMode.LENIENT
+    ignoredDependencies.addAll(listOf(
+        "org.jetbrains.kotlinx:atomicfu*",
+        "org.jetbrains.kotlinx:kotlinx-serialization*",
+    ))
 }
 
 rootProject.plugins.withType(NodeJsRootPlugin::class.java) {
