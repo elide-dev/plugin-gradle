@@ -64,7 +64,8 @@ jobs:
         with:
           components: "native-image,js"
           version: latest
-          java-version: 19
+          distribution: graalvm
+          java-version: 20
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       ## Setup: Gradle Caches
