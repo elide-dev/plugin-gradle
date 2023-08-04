@@ -12,11 +12,12 @@ on:
       - "*"
 
 env:
-  GRADLE_CACHE_REMOTE: true
+  GRADLE_CACHE_USERNAME: ${{ secrets.GRADLE_CACHE_USERNAME }}
+  GRADLE_CACHE_PASSWORD: ${{ secrets.GRADLE_CACHE_PASSWORD }}
+  GRADLE_CACHE_REMOTE: "true"
   GRADLE_CACHE_LOCAL: false
-  GRADLE_CACHE_PUSH: true
+  CACHE_ENDPOINT: "https://global.less.build/cache/generic/"
   GRADLE_OPTS: "-Xmx6g -XX:MaxMetaspaceSize=1024m -XX:+UseParallelGC"
-  BUILDLESS_APIKEY: ${{ secrets.BUILDLESS_APIKEY }}
 
 jobs:
   preflight-checks:
@@ -49,9 +50,9 @@ jobs:
 
       ## Setup: Node
       - name: "Setup: Node"
-        uses: actions/setup-node@v3 # v3
+        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3
         with:
-          node-version: 20
+          node-version: 18
 
       ## Setup: Yarn
       - name: "Setup: Yarn"
@@ -59,10 +60,11 @@ jobs:
 
       ## Setup: GraalVM
       - name: "Setup: GraalVM"
-        uses: graalvm/setup-graalvm@v1
+        uses: graalvm/setup-graalvm@b53bc17dd7dc3052d7c6751f6a5c34abdbf928b3 # v1
         with:
-          distribution: 'graalvm'
-          java-version: 20
+          components: "native-image,js"
+          version: latest
+          java-version: 19
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       ## Setup: Gradle Caches

@@ -15,8 +15,8 @@ import java.util.Properties
 
 plugins {
     java
+    embeddedKotlin("kapt") apply false
     alias(libs.plugins.ksp) apply false
-    alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.kover)
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
@@ -34,8 +34,8 @@ version = if (project.hasProperty("elide.stamp") && project.properties["elide.st
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 val props = Properties()
@@ -58,7 +58,7 @@ sonarqube {
         property("sonar.dynamicAnalysis", "reuseReports")
         property("sonar.junit.reportsPath", "build/reports/")
         property("sonar.java.coveragePlugin", "jacoco")
-        property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/kover/merged/xml/report.xml")
+        property("sonar.coverage.jacoco.xmlReportPaths", layout.buildDirectory.file("reports/kover/merged/xml/report.xml"))
         property("sonar.jacoco.reportPath", "build/jacoco/test.exec")
         property("sonar.sourceEncoding", "UTF-8")
     }
@@ -91,10 +91,11 @@ subprojects {
             property(
                 "sonar.coverage.jacoco.xmlReportPaths",
                 listOf(
-                    "$buildDir/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml",
-                    "$buildDir/reports/jacoco/testCodeCoverageReport/jacocoTestReport.xml",
-                    "$buildDir/reports/jacoco/test/jacocoTestReport.xml",
-                    "$buildDir/reports/kover/xml/coverage.xml",
+                    layout.buildDirectory.file("reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"),
+                    layout.buildDirectory.file("reports/jacoco/testCodeCoverageReport/jacocoTestReport.xml"),
+                    layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"),
+                    layout.buildDirectory.file("reports/kover/xml/coverage.xml"),
+                    layout.buildDirectory.file("reports/kover/xml/report.xml"),
                 )
             )
         }
@@ -163,7 +164,7 @@ tasks.register("preMerge") {
     description = "Runs all the tests/verification tasks on both top level and included build."
 
     dependsOn("build", "test", "check")
-    dependsOn("koverReport", "koverVerify", "koverMergedXmlReport")
+    dependsOn("koverReport", "koverVerify", "koverXmlReport")
 
     if ((properties["buildExamples"] as? String) == "true") {
         dependsOn(":example:fullstack:node:check")
