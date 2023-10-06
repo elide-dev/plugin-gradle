@@ -36,7 +36,7 @@ public abstract class InflateRuntimeTask : DefaultTask() {
     init {
         with(project) {
             destinationDirectory.set(
-                file("${rootProject.buildDir}/js/elideRuntime")
+                file(layout.buildDirectory.dir("js/elideRuntime"))
             )
             modulesPath.set(
                 file("${destinationDirectory.get()}/node_modules")
@@ -46,7 +46,7 @@ public abstract class InflateRuntimeTask : DefaultTask() {
                     RUNTIME_PKG
                 ) ?: throw FileNotFoundException(
                     "Failed to locate JS runtime package. This is an internal error; please report it to the Elide " +
-                    "project at https://github.com/elide-dev/v3/issues."
+                    "team at https://github.com/elide-dev/elide/issues."
                 )
             )
         }

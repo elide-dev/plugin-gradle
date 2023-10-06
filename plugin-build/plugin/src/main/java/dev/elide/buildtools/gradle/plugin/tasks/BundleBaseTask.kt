@@ -88,21 +88,21 @@ public abstract class BundleBaseTask : DefaultTask() {
             // resolve the inflate-runtime task installed on the root project, or if there is not one, create it.
             return try {
                 if (
-                    project.rootProject.tasks.findByPath(":${InflateRuntimeTask.TASK_NAME}") != null
+                    project.tasks.findByName(InflateRuntimeTask.TASK_NAME) != null
                 ) {
-                    project.rootProject.tasks.named(InflateRuntimeTask.TASK_NAME, InflateRuntimeTask::class.java)
+                    project.tasks.named(InflateRuntimeTask.TASK_NAME, InflateRuntimeTask::class.java)
                         .get()
                 } else {
                     InflateRuntimeTask.install(
                         extension,
-                        project.rootProject,
+                        project,
                     )
                 }
             } catch (noSuchTask: UnknownTaskException) {
                 // install it
                 InflateRuntimeTask.install(
                     extension,
-                    project.rootProject,
+                    project,
                 )
             }
         }
