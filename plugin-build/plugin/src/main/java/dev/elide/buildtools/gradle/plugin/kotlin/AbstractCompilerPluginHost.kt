@@ -22,12 +22,12 @@ import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 internal abstract class AbstractCompilerPluginHost<O : ElideKotlinPluginsHandler.PluginHandler> protected constructor (
     private val pluginId: String,
     private val groupId: String = defaultPluginGroup,
-    private val artifactId: String = "kotlin-$pluginId-plugin",
+    private val artifactId: String = "$pluginId-plugin",
     private val version: String = ELIDE_LIB_VERSION,
 ) : KotlinCompilerPluginSupportPlugin {
     internal companion object {
         // Default plugin group.
-        internal const val defaultPluginGroup: String = "dev.elide"
+        internal const val defaultPluginGroup: String = "dev.elide.tools.kotlin.plugin"
     }
 
     /** Plugin configuration, delivered via Gradle. */
@@ -36,20 +36,16 @@ internal abstract class AbstractCompilerPluginHost<O : ElideKotlinPluginsHandler
     /** Plugin-specific options. */
     protected lateinit var options: O
 
-    /** @inheritDoc */
     override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean = true
 
-    /** @inheritDoc */
     override fun getCompilerPluginId(): String = pluginId
 
-    /** @inheritDoc */
     override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
         groupId = groupId,
         artifactId = artifactId,
         version = version,
     )
 
-    /** @inheritDoc */
     override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> {
         val project = kotlinCompilation.target.project
         val extension = project.extensions.getByType(ElideExtension::class.java)

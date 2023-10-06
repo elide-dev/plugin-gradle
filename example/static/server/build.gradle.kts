@@ -14,17 +14,17 @@ plugins {
     alias(libs.plugins.micronaut.aot)
 
     kotlin("jvm")
-//    alias(libs.plugins.ksp)
+    alias(libs.plugins.ksp)
     id("dev.elide.buildtools.plugin")
 }
 
 application {
-    mainClass.set("example.App")
+    mainClass = "example.App"
 }
 
 dependencies {
-//    ksp(libs.elide.tools.processor)
-//    ksp(libs.autoService.ksp)
+    ksp(libs.elide.tools.processor)
+    ksp(libs.autoService.ksp)
 
     implementation(libs.elide.server)
     implementation(libs.elide.proto.core)
@@ -36,17 +36,13 @@ dependencies {
 }
 
 micronaut {
-    version.set("3.9.1")
+    version = "4.1.2"
 }
 
 elide {
     mode = BuildMode.DEVELOPMENT
 
     server {
-//        ssg {
-//            enable()
-//        }
-
         assets {
             bundler {
                 format(ManifestFormat.BINARY)
@@ -104,5 +100,5 @@ tasks.named<org.gradle.api.tasks.bundling.Zip>("optimizedDistZip").configure {
 
 tasks.withType<Detekt>().configureEach {
     // Target version of the generated JVM bytecode. It is used for type resolution.
-    jvmTarget = "17"
+    jvmTarget = "11"
 }

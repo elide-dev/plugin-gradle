@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2023 Elide Ventures, LLC.
+ *
+ * Licensed under the MIT license (the "License"); you may not use this file except in compliance
+ *  with the License. You may obtain a copy of the License at
+ *
+ *     https://opensource.org/license/mit/
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ *  License for the specific language governing permissions and limitations under the License.
+ */
+
 @file:Suppress(
     "DSL_SCOPE_VIOLATION",
     "UnstableApiUsage",
@@ -8,25 +21,26 @@ import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    `java-gradle-plugin`
+
     kotlin("jvm")
     kotlin("plugin.noarg")
     kotlin("plugin.allopen")
     kotlin("plugin.serialization")
     id("org.jetbrains.kotlinx.kover")
 
-    id("java-gradle-plugin")
-    id("org.sonarqube")
-    id("com.adarshr.test-logger")
     id("com.gradle.plugin-publish")
-    id("com.github.gmazzo.buildconfig")
+    alias(libs.plugins.testLogger)
+    alias(libs.plugins.buildConfig)
+    alias(libs.plugins.sonar)
     alias(libs.plugins.shadow)
 }
 
-val defaultJavaVersion = "11"
-val defaultKotlinVersion = "1.8"
+val defaultJavaVersion = "17"
+val defaultKotlinVersion = "1.9"
 
 val defaultElideGroup = "dev.elide"
-val elideToolsGroup = "dev.elide"
+val elideToolsGroup = "dev.elide.tools"
 val javaLanguageVersion = project.properties["versions.java.target"] as? String ?: defaultJavaVersion
 val kotlinLanguageVersion = project.properties["versions.kotlin.language"] as? String ?: defaultKotlinVersion
 
@@ -51,21 +65,15 @@ testlogger {
     slowThreshold = 30000L
 }
 
-repositories {
-    mavenCentral()
-    gradlePluginPortal()
-    maven("https://elide-snapshots.storage-download.googleapis.com/repository/v3/")
-}
-
 sonarqube {
     properties {
         property("sonar.projectKey", "elide-dev_buildtools")
         property("sonar.organization", "elide-dev")
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.dynamicAnalysis", "reuseReports")
-        property("sonar.junit.reportsPath", "$buildDir/reports/")
+        property("sonar.junit.reportsPath", layout.buildDirectory.dir("reports"))
         property("sonar.java.coveragePlugin", "jacoco")
-        property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/kover/merged/xml/report.xml")
+        property("sonar.coverage.jacoco.xmlReportPaths", layout.buildDirectory.file("reports/kover/merged/xml/report.xml"))
         property("sonar.jacoco.reportPath", "build/jacoco/test.exec")
         property("sonar.sourceEncoding", "UTF-8")
     }
@@ -89,12 +97,9 @@ buildConfig {
     }
 
     dependencyConfig("BASE", "elide-base")
-    dependencyConfig("PROTO", "elide-proto-core")
+    dependencyConfig("PROTO_CORE", "elide-proto")
     dependencyConfig("PROTO_PROTOBUF", "elide-proto-protobuf")
-    dependencyConfig("PROTO_FLATBUFFERS", "elide-proto-flatbuffers")
-    dependencyConfig("PROTO_KOTLINX", "elide-proto-kotlinx")
     dependencyConfig("SERVER", "elide-server")
-    dependencyConfig("SSG", "elide-ssg")
     dependencyConfig("MODEL", "elide-model")
     dependencyConfig("TEST", "elide-test")
     dependencyConfig("FRONTEND", "elide-frontend")
@@ -104,7 +109,7 @@ buildConfig {
     dependencyConfig("PLATFORM", "elide-platform")
     dependencyConfig("CATALOG", "elide-bom")
 
-    dependencyConfig("PROCESSOR", "elide-ksp-processor", elideToolsGroup)
+    dependencyConfig("PROCESSOR", "elide-processor", elideToolsGroup)
     dependencyConfig("SUBSTRATE", "elide-substrate", elideToolsGroup)
     dependencyConfig("CONVENTION", "elide-convention-plugins", elideToolsGroup)
 }
@@ -131,20 +136,11 @@ pluginBundle {
     }
 }
 
-val micronautPlugin = "3.7.9"
-val minimumMicronaut = "3.8.8"
-val preferredMicronaut = "3.9.1"
-val defaultJavaMin = "11"
+val minimumMicronaut = "4.0.5"
+val preferredMicronaut = "4.1.1"
+val defaultJavaMin = "17"
 val defaultJavaMax = "19"
-
-val baseJavaMin: Int = (
-    if (project.hasProperty("versions.java.minimum")) {
-        project.properties["versions.java.minimum"] as? String ?: defaultJavaMin
-    } else {
-        defaultJavaMin
-    }
-).toInt()
-
+val baseJavaMin: Int = (defaultJavaMin).toInt()
 val skipVersions = sortedSetOf(
     12,
     13,
@@ -180,10 +176,6 @@ sourceSets {
     }
 }
 
-koverReport {
-    // Nothing.
-}
-
 val embedded: Configuration by configurations.creating
 val implementation: Configuration by configurations.getting
 
@@ -192,14 +184,23 @@ configurations {
     runtimeClasspath.get().extendsFrom(embedded)
 }
 
+configurations.all {
+    resolutionStrategy {
+        preferProjectModules()
+    }
+}
+
 dependencies {
     api(kotlin("gradle-plugin"))
+    api(libs.protobuf.java)
+    api(libs.protobuf.util)
+    api(libs.protobuf.kotlin)
     api(libs.elide.tools.processor)
-    implementation(libs.elide.base)
-    implementation(libs.elide.ssg)
-    implementation(libs.elide.proto.legacy)
+    api(libs.elide.base)
+    api(libs.elide.proto.core)
+    api(libs.elide.proto.protobuf)
+//    api(libs.elide.proto.legacy)
 
-    implementation(kotlin("stdlib-jdk7"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(gradleApi())
     api(libs.plugin.node)
@@ -210,8 +211,8 @@ dependencies {
 
     api("io.micronaut.gradle:micronaut-gradle-plugin") {
         version {
-            strictly("[$micronautPlugin, $micronautPlugin]")
-            prefer(micronautPlugin)
+            strictly("[$minimumMicronaut, $preferredMicronaut]")
+            prefer(preferredMicronaut)
         }
     }
 
@@ -229,14 +230,7 @@ dependencies {
     // Elide: Kotlin Plugins
     implementation(libs.elide.kotlin.plugin.redakt)
 
-    // Elide: Embedded Libs
-    embedded(libs.elide.base)
-    embedded(libs.elide.ssg)
-
     // Elide: Embedded Tools
-    embedded(libs.closure.templates)
-    embedded(libs.closure.compiler)
-    embedded(libs.closure.stylesheets)
     embedded(libs.brotli)
     embedded(libs.brotli.native.osx)
     embedded(libs.brotli.native.linux)
@@ -264,13 +258,12 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 kotlin {
     explicitApi()
-    jvmToolchain(11)
 
     sourceSets.all {
         languageSettings.apply {
@@ -281,30 +274,43 @@ kotlin {
     }
 }
 
+tasks.compileKotlin.configure {
+    kotlinOptions {
+        apiVersion = kotlinLanguageVersion
+        languageVersion = kotlinLanguageVersion
+        jvmTarget = baseJavaMin.toString()
+        javaParameters = true
+        allWarningsAsErrors = false
+        incremental = true
+    }
+}
+
+tasks.compileTestKotlin.configure {
+    kotlinOptions {
+        apiVersion = kotlinLanguageVersion
+        languageVersion = kotlinLanguageVersion
+        jvmTarget = baseJavaMin.toString()
+        javaParameters = true
+        allWarningsAsErrors = false
+        incremental = true
+    }
+}
+
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
-        apiVersion = "1.8"
-        languageVersion = "1.8"
-        jvmTarget = "11"
+        apiVersion = kotlinLanguageVersion
+        languageVersion = kotlinLanguageVersion
+        jvmTarget = baseJavaMin.toString()
         javaParameters = true
-        allWarningsAsErrors = true
+        allWarningsAsErrors = false
         incremental = true
-        freeCompilerArgs = listOf(
-            "-progressive",
-            "-Xcontext-receivers",
-            "-no-stdlib",
-            "-Xallow-unstable-dependencies",
-            "-Xemit-jvm-type-annotations",
-            "-Xjvm-default=all",
-            "-Xjsr305=strict",
-        )
     }
 }
 
 detekt {
-    source = files(
+    source.from(files(
         "src/main/java"
-    )
+    ))
 }
 
 ktlint {
@@ -326,10 +332,11 @@ subprojects {
             property(
                 "sonar.coverage.jacoco.xmlReportPaths",
                 listOf(
-                    "$buildDir/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml",
-                    "$buildDir/reports/jacoco/testCodeCoverageReport/jacocoTestReport.xml",
-                    "$buildDir/reports/jacoco/test/jacocoTestReport.xml",
-                    "$buildDir/reports/kover/xml/coverage.xml",
+                    layout.buildDirectory.file("reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"),
+                    layout.buildDirectory.file("reports/jacoco/testCodeCoverageReport/jacocoTestReport.xml"),
+                    layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"),
+                    layout.buildDirectory.file("reports/kover/xml/coverage.xml"),
+                    layout.buildDirectory.file("reports/kover/xml/report.xml"),
                 )
             )
         }
@@ -351,7 +358,7 @@ tasks.create<Copy>("copyNodeRuntimeAssets") {
         include("**/*.js")
         include("**/*.json")
     }
-    into("${project.buildDir}/elideJsRuntime/sources")
+    into(project.layout.buildDirectory.dir("elideJsRuntime/sources"))
 }
 
 tasks.create<Tar>("packageRuntimeAssets") {
@@ -363,14 +370,14 @@ tasks.create<Tar>("packageRuntimeAssets") {
     archiveExtension.set("tar.gz")
     archiveVersion.set("")
     destinationDirectory.set(
-        file("${project.buildDir}/resources/main/dev/elide/buildtools/js/runtime")
+        file(layout.buildDirectory.dir("resources/main/dev/elide/buildtools/js/runtime"))
     )
 
     dependsOn(
         tasks.named("copyNodeRuntimeAssets")
     )
     into("/") {
-        from("${project.buildDir}/elideJsRuntime/sources")
+        from(layout.buildDirectory.dir("elideJsRuntime/sources"))
         include(
             "**/*.json",
             "**/*.js"
@@ -403,7 +410,7 @@ tasks.named("check").configure {
     dependsOn("test")
     dependsOn("detekt")
     dependsOn("ktlintCheck")
-//    dependsOn("koverReportXml")
+    dependsOn("koverXmlReport")
     dependsOn("koverVerify")
 }
 

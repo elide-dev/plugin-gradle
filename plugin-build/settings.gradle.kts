@@ -1,25 +1,42 @@
+/*
+ * Copyright (c) 2023 Elide Ventures, LLC.
+ *
+ * Licensed under the MIT license (the "License"); you may not use this file except in compliance
+ *  with the License. You may obtain a copy of the License at
+ *
+ *     https://opensource.org/license/mit/
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ *  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ *  License for the specific language governing permissions and limitations under the License.
+ */
+
 @file:Suppress("UnstableApiUsage")
 
 pluginManagement {
     repositories {
-        mavenCentral()
-        gradlePluginPortal()
+        maven("https://gradle.pkg.st/")
+        maven("https://maven.pkg.st/")
         maven("https://elide-snapshots.storage-download.googleapis.com/repository/v3/")
     }
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version("0.5.0")
+    id("build.less") version("1.0.0-beta1")
+    id("com.gradle.enterprise") version("3.15")
+    id("org.gradle.toolchains.foojay-resolver-convention") version("0.7.0")
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(
-        RepositoriesMode.PREFER_PROJECT
-    )
+    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
+
     repositories {
-        mavenCentral()
-        gradlePluginPortal()
+        maven("https://maven.pkg.st/")
+        maven("https://gradle.pkg.st/")
         maven("https://elide-snapshots.storage-download.googleapis.com/repository/v3/")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev/")
+        mavenLocal()
     }
     versionCatalogs {
         create("libs") {
@@ -28,37 +45,11 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = ("dev.elide.buildtools.gradle")
+rootProject.name = ("elideGradlePlugin")
 
 include(
     ":plugin"
 )
 
-val cacheUsername: String? by settings
-val cachePassword: String? by settings
-val cachePush: String? by settings
-val remoteCache = System.getenv("GRADLE_CACHE_REMOTE")?.toBoolean() ?: false
-val localCache = System.getenv("GRADLE_LOCAL_REMOTE")?.toBoolean() ?: true
-
-buildCache {
-    local {
-        isEnabled = localCache
-    }
-
-    if (remoteCache) {
-        remote<HttpBuildCache> {
-            isEnabled = true
-            isPush = (cachePush ?: System.getenv("GRADLE_CACHE_PUSH")) == "true"
-            url = uri("https://gradle.less.build/cache/generic/")
-            when (val pswd = cachePassword ?: System.getenv("GRADLE_CACHE_PASSWORD")) {
-                null -> {}
-                else -> credentials {
-                    username = cacheUsername ?: System.getenv("GRADLE_CACHE_USERNAME") ?: "apikey"
-                    password = pswd
-                }
-            }
-        }
-    }
-}
-
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+enableFeaturePreview("GROOVY_COMPILATION_AVOIDANCE")
