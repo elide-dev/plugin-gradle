@@ -17,7 +17,6 @@ env:
   GRADLE_CACHE_REMOTE: "true"
   GRADLE_CACHE_LOCAL: true
   GRADLE_CACHE_PUSH: true
-  CACHE_ENDPOINT: "https://azr.less.build/cache/generic/"
   GRADLE_OPTS: "-Xmx6g -XX:MaxMetaspaceSize=1024m -XX:+UseParallelGC"
 
 jobs:
