@@ -29,7 +29,7 @@ jobs:
       - name: "Check: Dependency Review"
         uses: actions/dependency-review-action@c090f4e553673e6e505ea70d6a95362ee12adb94 # v3
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@55e685c48d84285a5b0418cd094606e199cca3b6 # tag=v1
+        uses: gradle/wrapper-validation-action@699bb18358f12c5b78b37bb0111d3a0e2276e0e2 # tag=v1
 
   gradle:
     strategy:
